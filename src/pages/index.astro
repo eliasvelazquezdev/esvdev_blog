@@ -2,14 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Social from '../components/Social.astro';
 import Separator from '../components/Separator.astro';
+import PostDescription from '../components/PostDescription.astro';
 
 const pageTitle = 'Blog'
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-	<main class="lg:w-2/4 mx-auto">
-		<Separator />
-
+	<main class="">
 		<div class="flex flex-col items-center md:flex-row">
 			<img class="w-64 lg:me-5" src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1699897194/blog/elias_lofi_xdlf5p.png" alt="">
 			<div>
@@ -29,8 +28,16 @@ const pageTitle = 'Blog'
 		<Separator />
 
 		<!-- Articulos destacados -->
-		<div class="flex flex-col items-center md:flex-row">
-			<h1 class="font-bold text-2xl">Destacados</h1>
+		<div class="flex flex-col">
+			<h1 class="font-bold text-2xl block mb-5">Destacados</h1>
+
+			<div>
+				<PostDescription
+					postTitle="Articulo de prueba"
+					postDate="Septiembre 24 | 16:30"
+					postDescription="Viendo si este componente funca o no. Muy probablemente cueste hacer que la API en Django funcione con todo, pero eso está por verse."
+				/>
+			</div>
 		</div>
 	</main>
 </BaseLayout>
