@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Social from '../components/Social.astro';
+import Separator from '../components/Separator.astro';
+
+const pageTitle = 'Blog'
+---
+
+<BaseLayout pageTitle={pageTitle}>
+	<main class="lg:w-2/4 mx-auto">
+		<Separator />
+
+		<div class="flex flex-col items-center md:flex-row">
+			<img class="w-64 lg:me-5" src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1699897194/blog/elias_lofi_xdlf5p.png" alt="">
+			<div>
+				<h1 class="text-3xl block mb-3">¡Bienvenido/a a mi blog!</h1>
+				
+				<p class="mb-3">Soy Elias, programador autodidacta desde hace 2 años. Me gusta hablar de mi viaje como developer, desarrollo personal, filosofía y por supuesto, desarrollo de software en general.</p>
+				<p class="mb-3">Siendo que soy músico y me encantan los videojuegos, muy probablemente hable de estos temas también. Hay de todo un poco acá, así que si algo de lo que digo te gusta o te sirve, me sentiré más que complacido.</p>
+
+				<div>
+					<Social platform="github" username="eliasvelazquezdev"/>
+					<Social platform="linkedin" username="eliassvelazquez"/>
+					<Social platform="twitter" username="esvdev"/>
+				</div>
+			</div>
+		</div>
+
+		<Separator />
+
+		<!-- Articulos destacados -->
+		<div class="flex flex-col items-center md:flex-row">
+			<h1 class="font-bold text-2xl">Destacados</h1>
+		</div>
+	</main>
+</BaseLayout>
