@@ -1,15 +1,15 @@
 ---
-const {postTitle, postDescription, postDate} = Astro.props;
+const {postTitle, postDescription, postDate, postURL} = Astro.props;
 ---
 
-<div class="w-2/3">
-    <a class="text-xl font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
+<div class="w-2/3 mb-5">
+    <a href={postURL} class="text-xl font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
         {postTitle}
     </a>
     <p class="text-gray-500 mt-1 mb-2">
         <i class='bx bxs-calendar me-1'></i>
         {postDate}
     </p>
-    <p>{postDescription}</p>
+    <Fragment set:html={postDescription}>
 </div>
 

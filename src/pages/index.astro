@@ -4,6 +4,14 @@ import Social from '../components/Social.astro';
 import Separator from '../components/Separator.astro';
 import PostDescription from '../components/PostDescription.astro';
 
+const API_URL = import.meta.env.API_URL;
+
+const featured_posts_data = await fetch (`${API_URL}/api/v2/posts/?featured=true&limit=3&fields=intro`);
+const featured_posts = await featured_posts_data.json();
+
+const latest_posts_data = await fetch (`${API_URL}/api/v2/posts/?limit=3&fields=intro`);
+const latest_posts = await latest_posts_data.json();
+
 const pageTitle = 'Blog'
 ---
 
@@ -27,7 +35,7 @@ const pageTitle = 'Blog'
 
 		<Separator />
 
-		<!-- Articulos destacados -->
+		<!-- Featured -->
 		<div class="flex flex-col">
 			<h1 class="font-bold text-2xl block mb-5">Destacados</h1>
 
@@ -37,6 +45,41 @@ const pageTitle = 'Blog'
 					postDate="Septiembre 24 | 16:30"
 					postDescription="Viendo si este componente funca o no. Muy probablemente cueste hacer que la API en Django funcione con todo, pero eso está por verse."
 				/>
+
+				{
+                    
+                    featured_posts.items?.map((item) => (
+						<PostDescription
+							postURL={`${API_URL}/api/v2/posts/${item.id}`}
+							postTitle={item.title}
+							postDate={item.meta.first_published_at}
+							postDescription={item.intro}
+						/>
+                    ))
+                    
+                }
+			</div>
+		</div>
+
+		<Separator />
+
+		<!-- Latest posts -->
+		<div class="flex flex-col">
+			<h1 class="font-bold text-2xl block mb-5">Ultimos posts</h1>
+
+			<div>
+
+				{
+                    
+                    latest_posts.items?.map((item) => (
+						<PostDescription
+							postTitle={item.title}
+							postDate={item.meta.first_published_at}
+							postDescription={item.intro}
+						/>
+                    ))
+                    
+                }
 			</div>
 		</div>
 	</main>
