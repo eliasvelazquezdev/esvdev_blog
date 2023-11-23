@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostDescription from "../../components/PostDescription.astro";
+
+export async function getStaticPaths() {
+    const API_URL = import.meta.env.API_URL;
+    const tags_data = await fetch (`${API_URL}/api/v2/tags`);
+    const tags = await tags_data.json();
+
+    return await Promise.all(
+        tags.items.map(async (tag) => {
+            const taggedPosts = await fetch (`${API_URL}/api/v2/posts/?tags=${tag.id}&fields=intro`).then(response => response.json());
+            return {
+                params: { tag: `${tag.name}` },
+                props: { posts: taggedPosts },
+            }
+        })
+    );     
+}
+
+const { tag } = Astro.params;
+const {posts} = Astro.props;
+
+---
+<BaseLayout pageTitle={tag}>
+    <h2 class="text-2xl mb-5">
+        Posts con la etiqueta 
+        <span class="font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
+            { `#${tag}` }
+        </span>
+    </h2>
+
+    {posts.items?.map((post) => <PostDescription
+        postTitle={post.title}
+        postDate={post.meta.first_published_at}
+        postDescription={post.intro}
+    />)}
+    
+  </BaseLayout>
