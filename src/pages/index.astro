@@ -6,10 +6,10 @@ import PostDescription from '../components/PostDescription.astro';
 
 const API_URL = import.meta.env.API_URL;
 
-const featured_posts_data = await fetch (`${API_URL}/api/v2/posts/?featured=true&limit=3&fields=intro`);
+const featured_posts_data = await fetch (`${API_URL}/api/v2/posts/?featured=true&fields=intro`);
 const featured_posts = await featured_posts_data.json();
 
-const latest_posts_data = await fetch (`${API_URL}/api/v2/posts/?limit=3&fields=intro`);
+const latest_posts_data = await fetch (`${API_URL}/api/v2/posts/?&fields=intro`);
 const latest_posts = await latest_posts_data.json();
 
 const pageTitle = 'Blog'
@@ -48,12 +48,12 @@ const pageTitle = 'Blog'
 
 				{
                     
-                    featured_posts.items?.map((item) => (
+                    featured_posts.results?.map((post) => (
 						<PostDescription
-							postURL={`${API_URL}/api/v2/posts/${item.id}`}
-							postTitle={item.title}
-							postDate={item.meta.first_published_at}
-							postDescription={item.intro}
+							postURL={`/posts/${post.meta.slug}`}
+							postTitle={post.title}
+							postDate={post.meta.first_published_at}
+							postDescription={post.intro}
 						/>
                     ))
                     
@@ -71,11 +71,12 @@ const pageTitle = 'Blog'
 
 				{
                     
-                    latest_posts.items?.map((item) => (
+                    latest_posts.results?.map((post) => (
 						<PostDescription
-							postTitle={item.title}
-							postDate={item.meta.first_published_at}
-							postDescription={item.intro}
+							postURL={`/posts/${post.meta.slug}`}
+							postTitle={post.title}
+							postDate={post.meta.first_published_at}
+							postDescription={post.intro}
 						/>
                     ))
                     

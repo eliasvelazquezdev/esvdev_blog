@@ -18,9 +18,9 @@ const pageTitle = 'Tags Index';
 
         <div class="flex lg:flex-row flex-col flex-wrap">
             {
-                tags.items?.map((item) => (
-                    <a href={`/tags/${item.name}`} class="text-xl me-5 mb-3 md:mb-5 font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
-                    {`#${item.name}`}
+                tags.items?.map((tag) => (
+                    <a href={`/tags/${tag.name}`} class="text-xl me-5 mb-3 md:mb-5 font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
+                    {`#${tag.name}`}
                     </a>
                 ))
                 

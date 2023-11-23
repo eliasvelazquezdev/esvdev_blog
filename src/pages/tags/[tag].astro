@@ -30,10 +30,15 @@ const {posts} = Astro.props;
         </span>
     </h2>
 
-    {posts.items?.map((post) => <PostDescription
-        postTitle={post.title}
-        postDate={post.meta.first_published_at}
-        postDescription={post.intro}
-    />)}
+    {
+        posts.results?.map((post) => 
+            <PostDescription
+                postURL={`/posts/${post.meta.slug}`}
+                postTitle={post.title}
+                postDate={post.meta.first_published_at}
+                postDescription={post.intro}
+            />
+        )
+    }
     
   </BaseLayout>

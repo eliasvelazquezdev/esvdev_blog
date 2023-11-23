@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+
+const API_URL = import.meta.env.API_URL;
+
+export async function getStaticPaths() {
+    const API_URL = import.meta.env.API_URL;
+    const posts_data = await fetch (`${API_URL}/api/v2/posts`);
+    const posts = await posts_data.json();
+
+    return posts.results.map((post) => {
+            return {
+                params: {slug: `${post.meta.slug}`},
+                props: {postID: `${post.id}`}
+            };            
+        }
+    )        
+}
+
+
+const {postID} = Astro.props;
+console.log(postID)
+
+const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.json());
+
+
+---
+<BaseLayout pageTitle={post.title}>
+    <h2 class="text-2xl mb-5">
+        {post.title}
+    </h2>
+
+
+    
+</BaseLayout>

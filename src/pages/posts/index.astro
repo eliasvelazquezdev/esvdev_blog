@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostDescription from '../../components/PostDescription.astro';
+
+const API_URL = import.meta.env.API_URL;
+
+const posts_data = await fetch (`${API_URL}/api/v2/posts/?fields=intro`);
+const posts = await posts_data.json();
+
+const pageTitle = 'Posts Index';
+---
+<BaseLayout pageTitle={pageTitle}>
+    <main>
+        <div class="mb-5">
+            <h2 class="text-2xl">Posts</h2>
+            <p>Todos los articulos que he publicado.</p>
+        </div>
+
+        <div class="flex lg:flex-row flex-col flex-wrap">
+            {
+                posts.results?.map((post) => (
+                    <PostDescription
+                        postURL={`/posts/${post.meta.slug}`}
+                        postTitle={post.title}
+                        postDate={post.meta.first_published_at}
+                        postDescription={post.intro}
+                    />
+                ))
+                
+            }
+        </div>
+    </main>
+
+</BaseLayout>
