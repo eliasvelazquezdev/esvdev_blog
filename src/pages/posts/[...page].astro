@@ -17,12 +17,11 @@ interface Props {
 export async function getStaticPaths({ paginate }) {
     const API_URL = import.meta.env.API_URL;
 
-    const posts_data = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=20`);
-    const posts = await posts_data.json();
-    const all_posts = posts.items;
+    const posts_data = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=20`).then(response => response.json());
+    const posts = posts_data.items;
 
     // Return a paginated collection of paths for all posts
-    return paginate(all_posts, { pageSize: 3 });
+    return paginate(posts, { pageSize: 3 });
 }
 
 

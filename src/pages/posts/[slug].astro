@@ -6,8 +6,7 @@ const API_URL = import.meta.env.API_URL;
 
 export async function getStaticPaths() {
     const API_URL = import.meta.env.API_URL;
-    const posts_data = await fetch (`${API_URL}/api/v2/posts`);
-    const posts = await posts_data.json();
+    const posts = await fetch (`${API_URL}/api/v2/posts`).then(response => response.json());
 
     return posts.items?.map((post) => {
             return {

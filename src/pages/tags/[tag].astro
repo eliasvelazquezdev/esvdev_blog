@@ -4,8 +4,8 @@ import PostDescription from "../../components/PostDescription.astro";
 
 export async function getStaticPaths() {
     const API_URL = import.meta.env.API_URL;
-    const tags_data = await fetch (`${API_URL}/api/v2/tags`);
-    const tags = await tags_data.json();
+    const tags = await fetch (`${API_URL}/api/v2/tags`).then(response => response.json());
+
 
     return await Promise.all(
         tags.items.map(async (tag) => {
