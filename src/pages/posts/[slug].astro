@@ -9,7 +9,7 @@ export async function getStaticPaths() {
     const posts_data = await fetch (`${API_URL}/api/v2/posts`);
     const posts = await posts_data.json();
 
-    return posts.results.map((post) => {
+    return posts.items?.map((post) => {
             return {
                 params: {slug: `${post.meta.slug}`},
                 props: {postID: `${post.id}`}

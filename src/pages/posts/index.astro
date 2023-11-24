@@ -4,7 +4,7 @@ import PostDescription from '../../components/PostDescription.astro';
 
 const API_URL = import.meta.env.API_URL;
 
-const posts_data = await fetch (`${API_URL}/api/v2/posts/?fields=intro`);
+const posts_data = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=3`);
 const posts = await posts_data.json();
 
 const pageTitle = 'Posts Index';
@@ -12,13 +12,13 @@ const pageTitle = 'Posts Index';
 <BaseLayout pageTitle={pageTitle}>
     <main>
         <div class="mb-5">
-            <h2 class="text-2xl">Posts</h2>
+            <h2 class="text-2xl font-bold">Posts</h2>
             <p>Todos los articulos que he publicado.</p>
         </div>
 
         <div class="flex lg:flex-row flex-col flex-wrap">
             {
-                posts.results?.map((post) => (
+                posts.items?.map((post) => (
                     <PostDescription
                         postURL={`/posts/${post.meta.slug}`}
                         postTitle={post.title}
@@ -29,6 +29,8 @@ const pageTitle = 'Posts Index';
                 
             }
         </div>
+
+        
     </main>
 
 </BaseLayout>
