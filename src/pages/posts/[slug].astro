@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
+import Author from "../../components/Author.astro";
 
 const API_URL = import.meta.env.API_URL;
 
@@ -19,17 +19,50 @@ export async function getStaticPaths() {
 
 
 const {postID} = Astro.props;
-console.log(postID)
+
 
 const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.json());
 
 
 ---
 <BaseLayout pageTitle={post.title}>
-    <h2 class="text-2xl mb-5">
-        {post.title}
-    </h2>
+    <div class="mb-20">
+        <h2 class="text-3xl mb-3 text-orange-500">
+            {post.title}
+        </h2>
+        <div class="flex">
+            <p class="text-gray-500 mt-1 mb-5 me-3">
+                <i class='bx bxs-calendar me-1'></i>
+                Publicado: 
+                {post.date}
+            </p>
+            {
+                post.date != post.latest_revision_created_at ?
+                    <p class="text-gray-500 mt-1 mb-2">
+                        | Actualizado: 
+                        {post.latest_revision_created_at}
+                    </p>
+                : <div></div>
+            }
+        </div>
+        <Fragment set:html={post.intro} />
+    </div>
 
+    <div >
+        {
+            post.body.map((item) => (
+               item.type == "heading" ? <h2 class="text-2xl font-bold mb-5 underline underline-offset-4">{item.value}</h2>
+               : item.type == "paragraph" ? <p class="text-2xl" set:html={item.value}></p>
+               : item.type == "image" ? <img class="w-2/3 mx-auto mt-3 mb-3" src={item.value.large.src} alt="">
+               : item.type == "quote" ? <blockquote class="block italic text-3xl mt-5 mb-5">{`"${item.value}"`}</blockquote>
+               : <div>{item.value}</div>
+            ))
+            
+        }
+    </div>
+
+    
+    <Author />
 
     
 </BaseLayout>

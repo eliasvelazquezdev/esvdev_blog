@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostDescription from '../../components/PostDescription.astro';
+import PaginationArrows from '../../components/PaginationArrows.astro';
 
 interface Props {
   page?: {
@@ -33,7 +34,7 @@ const pageTitle = 'Posts Index';
 <BaseLayout pageTitle={pageTitle}>
     <main>
         <div class="mb-5">
-            <h2 class="text-2xl font-bold">Posts</h2>
+            <h2 class="text-3xl font-bold">Posts</h2>
             <p>Todos los articulos que he publicado.</p>
         </div>
 
@@ -50,8 +51,8 @@ const pageTitle = 'Posts Index';
                 
             }
         </div>
-        <p><a href={next}>Next Page</a></p>
-        <p><a href={prev}>Previous Page</a></p>
+
+        <PaginationArrows prev={prev} next={next} />
         
     </main>
 

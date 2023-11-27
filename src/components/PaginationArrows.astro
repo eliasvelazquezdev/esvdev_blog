@@ -1,0 +1,17 @@
+---
+const {prev, next} = Astro.props;
+---
+<div class="flex justify-center mt-10">
+    <p class="font-bold text-lg">
+        <a class="me-3" href={prev}>
+            <i class='bx bx-left-arrow-alt'></i>
+            Ant.
+        </a>
+    </p>
+    <p class="font-bold text-lg">
+        <a class="me-3" href={next}>
+            Sig.
+            <i class='bx bx-right-arrow-alt'></i>
+        </a>
+    </p>
+</div>
