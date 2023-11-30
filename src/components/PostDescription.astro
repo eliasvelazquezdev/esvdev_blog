@@ -10,6 +10,8 @@ const {postTitle, postDescription, postDate, postURL} = Astro.props;
         <i class='bx bxs-calendar me-1'></i>
         {postDate}
     </p>
-    <Fragment set:html={postDescription}>
+    <div class="text-gray-400">
+        <Fragment set:html={postDescription}>
+    </div>
 </div>
 
