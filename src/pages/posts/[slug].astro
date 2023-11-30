@@ -25,6 +25,8 @@ const {postID} = Astro.props;
 
 const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.json());
 
+const prog_language = post.programming_language
+
 
 ---
 <BaseLayout pageTitle={post.title}>
@@ -58,7 +60,7 @@ const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.
                : item.type == "paragraph" ? <p set:html={item.value}></p>
                : item.type == "image" ? <img class="w-2/3 mx-auto mt-3 mb-3" src={item.value.large.src} alt="">
                : item.type == "quote" ? <blockquote class="block italic text-xl mt-5 mb-5">{`"${item.value}"`}</blockquote>
-               : item.type == "code_snippet" ? <p class="mt-5 mb-5"><Code code={item.value} lang="py" /></p>
+               : item.type == "code_snippet" ? <p class="mt-5 mb-5"><Code code={item.value} lang={prog_language} theme="github-dark"/></p>
                : <div>{item.value}</div>
             ))
             
