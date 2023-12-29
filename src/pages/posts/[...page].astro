@@ -3,31 +3,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostDescription from '../../components/PostDescription.astro';
 import PaginationArrows from '../../components/PaginationArrows.astro';
 
-interface Props {
-  page?: {
-    url?: {
-      next?: string;
-      prev?: string;
-    };
-    data?: any;
-    lastPage?: number;
-    currentPage?: number;
-  };
-}
 
-export async function getStaticPaths({ paginate }) {
-    const API_URL = import.meta.env.API_URL;
+const API_URL = import.meta.env.API_URL;
 
-    const posts_data = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=20`).then(response => response.json());
-    const posts = posts_data.items;
+const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=20`).then(response => response.json());
 
-    // Return a paginated collection of paths for all posts
-    return paginate(posts, { pageSize: 3 });
-}
-
-
-const { page } = Astro.props;
-const { prev, next} = page.url;
 
 const pageTitle = 'Posts Index';
 ---
@@ -45,7 +25,7 @@ const pageTitle = 'Posts Index';
 
         <div class="flex lg:flex-row flex-col flex-wrap">
             {
-                page.data.map((post) => (
+                posts.items.map((post) => (
                     <PostDescription
                         postURL = {`/posts/${post.meta.slug}`}
                         postTitle={post.title}
@@ -57,7 +37,7 @@ const pageTitle = 'Posts Index';
             }
         </div>
 
-        <PaginationArrows prev={prev} next={next} />
+        
         
     </main>
 

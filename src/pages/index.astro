@@ -6,11 +6,10 @@ import PostDescription from '../components/PostDescription.astro';
 
 const API_URL = import.meta.env.API_URL;
 
-const featured_posts_data = await fetch (`${API_URL}/api/v2/posts/?featured=true&fields=intro&limit=3`);
-const featured_posts = await featured_posts_data.json();
+const featured_posts = await fetch (`${API_URL}/api/v2/posts/?featured=true&fields=intro&limit=3`).then(response => response.json());
 
-const latest_posts_data = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=3`);
-const latest_posts = await latest_posts_data.json();
+const latest_posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=3`).then(response => response.json());
+console.log(latest_posts)
 
 const pageTitle = 'Blog'
 ---
