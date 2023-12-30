@@ -6,32 +6,21 @@ import { Code } from 'astro:components';
 
 const API_URL = import.meta.env.API_URL;
 
-export async function getStaticPaths() {
-    const API_URL = import.meta.env.API_URL;
-    const posts = await fetch (`${API_URL}/api/v2/posts`).then(response => response.json());
+const {slug} = Astro.params;
 
-    return posts.items?.map((post) => {
-            return {
-                params: {slug: `${post.meta.slug}`},
-                props: {postID: `${post.id}`}
-            };            
-        }
-    )        
-}
+const postBySlug = await fetch (`${API_URL}/api/v2/posts/?slug=${slug}`).then(response => response.json());
 
-
-const {postID} = Astro.props;
-
+const postID = postBySlug.items[0].id;
 
 const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.json());
 
-const prog_language = post.programming_language
+const prog_language = post.programming_language;
 
 
 ---
 <BaseLayout pageTitle={post.title}>
     <div class="mb-20">
-        <h2 class="text-3xl font-bold mb-3 text-orange-500">
+        <h2 class="text-4xl font-bold mb-3 text-orange-500">
             {post.title}
         </h2>
         <div class="flex flex-wrap">
@@ -57,8 +46,8 @@ const prog_language = post.programming_language
     <div class="mb-8" >
         {
             post.body.map((item) => (
-               item.type == "heading" ? <h2 class="text-2xl font-bold mb-5">{item.value}</h2>
-               :item.type == "subtitle" ? <h2 class="text-xl mb-3 mt-10 font-bold italic">{item.value}</h2>
+               item.type == "heading" ? <h2 class="text-3xl font-bold mb-5 underline underline-offset-4">{item.value}</h2>
+               :item.type == "subtitle" ? <h2 class="text-2xl mb-3 mt-10 font-bold underline underline-offset-4">{item.value}</h2>
                : item.type == "paragraph" ? <div class="text-lg mt-5 mb-5" set:html={item.value}></div>
                : item.type == "image" ? <img class="w-2/3 mx-auto mt-3 mb-3" src={item.value.large.src} alt="">
                : item.type == "quote" ? <blockquote class="bg-slate-800 p-2 block italic text-xl mt-5 mb-5" set:html={item.value}></blockquote>

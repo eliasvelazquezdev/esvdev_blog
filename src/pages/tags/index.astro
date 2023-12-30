@@ -3,8 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const API_URL = import.meta.env.API_URL;
 
-const tags_data = await fetch (`${API_URL}/api/v2/tags`);
-const tags = await tags_data.json();
+const tags = await fetch (`${API_URL}/api/v2/tags`).then(response => response.json());
+
 
 const pageTitle = 'Tags Index';
 ---
@@ -24,7 +24,7 @@ const pageTitle = 'Tags Index';
         <div class="flex lg:flex-row flex-col flex-wrap">
             {
                 tags.items?.map((tag) => (
-                    <a href={`/tags/${tag.name}`} class="text-xl me-5 mb-3 md:mb-5 font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
+                    <a href={`/tags/${tag.id}`} class="text-xl me-5 mb-3 md:mb-5 font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
                     {`#${tag.name}`}
                     </a>
                 ))

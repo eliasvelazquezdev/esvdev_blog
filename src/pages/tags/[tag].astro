@@ -2,24 +2,14 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostDescription from "../../components/PostDescription.astro";
 
-export async function getStaticPaths() {
-    const API_URL = import.meta.env.API_URL;
-    const tags = await fetch (`${API_URL}/api/v2/tags`).then(response => response.json());
 
-
-    return await Promise.all(
-        tags.items.map(async (tag) => {
-            const taggedPosts = await fetch (`${API_URL}/api/v2/posts/?tags=${tag.id}&fields=intro`).then(response => response.json());
-            return {
-                params: { tag: `${tag.name}` },
-                props: { posts: taggedPosts },
-            }
-        })
-    );     
-}
+const API_URL = import.meta.env.API_URL;
 
 const { tag } = Astro.params;
-const {posts} = Astro.props;
+
+const posts = await fetch (`${API_URL}/api/v2/posts/?tags=${tag}&fields=intro`).then(response => response.json());
+
+console.log(Astro.url)
 ---
 <BaseLayout pageTitle={tag}>
     <h2 class="text-2xl mb-5">

@@ -6,7 +6,7 @@ import PaginationArrows from '../../components/PaginationArrows.astro';
 
 const API_URL = import.meta.env.API_URL;
 
-const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=20`).then(response => response.json());
+const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=3`).then(response => response.json());
 
 
 const pageTitle = 'Posts Index';
