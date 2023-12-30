@@ -2,14 +2,15 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostDescription from "../../components/PostDescription.astro";
 
-
 const API_URL = import.meta.env.API_URL;
 
 const { tag } = Astro.params;
 
-const posts = await fetch (`${API_URL}/api/v2/posts/?tags=${tag}&fields=intro`).then(response => response.json());
+const tagByName = await fetch (`${API_URL}/api/v2/tags/?name=${tag}`).then(response => response.json());
 
-console.log(Astro.url)
+const tagID = tagByName.items[0].id;
+
+const posts = await fetch (`${API_URL}/api/v2/posts/?tags=${tagID}&fields=intro`).then(response => response.json());
 ---
 <BaseLayout pageTitle={tag}>
     <h2 class="text-2xl mb-5">
