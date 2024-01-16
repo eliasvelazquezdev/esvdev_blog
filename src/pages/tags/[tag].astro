@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostDescription from "../../components/PostDescription.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 
 const API_URL = import.meta.env.API_URL;
 
@@ -13,6 +14,12 @@ const tagID = tagByName.items[0].id;
 const posts = await fetch (`${API_URL}/api/v2/posts/?tags=${tagID}&fields=intro`).then(response => response.json());
 ---
 <BaseLayout pageTitle={tag}>
+    <Breadcrumbs linkList={[
+        {label: "Tags", link: "/tags/"},
+        {label: tag}
+    ]} 
+    />
+
     <h2 class="text-2xl mb-5">
         Posts con la etiqueta 
         <span class="font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">

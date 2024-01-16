@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostDescription from '../../components/PostDescription.astro';
 import PaginationArrows from '../../components/PaginationArrows.astro';
-
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 const API_URL = import.meta.env.API_URL;
 
@@ -14,10 +14,10 @@ const pageTitle = 'Posts Index';
 <BaseLayout pageTitle={pageTitle}>
     <main>
         <div class="mb-5">
-            <a class="text-md hover:text-gray-400" href="/">
-                <i class='bx bx-left-arrow-alt  '></i>
-                Volver
-            </a>
+            <Breadcrumbs linkList={[
+                {label: "Posts"}
+            ]} 
+            />
 
             <h2 class="text-3xl font-bold">Posts</h2>
             <p>Todos los articulos que he publicado.</p>

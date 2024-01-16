@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 const API_URL = import.meta.env.API_URL;
 
 const tags = await fetch (`${API_URL}/api/v2/tags`).then(response => response.json());
-
 
 const pageTitle = 'Tags Index';
 ---
@@ -12,10 +12,15 @@ const pageTitle = 'Tags Index';
 <BaseLayout pageTitle={pageTitle}>
     <main>
         <div class="mb-5">
-            <a class="text-md hover:text-gray-400" href="/">
+            <!-- <a class="text-md text-white hover:text-gray-300" href="/">
                 <i class='bx bx-left-arrow-alt  '></i>
                 Volver
-            </a>
+            </a> -->
+
+            <Breadcrumbs linkList={[
+                {label: "Tags"}
+            ]} 
+            />
 
             <h2 class="text-3xl font-bold">Tags</h2>
             <p>Todos los tags utilizados en los posts.</p>

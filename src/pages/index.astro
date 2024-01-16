@@ -9,7 +9,6 @@ const API_URL = import.meta.env.API_URL;
 const featured_posts = await fetch (`${API_URL}/api/v2/posts/?featured=true&fields=intro&limit=3`).then(response => response.json());
 
 const latest_posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=3`).then(response => response.json());
-console.log(latest_posts)
 
 const pageTitle = 'Blog'
 ---
@@ -81,7 +80,7 @@ const pageTitle = 'Blog'
 			</div>
 
 			<div class="flex justify-center text-bold">
-				<a href="/posts/" class=" hover:text-orange-500">
+				<a href="/posts/" class="text-white hover:text-orange-500">
 				Todos los posts
 				<i class='bx bx-right-arrow-alt'></i>
 				</a>

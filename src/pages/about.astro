@@ -1,10 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Separator from '../components/Separator.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 const pageTitle = 'Acerca de'
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+    <Breadcrumbs linkList={[
+        {label: "Acerca de"}
+    ]} 
+    />
+
     <h1 class="text-3xl font-bold block mb-3">Muy pronto vas a leer algo copado acá :)</h1>
 </BaseLayout>
