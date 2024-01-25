@@ -10,7 +10,7 @@ const {slug} = Astro.params;
 
 const postBySlug = await fetch (`${API_URL}/api/v2/posts/?slug=${slug}`).then(response => response.json());
 
-const postID = postBySlug.items[0].id;
+const postID = postBySlug.results[0].id;
 
 const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.json());
 

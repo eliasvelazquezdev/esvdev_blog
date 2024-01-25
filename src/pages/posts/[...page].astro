@@ -25,7 +25,7 @@ const pageTitle = 'Posts Index';
 
         <div class="flex lg:flex-row flex-col flex-wrap">
             {
-                posts.items.map((post) => (
+                posts.results?.map((post) => (
                     <PostDescription
                         postURL = {`/posts/${post.meta.slug}`}
                         postTitle={post.title}
