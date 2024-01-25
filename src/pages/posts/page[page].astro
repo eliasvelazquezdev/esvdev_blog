@@ -1,11 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostDescription from '../../components/PostDescription.astro';
-import PaginationArrows from '../../components/PaginationArrows.astro';
+import PaginationArrowsForPosts from '../../components/PaginationArrowsForPosts.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 const {page} = Astro.params;
-console.log(page);
 
 const API_URL = import.meta.env.API_URL;
 
@@ -13,7 +12,7 @@ const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&page=${page}`)
 
 const next = posts.next;
 const prev = posts.previous;
-console.log(prev);
+
 
 const pageTitle = 'Posts Index';
 ---
@@ -44,7 +43,7 @@ const pageTitle = 'Posts Index';
             }
         </div>
 
-        <PaginationArrows next={next} prev={prev} />
+        <PaginationArrowsForPosts next={next} prev={prev} />
 
         
         
