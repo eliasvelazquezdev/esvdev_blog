@@ -6,9 +6,9 @@ import PostDescription from '../components/PostDescription.astro';
 
 const API_URL = import.meta.env.API_URL;
 
-const featured_posts = await fetch (`${API_URL}/api/v2/posts/?featured=true&fields=intro&limit=3`).then(response => response.json());
+const featured_posts = await fetch (`${API_URL}/api/v2/posts/?featured=true&fields=intro`).then(response => response.json());
 
-const latest_posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&limit=3`).then(response => response.json());
+const latest_posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro`).then(response => response.json());
 
 const pageTitle = 'Blog'
 ---
@@ -44,7 +44,7 @@ const pageTitle = 'Blog'
 			<div>
 				{
                     
-                    featured_posts.items?.map((post) => (
+                    featured_posts.results?.map((post) => (
 						<PostDescription
 							postURL={`/posts/${post.meta.slug}`}
 							postTitle={post.title}
@@ -67,7 +67,7 @@ const pageTitle = 'Blog'
 
 				{
                     
-                    latest_posts.items?.map((post) => (
+                    latest_posts.results?.map((post) => (
 						<PostDescription
 							postURL={`/posts/${post.meta.slug}`}
 							postTitle={post.title}

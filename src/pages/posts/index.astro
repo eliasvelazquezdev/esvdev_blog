@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostDescription from '../../components/PostDescription.astro';
+import PaginationArrows from '../../components/PaginationArrows.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+
+const API_URL = import.meta.env.API_URL;
+
+const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro`).then(response => response.json());
+
+const next = posts.next;
+console.log(next);
+
+const pageTitle = 'Posts Index';
+---
+<BaseLayout pageTitle={pageTitle}>
+    <main>
+        <div class="mb-5">
+            <Breadcrumbs linkList={[
+                {label: "Posts"}
+            ]} 
+            />
+
+            <h2 class="text-3xl font-bold">Posts</h2>
+            <p>Todos los articulos que he publicado.</p>
+        </div>
+
+        <div class="flex lg:flex-row flex-col flex-wrap">
+            {
+                posts.results.map((post) => (
+                    <PostDescription
+                        postURL = {`/posts/${post.meta.slug}`}
+                        postTitle={post.title}
+                        postDate={post.meta.first_published_at}
+                        postDescription={post.intro}
+                    />
+                ))
+                
+            }
+        </div>
+
+        <PaginationArrows  next={next} />
+    </main>
+
+</BaseLayout>
