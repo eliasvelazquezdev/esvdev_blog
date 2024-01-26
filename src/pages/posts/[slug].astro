@@ -16,7 +16,6 @@ const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.
 
 const prog_language = post.programming_language;
 
-
 ---
 <BaseLayout pageTitle={post.title}>
     <div class="mb-20">

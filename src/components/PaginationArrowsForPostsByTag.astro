@@ -1,0 +1,50 @@
+---
+const {prevURL, nextURL, tagName} = Astro.props;
+
+const isPrevURLNullOrUndefined = prevURL == null || undefined ? true : false;
+const isNextURLNullOrUndefined = nextURL == null || undefined ? true : false;
+
+const prev_arrow = isPrevURLNullOrUndefined || prevURL.slice(-3,-2) == "s" ? 
+                `/tags/${tagName}` 
+                : 
+                `/tags/${tagName}/page${prevURL.slice(-8)}`;
+
+const next_arrow = !isNextURLNullOrUndefined && nextURL.slice(-3,-2) == "s" ? 
+                `/tags/${tagName}/page${nextURL.slice(-8,-7)}` 
+                : 
+                "nothing";
+
+
+--- 
+<div class="flex justify-center mt-10">
+    <p class="font-bold text-lg">
+        {
+            isPrevURLNullOrUndefined ? 
+                <span class="me-3 text-slate-500" >
+                    <i class='bx bx-left-arrow-alt  '></i>
+                    Ant.
+                </span>
+            :
+                <a class="me-3 text-white hover:text-orange-500" href={prev_arrow}>
+                    <i class='bx bx-left-arrow-alt '></i>
+                    Ant.
+                </a>
+        }
+        
+    </p>
+    <p class="font-bold text-lg">
+        {
+            isNextURLNullOrUndefined ?
+                <span class="me-3 text-slate-500">
+                    Sig.
+                    <i class='bx bx-right-arrow-alt'></i>
+                </span>
+            :
+                <a class="me-3 text-white hover:text-orange-500" href={next_arrow}>
+                    Sig.
+                    <i class='bx bx-right-arrow-alt'></i>
+                </a>
+        }
+
+    </p>
+</div>
