@@ -1,12 +1,27 @@
 ---
 const { platform, username} = Astro.props;
 ---
-
-{platform == "linkedin" ? 
-            <a target="_blank" href={`https://www.${platform}.com/in/${username}`}>
-                <i class={`bx bxl-${platform} text-lg lg:text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse `}></i>
-            </a> 
-            : 
-            <a target="_blank" href={`https://www.${platform}.com/${username}`}>
-                <i class={`bx bxl-${platform} text-lg lg:text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse `}></i>
-            </a>}
+{
+    (() => {
+        switch (platform) {
+            case 'linkedin':
+                return (
+                    <a target="_blank" href={`https://www.${platform}.com/in/${username}`}>
+                        <i class={`bx bxl-${platform} text-lg lg:text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse`}></i>
+                    </a>
+                );
+            case 'twitter':
+                return (
+                    <a target="_blank" href={`https://www.${platform}.com/${username}`}>
+                        <i class={`devicon-twitter-original text-lg me-2 text-white hover:text-orange-500 hover:animate-pulse`}></i>
+                    </a>
+                );
+            default:
+                return (
+                    <a target="_blank" href={`https://www.${platform}.com/${username}`}>
+                        <i class={`bx bxl-${platform} text-lg lg:text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse`}></i>
+                    </a>
+                );
+        }
+    })()
+}
