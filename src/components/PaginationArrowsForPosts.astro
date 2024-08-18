@@ -1,21 +1,27 @@
 ---
 const {prev, next} = Astro.props;
 
-const isPrevUndefined = prev == undefined ? true : false;
+const getPageNumber = (url) => {
+  const urlParams = new URL(url).searchParams;
+  return urlParams.get('page');
+};
 
-const prev_page = isPrevUndefined || prev.slice(-1) == "o" ? "/posts" : `/posts/page${prev.slice(-1)}`;
-const next_page = next == null ? undefined : `/posts/page${next.slice(-1)}`;
+const prevPageNumber = prev ? getPageNumber(prev) : null;
+const nextPageNumber = next ? getPageNumber(next) : null;
+
+const prevPage = prevPageNumber ? `/posts/page${prevPageNumber}` : (prev ? '/posts/' : null);
+const nextPage = nextPageNumber ? `/posts/page${nextPageNumber}` : null;
 ---
 <div class="flex justify-center mt-10">
     <p class="font-bold text-lg">
         {
-            isPrevUndefined ? 
+            !prevPage ? 
                 <span class="me-3 text-slate-500" >
                     <i class='bx bx-left-arrow-alt  '></i>
                     Ant.
                 </span>
             :
-                <a class="me-3 text-white hover:text-orange-500" href={prev_page}>
+                <a class="me-3 text-white hover:text-orange-500" href={prevPage}>
                     <i class='bx bx-left-arrow-alt '></i>
                     Ant.
                 </a>
@@ -24,13 +30,13 @@ const next_page = next == null ? undefined : `/posts/page${next.slice(-1)}`;
     </p>
     <p class="font-bold text-lg">
         {
-            next == undefined ?
+            !nextPage ?
                 <span class="me-3 text-slate-500">
                     Sig.
                     <i class='bx bx-right-arrow-alt'></i>
                 </span>
             :
-                <a class="me-3 text-white hover:text-orange-500" href={next_page}>
+                <a class="me-3 text-white hover:text-orange-500" href={nextPage}>
                     Sig.
                     <i class='bx bx-right-arrow-alt'></i>
                 </a>

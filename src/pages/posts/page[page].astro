@@ -8,10 +8,11 @@ const {page} = Astro.params;
 
 const API_URL = import.meta.env.API_URL;
 
-const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&page=${page}`).then(response => response.json());
+const posts = await fetch (`${API_URL}/api/v2/posts/?page=${page}`).then(response => response.json());
 
 const next = posts.next;
 const prev = posts.previous;
+console.log(prev);
 
 
 const pageTitle = 'Posts Index';
