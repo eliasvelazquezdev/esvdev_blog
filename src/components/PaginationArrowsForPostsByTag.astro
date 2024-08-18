@@ -1,50 +1,47 @@
 ---
-const {prevURL, nextURL, tagName} = Astro.props;
+const {prev, next, tagName} = Astro.props;
 
-const isPrevURLNullOrUndefined = prevURL == null || undefined ? true : false;
-const isNextURLNullOrUndefined = nextURL == null || undefined ? true : false;
+const getPageNumber = (url) => {
+  const urlParams = new URL(url).searchParams;
+  return urlParams.get('page');
+};
 
-const prev_arrow = isPrevURLNullOrUndefined || prevURL.slice(-3,-2) == "s" ? 
-                `/tags/${tagName}` 
-                : 
-                `/tags/${tagName}/page${prevURL.slice(-8)}`;
+const prevPageNumber = prev ? getPageNumber(prev) : null;
+const nextPageNumber = next ? getPageNumber(next) : null;
 
-const next_arrow = !isNextURLNullOrUndefined && nextURL.slice(-3,-2) == "s" ? 
-                `/tags/${tagName}/page${nextURL.slice(-8,-7)}` 
-                : 
-                "nothing";
+const prevPage = prevPageNumber ? `/tags/${tagName}/page${prevPageNumber}` : (prev ? `/tags/${tagName}/` : null);
+const nextPage = nextPageNumber ? `/tags/${tagName}/page${nextPageNumber}` : null;
 
 
 --- 
 <div class="flex justify-center mt-10">
     <p class="font-bold text-lg">
         {
-            isPrevURLNullOrUndefined ? 
+            !prevPage ? 
                 <span class="me-3 text-slate-500" >
                     <i class='bx bx-left-arrow-alt  '></i>
                     Ant.
                 </span>
             :
-                <a class="me-3 text-white hover:text-orange-500" href={prev_arrow}>
+                <a class="me-3 text-white hover:text-orange-500" href={prevPage}>
                     <i class='bx bx-left-arrow-alt '></i>
                     Ant.
                 </a>
-        }
-        
+        }    
     </p>
+
     <p class="font-bold text-lg">
         {
-            isNextURLNullOrUndefined ?
+            !nextPage ?
                 <span class="me-3 text-slate-500">
                     Sig.
                     <i class='bx bx-right-arrow-alt'></i>
                 </span>
             :
-                <a class="me-3 text-white hover:text-orange-500" href={next_arrow}>
+                <a class="me-3 text-white hover:text-orange-500" href={nextPage}>
                     Sig.
                     <i class='bx bx-right-arrow-alt'></i>
                 </a>
         }
-
     </p>
 </div>

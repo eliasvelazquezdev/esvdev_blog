@@ -12,9 +12,9 @@ const tagByName = await fetch (`${API_URL}/api/v2/tags/?name=${tag}`).then(respo
 
 const tagID = tagByName.items[0].id;
 
-const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&tags=${tagID}`).then(response => response.json());
+const posts = await fetch (`${API_URL}/api/v2/posts/?tags=${tagID}`).then(response => response.json());
 
-const nextURL = posts.next;
+const next = posts.next;
 ---
 <BaseLayout pageTitle={tag}>
     <Breadcrumbs linkList={[
@@ -48,7 +48,7 @@ const nextURL = posts.next;
         )
     }
 
-    <PaginationArrowsForPostsByTag nextURL={nextURL} tagName={tag}/>
+    <PaginationArrowsForPostsByTag next={next} tagName={tag}/>
     
     
 </BaseLayout>

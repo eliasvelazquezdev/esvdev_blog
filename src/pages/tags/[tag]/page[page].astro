@@ -13,10 +13,10 @@ const tagByName = await fetch (`${API_URL}/api/v2/tags/?name=${tag}`).then(respo
 
 const tagID = tagByName.items[0].id;
 
-const posts = await fetch (`${API_URL}/api/v2/posts/?fields=intro&page=${page}&tags=${tagID}`).then(response => response.json());
+const posts = await fetch (`${API_URL}/api/v2/posts/?page=${page}&tags=${tagID}`).then(response => response.json());
 
-const prevURL = posts.previous;
-const nextURL = posts.next;
+const prev = posts.previous;
+const next = posts.next;
 
 ---
 <BaseLayout>
@@ -52,6 +52,6 @@ const nextURL = posts.next;
         )
     }
 
-    <PaginationArrowsForPostsByTag prevURL={prevURL} nextURL={nextURL} tagName={tag} />
+    <PaginationArrowsForPostsByTag prev={prev} next={next} tagName={tag} />
     
 </BaseLayout>
