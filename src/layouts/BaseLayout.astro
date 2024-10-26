@@ -17,7 +17,7 @@ const {pageTitle} = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<!-- Thumbnail -->
 		<meta property='og:title' content='Esvdev Blog'/>
-		<meta property='og:image' content='https://res.cloudinary.com/dwczjy8e4/image/upload/v1701366765/blog/thumb_blog_bclotb.png'/>
+		<meta property='og:image' content='https://res.cloudinary.com/dwczjy8e4/image/upload/v1729969447/blog/esvdev_blog_thumb_ytuuiz.png'/>
 		<meta property='og:description' content="Backend - Data Engineering - Python - Filosofia - Desarrollo personal"/>
 		<meta property='og:url' content=''/>
 		<meta property='og:image:width' content='1200' />
@@ -42,27 +42,37 @@ const {pageTitle} = Astro.props;
 	</body>
 
     <style is:global>
-
-
-  	@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;700;900&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 
         body {
-          @apply text-slate-300 lg:w-2/4 mx-auto bg-[#0d1827] p-4 min-h-screen;
-
-		  font-family: 'Inconsolata', monospace;
+			@apply text-slate-300 lg:w-2/4 mx-auto bg-[#01161E] p-4 min-h-screen;
+			font-family: "Montserrat", sans-serif;
         }
 
 		ul{
-			@apply list-disc list-inside bg-slate-950 p-3 mt-2 mb-2
+			@apply list-disc list-inside  p-3 mt-2 mb-2
 		}
 
 		li {
 			@apply mb-3
 		}
 
-		a {
-			@apply text-orange-500 hover:text-orange-400
+		p > a, ul > li > a{
+			@apply text-orange-500 hover:text-orange-600 underline underline-offset-4 decoration-dotted
 		}
-      
+
+		pre > code {
+			border-radius: 4px;
+			padding: 15px;
+			background: #02202c;
+			font-family: Consolas, Monaco, 'Andale Mono', monospace;
+			display: block;
+			font-size: 15px;
+			line-height: 1.5;
+			word-break: normal;
+			white-space: pre;
+			word-spacing: normal;
+			tab-size: 4;
+		}
     </style>
 </html>
