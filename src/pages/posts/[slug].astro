@@ -45,10 +45,10 @@ const prog_language = post.programming_language;
     <div class="mb-8">
         {
             post.body.map((item) => (
-               item.type == "heading" ? <h2 class="text-3xl font-bold mt-16 mb-5 underline underline-offset-8">{item.value}</h2>
+               item.type == "heading" ? <h2 class="text-3xl font-bold mt-16 mb-5">{item.value}</h2>
                :item.type == "subtitle" ? <h2 class="text-2xl mb-3 mt-10 font-bold">{item.value}</h2>
-               : item.type == "paragraph" ? <div class="text-lg mt-5 mb-5 overflow-clip" set:html={item.value}></div>
-               : item.type == "image" ? <img class="w-2/3 mx-auto mt-3 mb-3" src={item.value.large.src} alt="">
+               : item.type == "paragraph" ? <div class="text-lg mt-5 mb-8 overflow-clip leading-loose" set:html={item.value}></div>
+               : item.type == "image" ? <img class="w-2/3 mx-auto mt-5 mb-5" src={item.value.large.src} alt="">
                : item.type == "quote" ? <blockquote class="bg-slate-800 p-4 block italic text-xl mt-5 mb-5" set:html={item.value}></blockquote>
                : item.type == "code_snippet" ? <p class="mt-5 mb-5"><Code code={item.value} lang={prog_language} theme="github-dark"/></p>
                : item.type == "video" ? <iframe src={item.value} class="w-full aspect-video my-7"></iframe>

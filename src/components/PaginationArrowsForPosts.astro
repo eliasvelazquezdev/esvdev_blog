@@ -18,12 +18,12 @@ const nextPage = nextPageNumber ? `/posts/page${nextPageNumber}` : null;
             !prevPage ? 
                 <span class="me-3 text-slate-500" >
                     <i class='bx bx-left-arrow-alt  '></i>
-                    Ant.
+                    Anterior
                 </span>
             :
                 <a class="me-3 text-white hover:text-orange-500" href={prevPage}>
                     <i class='bx bx-left-arrow-alt '></i>
-                    Ant.
+                    Anterior
                 </a>
         }
         
@@ -32,12 +32,12 @@ const nextPage = nextPageNumber ? `/posts/page${nextPageNumber}` : null;
         {
             !nextPage ?
                 <span class="me-3 text-slate-500">
-                    Sig.
+                    Siguiente
                     <i class='bx bx-right-arrow-alt'></i>
                 </span>
             :
                 <a class="me-3 text-white hover:text-orange-500" href={nextPage}>
-                    Sig.
+                    Siguiente
                     <i class='bx bx-right-arrow-alt'></i>
                 </a>
         }
