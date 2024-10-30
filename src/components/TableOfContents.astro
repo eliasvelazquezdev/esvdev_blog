@@ -1,0 +1,60 @@
+---
+interface TableItem {
+    type: string;
+    value: string;
+}
+
+interface Props {
+    items: TableItem[];
+}
+
+const { items } = Astro.props;
+
+// Filter only headings and subtitles and create slugs for links
+const tocItems = items
+    .filter(item => item.type === "heading" || item.type === "subtitle")
+    .map(item => ({
+        ...item,
+        slug: item.value
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '')
+    }));
+
+// Group subtitles under their respective headings
+const groupedItems = tocItems.reduce((acc: any[], item) => {
+    if (item.type === "heading") {
+        acc.push({
+            ...item,
+            children: []
+        });
+    } else if (item.type === "subtitle" && acc.length > 0) {
+        acc[acc.length - 1].children.push(item);
+    }
+    return acc;
+}, []);
+---
+
+<nav class="toc bg-slate-800 p-6 rounded-lg mb-8">
+    <h3 class="text-xl font-bold mb-4">Tabla de Contenidos</h3>
+    <ul class="space-y-3">
+        {groupedItems.map(heading => (
+            <li>
+                <a href={`#${heading.slug}`} class="text-orange-500 hover:text-orange-400">
+                    {heading.value}
+                </a>
+                {heading.children.length > 0 && (
+                    <ul class="ml-4 mt-2 space-y-2">
+                        {heading.children.map(subtitle => (
+                            <li>
+                                <a href={`#${subtitle.slug}`} class="text-gray-400 hover:text-gray-300">
+                                    {subtitle.value}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </li>
+        ))}
+    </ul>
+</nav>
