@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import ZipsCard from '../../components/ZipsCard.astro';
+
+const zipsEntries = await getCollection('zips', ({ id }) => {
+    return id;
+});
+---
+
+<BaseLayout pageTitle="Zips">
+    <main>
+        <h1 class="text-3xl font-bold mb-5">Zips ⚡​</h1>
+
+        <p class="text-lg mb-14 leading-loose">¡Bienvenido/a a <span class="font-bold">Zips</span>! Aquí encontrarás lecturas rápidas sobre tecnología, programación, etc. La idea es que te lleves un aprendizaje, encuentres recursos, o simplemente te diviertas en lecturas breves que no te tomarán más que unos muy pocos minutos.</p>
+
+        <div class="flex flex-wrap">
+            {
+            zipsEntries.map((zip) => (
+                <ZipsCard zip={zip} />
+            ))
+        }
+    </main>
+</BaseLayout>

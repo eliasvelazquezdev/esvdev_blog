@@ -49,6 +49,37 @@ const {pageTitle} = Astro.props;
 			font-family: "Montserrat", sans-serif;
         }
 
+		.markdown-parsed-content {
+			@apply text-slate-300;
+			max-width: 100%;
+			h1 {
+				@apply text-4xl font-bold mt-14 mb-5 text-slate-300;
+			}
+			h2 {
+				@apply text-2xl font-bold mt-14 mb-5 text-slate-300;
+			}
+			h3 {
+				@apply text-xl font-bold mt-14 mb-5 text-slate-300;
+			}
+			p, li {
+				@apply text-lg mb-5 leading-loose;
+			}
+			
+			strong {
+				@apply font-bold text-slate-300;
+			}
+
+			ul > li, ol > li {
+				@apply list-inside; /* Ensure markers are inside */
+				padding-left: 0; /* Remove default padding */
+				margin-left: 0;
+			}
+			li {
+				@apply mb-3;
+				padding-left: 0.5rem; /* Adjust padding for list items */
+			}
+		}
+
 		ul{
 			@apply list-disc list-inside p-3 mt-2 mb-2
 		}
