@@ -1,16 +1,41 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Separator from '../components/Separator.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+
 
 const pageTitle = 'Acerca de'
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <Breadcrumbs linkList={[
-        {label: "Acerca de"}
-    ]} 
-    />
+    <h1 class="text-3xl font-bold block mb-5">Hola! Soy Elias y te cuento un poco sobre mí 😉</h1>
 
-    <h1 class="text-3xl font-bold block mb-3">Muy pronto vas a leer algo copado acá :)</h1>
+
+    <h2 class="text-2xl font-bold block mt-10 mb-3">Mis inicios 👶</h2>
+    <p class="text-lg mb-5 leading-loose">Siempre me gustaron las computadoras y todo lo que se puede hacer con ellas. A mis 16 años, mientras estaba en la secundaria, <span class="font-bold">entré en contacto con mi primer lenguaje, C++</span>. No voy a dibujar la situación. Me fue un espanto. Pero recuerdo que parte de mí pensaba que era como hacer magia. Escribir todas esas letras, palabras y símbolos raros me permitía decirle a la computadora qué hacer y qué no.</p>
+
+    <p class="text-lg mb-5 leading-loose">Al terminar la secundaria comenzaría a trabajar durante varios años y exploraría distintos caminos académicos. En 2020 comencé a estudiar enfermería y, tras 1 año y medio de estudios y al ver que no era para mí, en 2021 decidí retomar un camino que había transitado brevemente en mi época de secundaria: la programación. <span class="font-bold">Fue en este año donde volvería a entrar en contacto con este mundo a través de mi segundo lenguaje: Python</span>. Claro, no me acordaba nada de C++, pero sí recordaba que teclear en la compu era algo a lo que ya estaba acostumbrado.</p>
+
+    <p class="text-lg mb-5 leading-loose">Volví a sentir esa magia de la que hablé antes. Me encantó la facilidad de la sintaxis de Python, su legibilidad y facilidad de aprendizaje. Así comencé este viaje donde soy alumno y la mayoría de veces mi propio maestro, y es hasta el día de la fecha donde sigo esforzándome por aprender y practicar lo aprendido.</p>
+
+
+    <h2 class="text-2xl font-bold block mt-10 mb-3">Mi camino laboral 🚀</h2>
+    <p class="text-lg mb-5 leading-loose">En febrero de 2024 empecé mi camino laboral como Python dev en una startup llamada <a href="https://www.linkedin.com/company/vordentech/posts/?feedView=all" target="_blank" class="font-bold">Vordentech</a>. Aunque en ese momento Data Engineering no era mi campo de estudio, me encantó el desafío y la oportunidad de aprender y crecer. Durante este tiempo, aprendí mucho sobre el desarrollo de software, la gestión de datos y la importancia de la nube en la industria.</p>
+
+    <p class="text-lg mb-5 leading-loose">También supuso (y sigue suponiendo) un gran campo para seguir puliendo mis habilidades colaborativas, <span class="font-bold">comunicativas (tanto en español como en inglés)</span> y de trabajo en equipo, ya sea utilizando herramientas de comunicación como Slack, o <span class="font-bold">Git</span> para el control de versiones.</p>
+
+    <p class="text-lg mb-5 leading-loose">Mi mayor aprendizaje ha sido la utilización de <span class="font-bold">herramientas de IA</span>, como ChatGPT o Claude, para resolver problemas de manera más eficiente y rápida. También aprendí a utilizar <span class="font-bold">AWS</span>, el principal proveedor de nube en la actualidad. No solo me estoy sintiendo cada vez más cómodo en su interfaz web, sino que he aprendido sobre el funcionamiento interno de varios de los servicios que ofrece y cómo desplegarlos e integrarlos en un ambiente de producción, sea mediante la consola web o mediante la CLI.</p>
+
+    <p class="text-lg mb-5 leading-loose">Otro de mis aprendizajes ha sido <span class="font-bold">Docker</span> para crear contenedores de desarrollo y producción, lo que me ha permitido ahorrar tiempo y recursos al no tener que configurar dichos entornos manualmente.</p>
+
+    <p class="text-lg mb-5 leading-loose">Necesitaría más párrafos para hablar de todo lo que he aprendido, pero creo que este es un buen punto de partida.</p>
+
+
+    <h2 class="text-2xl font-bold block mt-10 mb-3">Mi gran objetivo 🎯</h2>
+    <p class="text-lg mb-5 leading-loose">Aún recuerdo algunos de los conocimientos que he adquirido durante mis estudios de enfermería. No quiero ahondar en los motivos que me llevaron a abandonar la carrera, pero sí sobre la razón por la cual empecé: <span class="font-bold">ayudar a los demás</span>. Si hay algo que me apasiona hacer es poner mis conocimientos al servicio de otros, no importa el campo o especialidad.</p>
+
+    <p class="text-lg mb-5 leading-loose italic">Estoy convencido de que la programación, y más particularmente Data Engineering, me permitirá hacer justamente eso: lograr un impacto positivo en la vida de las personas a través de la tecnología. Y por ese motivo es que me preparo persistentemente.</p>
+
+    <p class="text-lg mb-5 leading-loose">Hablando de ayudar, hace unos meses fundé una comunidad en WhatsApp llamada <span class="font-bold">SHARE IT</span>. Es una comunidad donde compartimos conocimientos sobre tecnologías, programación, nos ayudamos a mejorar nuestros CVs, prepararnos para entrevistas, etc. Si te interesa, puedes unirte a ella <a href="https://chat.whatsapp.com/L688888888888888888888888" target="_blank" class="font-bold">aquí</a>.</p>
+
+    <p class="text-lg mb-5 leading-loose">¡Gracias por haber leído hasta acá! Si tienes alguna pregunta, no dudes en contactarme 😃.</p>
 </BaseLayout>
