@@ -2,7 +2,7 @@
 const { zip } = Astro.props;
 ---
 
-<div class="card mb-5 p-4 border rounded shadow">
+<div class="card h-full mb-5 p-4 border rounded shadow">
     <a href={zip.id} class="text-lg font-bold text-orange-500">{zip.data.title}</a>
     <p class="text-sm mt-2">{zip.data.description}</p>
 </div>

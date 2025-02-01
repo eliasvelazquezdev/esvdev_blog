@@ -65,18 +65,18 @@ const {pageTitle} = Astro.props;
 				@apply text-lg mb-5 leading-loose;
 			}
 			
-			strong {
-				@apply font-bold text-slate-300;
-			}
-
 			ul > li, ol > li {
-				@apply list-inside; /* Ensure markers are inside */
-				padding-left: 0; /* Remove default padding */
+				@apply list-inside;
+				padding-left: 0; 
 				margin-left: 0;
 			}
 			li {
 				@apply mb-3;
-				padding-left: 0.5rem; /* Adjust padding for list items */
+				padding-left: 0.5rem; 
+			}
+
+			code {
+				@apply my-5;
 			}
 		}
 
@@ -110,5 +110,11 @@ const {pageTitle} = Astro.props;
 			word-spacing: normal;
 			tab-size: 4;
 		}
+
+		strong:not(a strong), b:not(a b),
+        .markdown-parsed-content strong:not(a strong),
+        .markdown-parsed-content b:not(a b) {
+            @apply font-bold text-sky-600; 
+        }
     </style>
 </html>
