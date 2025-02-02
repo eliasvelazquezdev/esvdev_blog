@@ -16,6 +16,10 @@ const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.
 
 const prog_language = post.programming_language;
 
+function addTargetBlankToLinks(html: string) {
+    return html.replace(/<a /g, '<a target="_blank" ');
+}
+
 ---
 <BaseLayout pageTitle={post.title}>
     <div class="mb-20">
@@ -58,7 +62,7 @@ const prog_language = post.programming_language;
                         {item.value}
                     </h2>
                 ) : item.type == "paragraph" ? (
-                    <div class="text-lg mt-5 mb-8 overflow-clip leading-loose" set:html={item.value}></div>
+                    <div class="text-lg mt-5 mb-8 overflow-clip leading-loose" set:html={addTargetBlankToLinks(item.value)}></div>
                 ) : item.type == "image" ? (
                     <img class="w-2/3 mx-auto mt-5 mb-5" src={item.value.large.src} alt="" />
                 ) : item.type == "quote" ? (
