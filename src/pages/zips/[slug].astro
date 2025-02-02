@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Author from "../../components/Author.astro";
 import { getCollection } from 'astro:content';
 import { marked } from "marked";
 
@@ -29,4 +30,6 @@ if (!zip) {
 
         <div class="markdown-parsed-content" set:html={htmlContent}></div> 
     </main>
+
+    <Author />
 </BaseLayout>
