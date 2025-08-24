@@ -4,11 +4,21 @@ import Social from '../components/Social.astro';
 import Separator from '../components/Separator.astro';
 import PostDescription from '../components/PostDescription.astro';
 
-const API_URL = import.meta.env.API_URL;
+import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
 
-const featured_posts = await fetch (`${API_URL}/api/v2/posts/?featured=true`).then(response => response.json());
+const FEATURED_POSTS_QUERY = `*[
+	_type == "post" && featured == true
+]|order(publishedAt desc){_id, title, slug, excerpt, publishedAt}
+`;
 
-const latest_posts = await fetch (`${API_URL}/api/v2/posts/`).then(response => response.json());
+const featured_posts = await sanityClient.fetch<SanityDocument[]>(FEATURED_POSTS_QUERY);
+
+const LATEST_POSTS_QUERY = `*[
+    _type == "post"
+]|order(publishedAt desc)[0...3]{_id, title, slug, excerpt, publishedAt}
+`;
+const latest_posts = await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY);
 
 const pageTitle = 'Blog'
 ---
@@ -48,13 +58,12 @@ const pageTitle = 'Blog'
 
 			<div>
 				{
-                    
-                    featured_posts.results?.map((post) => (
+                    featured_posts.map((post) => (
 						<PostDescription
-							postURL={`/posts/${post.meta.slug}`}
+							postURL={`/posts/${post.slug.current}`}
 							postTitle={post.title}
-							postDate={post.meta.first_published_at}
-							postDescription={post.intro}
+							postDate={post.publishedAt}
+							postDescription={post.excerpt}
 						/>
                     ))
                     
@@ -69,15 +78,13 @@ const pageTitle = 'Blog'
 			<h1 class="font-bold text-3xl block mb-5">Ultimos posts</h1>
 
 			<div>
-
 				{
-                    
-                    latest_posts.results?.map((post) => (
+                    latest_posts.map((post) => (
 						<PostDescription
-							postURL={`/posts/${post.meta.slug}`}
+							postURL={`/posts/${post.slug.current}`}
 							postTitle={post.title}
-							postDate={post.meta.first_published_at}
-							postDescription={post.intro}
+							postDate={post.publishedAt}
+							postDescription={post.excerpt}
 						/>
                     ))
                     

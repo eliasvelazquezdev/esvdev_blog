@@ -4,11 +4,16 @@ import PostDescription from '../../components/PostDescription.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import PaginationArrowsForPosts from '../../components/PaginationArrowsForPosts.astro';
 
-const API_URL = import.meta.env.API_URL;
+import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
 
-const posts = await fetch (`${API_URL}/api/v2/posts/`).then(response => response.json());
+const POSTS_QUERY = `*[
+    _type == "post"
+    && defined(slug.current)
+]|order(publishedAt desc)[0...15]{_id, title, slug, excerpt, publishedAt}
+`;
 
-const next = posts.next;
+const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
 
 const pageTitle = 'Posts Index';
 ---
@@ -26,19 +31,19 @@ const pageTitle = 'Posts Index';
 
         <div class="flex lg:flex-row flex-col flex-wrap">
             {
-                posts.results.map((post) => (
+                posts.map((post) => (
                     <PostDescription
-                        postURL = {`/posts/${post.meta.slug}`}
+                        postURL = {`/posts/${post.slug.current}`}
                         postTitle={post.title}
-                        postDate={post.meta.first_published_at}
-                        postDescription={post.intro}
+                        postDate={post.publishedAt}
+                        postDescription={post.excerpt}
                     />
                 ))
                 
             }
         </div>
 
-        <PaginationArrowsForPosts next={next} />
+        {/* <PaginationArrowsForPosts next={next} /> */}
     </main>
 
 </BaseLayout>

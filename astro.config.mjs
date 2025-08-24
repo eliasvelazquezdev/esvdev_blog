@@ -3,9 +3,21 @@ import tailwind from "@astrojs/tailwind";
 
 import netlify from "@astrojs/netlify/functions";
 
+import sanity from "@sanity/astro";
+
 // https://astro.build/config
-export default defineConfig({
-  integrations: [tailwind()],
-  output: "server",
-  adapter: netlify()
-});
+export default defineConfig(
+  {
+    integrations: [
+      tailwind(), 
+      sanity({
+      projectId: "y9uq1het",
+      dataset: "production",
+      useCdn: false,
+      apiVersion: '2025-08-24',
+      })
+    ],
+    output: "server",
+    adapter: netlify()
+  }
+);
