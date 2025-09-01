@@ -10,12 +10,16 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig(
   {
-    integrations: [tailwind(), sanity({
-    projectId: "y9uq1het",
-    dataset: "production",
-    useCdn: false,
-    apiVersion: '2025-08-24',
-    }), react()],
+    integrations: [
+      tailwind(), 
+      sanity({
+        projectId: "y9uq1het",
+        dataset: "production",
+        useCdn: false,
+        apiVersion: '2025-08-24',
+      }), 
+      react()
+    ],
     output: "server",
     adapter: netlify()
   }
