@@ -1,20 +1,89 @@
+import { createSlug } from '../utils/slugify.js';
+
+
+function extractText(children) {
+  console.log('Children received:', children);
+  
+  if (!children) return '';
+  
+  if (typeof children === 'string') return children;
+  
+  if (Array.isArray(children)) {
+    return children.map(child => extractText(child)).join('');
+  }
+  
+  if (children.props && children.props.value) {
+    const value = children.props.value;
+    return String(value);
+  }
+  
+  if (children.props) {
+    if (typeof children.props.children === 'string') {
+      return children.props.children;
+    }
+    if (children.props.children) {
+      return extractText(children.props.children);
+    }
+  }
+  
+  if (children.text) {
+    return children.text;
+  }
+  
+  return '';
+}
+
+
 export const components = {
   block: {
-    h1: ({ children }) => (
-      <h1 className="text-6xl font-bold mt-6 mb-4">{children}</h1>
-    ),
-    h2: ({ children }) => (
-      <h2 className="text-4xl font-semibold mt-6 mb-3">{children}</h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="text-3xl font-medium mt-4 mb-2">{children}</h3>
-    ),
-    h4: ({ children }) => (
-      <h4 className="text-2xl font-medium mt-3 mb-2">{children}</h4>
-    ),
+    h1: ({ children }) => {
+      const text = extractText(children);
+      const slug = createSlug(text);
+
+      return (
+        <h1 id={slug} className="text-6xl font-bold mt-6 mb-4 scroll-mt-20">
+          {children}
+        </h1>
+      );
+    },
+
+    h2: ({ children }) => {
+      const text = extractText(children);
+      const slug = createSlug(text);
+
+      return (
+        <h2 id={slug} className="text-4xl font-semibold mt-6 mb-3 scroll-mt-20">
+          {children}
+        </h2>
+      );
+    },
+
+    h3: ({ children }) => {
+      const text = extractText(children);
+      const slug = createSlug(text);
+
+      return (
+        <h3 id={slug} className="text-3xl font-medium mt-4 mb-2 scroll-mt-20">
+          {children}
+        </h3>
+      );
+    },
+
+    h4: ({ children }) => {
+      const text = extractText(children);
+      const slug = createSlug(text);
+
+      return (
+        <h4 id={slug} className="text-2xl font-medium mt-3 mb-2 scroll-mt-20">
+          {children}
+        </h4>
+      );
+    },
+
     normal: ({ children }) => (
       <p className="leading-8 mb-8 text-lg">{children}</p>
     ),
+    
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 text-xl  border-gray-400 pl-4 italic text-gray-400 my-10">
         {children}
