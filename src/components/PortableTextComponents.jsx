@@ -1,9 +1,8 @@
 import { createSlug } from '../utils/slugify.js';
-
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 function extractText(children) {
-  console.log('Children received:', children);
-  
   if (!children) return '';
   
   if (typeof children === 'string') return children;
@@ -83,7 +82,7 @@ export const components = {
     normal: ({ children }) => (
       <p className="leading-8 mb-8 text-lg">{children}</p>
     ),
-    
+
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 text-xl  border-gray-400 pl-4 italic text-gray-400 my-10">
         {children}
@@ -112,9 +111,6 @@ export const components = {
   marks: {
     strong: ({ children }) => <strong>{children}</strong>,
     em: ({ children }) => <em>{children}</em>,
-    code: ({ children }) => (
-      <code className="bg-gray-100 px-1 rounded">{children}</code>
-    ),
     link: ({ value, children }) => (
       <a
         href={value?.href}
@@ -140,6 +136,33 @@ export const components = {
             className="rounded-lg shadow-md max-w-full h-auto mb-6"
             loading="lazy"
           />
+        </div>
+      );
+    },
+    code: (props) => {
+      const { code, language, filename } = props.node || {};
+      
+      return (
+        <div className="my-8">
+          {filename && (
+            <div className="bg-gray-800 text-gray-300 px-4 py-2 text-sm font-mono rounded-t-lg border-b border-gray-600">
+              📁 {filename}
+            </div>
+          )}
+          <SyntaxHighlighter
+            language={language || 'text'}
+            style={oneDark}
+            customStyle={{
+              borderRadius: filename ? '0 0 0.5rem 0.5rem' : '0.5rem',
+              fontSize: '0.875rem',
+              lineHeight: '1.5',
+              margin: 0,
+            }}
+            showLineNumbers={true}
+            wrapLines={true}
+          >
+            {code || ''}
+          </SyntaxHighlighter>
         </div>
       );
     },
