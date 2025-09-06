@@ -1,47 +1,43 @@
 ---
-const {prev, next, tagName} = Astro.props;
+interface Props {
+    next?: string | null;
+    prev?: string | null;
+    tagName: string;
+    currentPage?: number;
+    totalPages?: number;
+}
 
-const getPageNumber = (url) => {
-  const urlParams = new URL(url).searchParams;
-  return urlParams.get('page');
-};
-
-const prevPageNumber = prev ? getPageNumber(prev) : null;
-const nextPageNumber = next ? getPageNumber(next) : null;
-
-const prevPage = prevPageNumber ? `/tags/${tagName}/page${prevPageNumber}` : (prev ? `/tags/${tagName}/` : null);
-const nextPage = nextPageNumber ? `/tags/${tagName}/page${nextPageNumber}` : null;
-
-
---- 
-<div class="flex justify-center mt-10">
-    <p class="font-bold text-lg">
-        {
-            !prevPage ? 
-                <span class="me-3 text-slate-500" >
-                    <i class='bx bx-left-arrow-alt  '></i>
-                    Anterior
-                </span>
-            :
-                <a class="me-3 text-white hover:text-orange-500" href={prevPage}>
-                    <i class='bx bx-left-arrow-alt '></i>
-                    Anterior
-                </a>
-        }    
-    </p>
-
-    <p class="font-bold text-lg">
-        {
-            !nextPage ?
-                <span class="me-3 text-slate-500">
-                    Siguiente
-                    <i class='bx bx-right-arrow-alt'></i>
-                </span>
-            :
-                <a class="me-3 text-white hover:text-orange-500" href={nextPage}>
-                    Siguiente
-                    <i class='bx bx-right-arrow-alt'></i>
-                </a>
-        }
-    </p>
-</div>
+const { next, prev, tagName, currentPage, totalPages } = Astro.props;
+---
+<hr class="w-full h-0.5 mx-auto bg-orange-500 border-0 rounded my-6">
+<nav class="flex justify-between items-center mt-8 pt-8">
+    <div class="flex-1">
+        {prev && (
+            <a 
+                href={prev} 
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-orange-500 hover:text-white"
+            >
+                ← Página anterior
+            </a>
+        )}
+    </div>
+    
+    {(currentPage && totalPages) && (
+        <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-700">
+                Página {currentPage} de {totalPages} para #{tagName}
+            </span>
+        </div>
+    )}
+    
+    <div class="flex-1 text-right">
+        {next && (
+            <a 
+                href={next} 
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-orange-500 hover:text-white"
+            >
+                Página siguiente →
+            </a>
+        )}
+    </div>
+</nav>
