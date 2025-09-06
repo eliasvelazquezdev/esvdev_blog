@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Author from "../../components/Author.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
+import { getTagColorClasses } from "../../utils/tagColors.js";
 
 import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
@@ -18,7 +19,13 @@ const POST_BY_SLUG_QUERY = `*[
     excerpt,
     publishedAt,
     _updatedAt,
-    body
+    body,
+    "tags": tags[]->{ 
+    name, 
+    "slug": slug.current, 
+    color,
+    description 
+    }
 }`;
 
 const post = await sanityClient.fetch<SanityDocument[]>(POST_BY_SLUG_QUERY);
@@ -69,19 +76,25 @@ function formatDate(date: Date){
 
     <PortableText value={portableText}  components={components} />
 
-    <!-- TODO: Show the tags correctly -->
-    <!-- <div class="mt-5">
-        <span>Tags: </span>
-        <div class="flex flex-wrap">
-            {
-                post.tags.map((tag) => (
-                    <a href={`/tags/${tag}`} class=" me-5 mb-3 md:mb-5 font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
-                        {`#${tag}`}
-                    </a>
-                ))
-            }
+    {post.tags && post.tags.length > 0 && (
+        <div class="mt-8 pt-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-700">Tags:</h3>
+            <div class="flex flex-wrap gap-2">
+                {post.tags.map((tag) => {
+                    const colors = getTagColorClasses(tag.color);
+                    return (
+                        <a 
+                            href={`/tags/${tag.slug}`}
+                            class={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
+                            title={tag.description || `Ver todos los posts sobre ${tag.name}`}
+                        >
+                            #{tag.name}
+                        </a>
+                    );
+                })}
+            </div>
         </div>
-    </div> -->
+    )}
     
     <Author />
 
