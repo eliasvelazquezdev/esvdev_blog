@@ -78,7 +78,7 @@ function formatDate(date: Date){
 
     {post.tags && post.tags.length > 0 && (
         <div class="mt-8 pt-6">
-            <h3 class="text-lg font-semibold mb-4 text-gray-700">Tags:</h3>
+            <h3 class="text-lg font-semibold mb-4 text-sky-600">Tags:</h3>
             <div class="flex flex-wrap gap-2">
                 {post.tags.map((tag) => {
                     const colors = getTagColorClasses(tag.color);
