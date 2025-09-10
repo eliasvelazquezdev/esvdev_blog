@@ -1,54 +1,21 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import PostDescription from "../../../components/PostDescription.astro";
-import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import PaginationArrowsForPostsByTag from "../../../components/PaginationArrowsForPostsByTag.astro";
+import { sanityClient } from "sanity:client";
 
-const API_URL = import.meta.env.API_URL;
+export const prerender = true;
+export async function getStaticPaths() {
+  const TAGS_QUERY = `*[_type == "tag" && count(*[_type == "post" && references(^._id)]) > 0] {
+    "slug": slug.current
+  }`;
+  
+  const tags = await sanityClient.fetch(TAGS_QUERY);
+  
+  return tags.map(tag => ({
+    params: { tag: tag.slug }
+  }));
+}
 
 const { tag } = Astro.params;
 
-const tagByName = await fetch (`${API_URL}/api/v2/tags/?name=${tag}`).then(response => response.json());
-
-const tagID = tagByName.items[0].id;
-
-const posts = await fetch (`${API_URL}/api/v2/posts/?tags=${tagID}`).then(response => response.json());
-
-const next = posts.next;
+// Redirect to page 1
+return Astro.redirect(`/tags/${tag}/page1`);
 ---
-<BaseLayout pageTitle={tag}>
-    <Breadcrumbs linkList={[
-        {label: "Tags", link : "/tags"},
-        {label: tag}
-    ]} 
-    />
-
-    <h2 class="text-2xl mb-5">
-        Posts con la etiqueta 
-        <span class="font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
-            { `#${tag}` }
-        </span>
-    </h2>
-
-    {
-        posts.count == 0 ? 
-        <h2 class="text-xl">Nada por aquí. Muy pronto voy a hablar de este tema, así que date una vuelta pronto. 😉</h2>
-        :
-        <Fragment />
-    }
-
-    {
-        posts.results?.map((post) => 
-            <PostDescription
-                postURL={`/posts/${post.meta.slug}`}
-                postTitle={post.title}
-                postDate={post.meta.first_published_at}
-                postDescription={post.intro}
-            />
-        )
-    }
-
-    <PaginationArrowsForPostsByTag next={next} tagName={tag}/>
-    
-    
-</BaseLayout>

@@ -1,5 +1,12 @@
 ---
 const {postTitle, postDescription, postDate, postURL} = Astro.props;
+
+const dateFormatting =  {
+    weekday: 'short', 
+    year: 'numeric', 
+    month: 'numeric', 
+    day: 'numeric'
+};
 ---
 
 <div class="w-2/3 mb-5">
@@ -8,10 +15,10 @@ const {postTitle, postDescription, postDate, postURL} = Astro.props;
     </a>
     <p class="text-gray-500 mt-1 mb-2">
         <i class='bx bxs-calendar me-1'></i>
-        {postDate}
+        {new Date(postDate).toLocaleDateString("es-ES", dateFormatting)}
     </p>
     <div class="text-gray-400 w-2/3">
-        <Fragment set:html={postDescription}>
+        {postDescription}
     </div>
 </div>
 

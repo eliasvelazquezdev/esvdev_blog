@@ -1,60 +1,86 @@
 ---
-interface TableItem {
-    type: string;
-    value: string;
+import { createSlug } from '../utils/slugify.js';
+
+
+interface PortableTextBlock {
+    _type: string;
+    style?: string;
+    children?: Array<{
+        text: string;
+        _type: string;
+    }>;
 }
 
 interface Props {
-    items: TableItem[];
+    items: PortableTextBlock[];
 }
 
 const { items } = Astro.props;
 
-// Filter only headings and subtitles and create slugs for links
-const tocItems = items
-    .filter(item => item.type === "heading" || item.type === "subtitle")
-    .map(item => ({
-        ...item,
-        slug: item.value
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '')
-    }));
+function extractTextFromBlock(block: PortableTextBlock): string {
+    if (!block.children) return '';
+    return block.children
+        .filter(child => child._type === 'span')
+        .map(child => child.text)
+        .join('');
+}
 
-// Group subtitles under their respective headings
+
+const tocItems = items
+    .filter(item => 
+        item._type === 'block' && 
+        item.style && 
+        ['h1', 'h2', 'h3', 'h4'].includes(item.style)
+    )
+    .map(item => {
+        const text = extractTextFromBlock(item);
+        return {
+            level: parseInt(item.style!.substring(1)), // Extract number from h1, h2, etc.
+            text: text,
+            slug: createSlug(text),
+            style: item.style
+        };
+    })
+    .filter(item => item.text.trim() !== ''); // Remove empty headings
+
+// Group headings hierarchically
 const groupedItems = tocItems.reduce((acc: any[], item) => {
-    if (item.type === "heading") {
+    if (item.level === 1 || item.level === 2) {
+        // Main headings
         acc.push({
             ...item,
             children: []
         });
-    } else if (item.type === "subtitle" && acc.length > 0) {
+    } else if ((item.level === 3 || item.level === 4) && acc.length > 0) {
+        // Sub-headings under the last main heading
         acc[acc.length - 1].children.push(item);
     }
     return acc;
 }, []);
 ---
 
-<nav class="toc bg-slate-800 p-6 rounded-lg mb-8">
-    <h3 class="text-xl font-bold mb-4">Tabla de Contenidos</h3>
-    <ul class="space-y-3">
-        {groupedItems.map(heading => (
-            <li>
-                <a href={`#${heading.slug}`} class="text-orange-500 hover:text-orange-400">
-                    {heading.value}
-                </a>
-                {heading.children.length > 0 && (
-                    <ul class="ml-4 mt-2 space-y-2">
-                        {heading.children.map(subtitle => (
-                            <li>
-                                <a href={`#${subtitle.slug}`} class="text-gray-400 hover:text-gray-300">
-                                    {subtitle.value}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </li>
-        ))}
-    </ul>
-</nav>
+{tocItems.length > 0 && (
+    <nav class="toc bg-slate-800 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-bold mb-4 text-white">Tabla de Contenidos</h3>
+        <ul class="space-y-3 list-disc list-outside ml-4">
+            {groupedItems.map(heading => (
+                <li>
+                    <a href={`#${heading.slug}`} class="text-orange-500 hover:text-orange-400 block">
+                        {heading.text}
+                    </a>
+                    {heading.children.length > 0 && (
+                        <ul class="ml-4 mt-2 space-y-2 list-outside">
+                            {heading.children.map(subheading => (
+                                <li>
+                                    <a href={`#${subheading.slug}`} class="text-gray-400 hover:text-gray-300 text-sm block">
+                                        {subheading.text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </li>
+            ))}
+        </ul>
+    </nav>
+)}

@@ -2,22 +2,48 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Author from "../../components/Author.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
-import { Code } from 'astro:components';
+import { getTagColorClasses } from "../../utils/tagColors.js";
 
-const API_URL = import.meta.env.API_URL;
+import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
+import { PortableText } from "astro-portabletext";
+import { components } from '../../components/PortableTextComponents.jsx';
 
-const {slug} = Astro.params;
+const { slug } = Astro.params;
 
-const postBySlug = await fetch (`${API_URL}/api/v2/posts/?slug=${slug}`).then(response => response.json());
+const POST_BY_SLUG_QUERY = `*[
+    _type == "post" && slug.current == "${slug}"
+][0]{
+    _id,
+    title,
+    excerpt,
+    publishedAt,
+    _updatedAt,
+    body,
+    "tags": tags[]->{ 
+    name, 
+    "slug": slug.current, 
+    color,
+    description 
+    }
+}`;
 
-const postID = postBySlug.results[0].id;
-
-const post  = await fetch (`${API_URL}/api/v2/posts/${postID}`).then(res => res.json());
-
-const prog_language = post.programming_language;
+const post = await sanityClient.fetch<SanityDocument[]>(POST_BY_SLUG_QUERY);
+const portableText = post.body;
 
 function addTargetBlankToLinks(html: string) {
     return html.replace(/<a /g, '<a target="_blank" ');
+}
+
+function formatDate(date: Date){
+    const dateFormatting =  {
+        weekday: 'short', 
+        year: 'numeric', 
+        month: 'numeric', 
+        day: 'numeric'
+    };
+
+    return new Date(date).toLocaleDateString("es-ES", dateFormatting)
 }
 
 ---
@@ -27,69 +53,48 @@ function addTargetBlankToLinks(html: string) {
             {post.title}
         </h2>
         <div class="flex flex-wrap">
-            <p class="text-gray-500 mt-1 mb-5 me-3">
+            <p class="text-gray-500 mt-1 mb-5 me-2">
                 <i class='bx bxs-calendar me-1'></i>
                 Publicado: 
-                {post.date}
+                {formatDate(post.publishedAt)}
             </p>
             {
-                post.date != post.latest_revision_created_at ?
-                    <p class="text-gray-500 mt-1 mb-2">
-                        | Actualizado: 
-                        {post.latest_revision_created_at}
+                post.publishedAt != post._updatedAt ?
+                    <p class="text-gray-500 mt-1  mb-2">
+                        | Actualizado:
+                        {formatDate(post._updatedAt)}
                     </p>
                 : <div></div>
             }
         </div>
         <div class="text-gray-400">
-            <Fragment set:html={post.intro} />
+            {post.excerpt}
         </div>
     </div>
 
     <TableOfContents items={post.body} />
 
-    <div class="mb-8">
-        {
-            post.body.map((item) => (
-                item.type == "heading" ? (
-                    <h2 id={item.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')} 
-                        class="text-3xl font-bold mt-16 mb-5">
-                        {item.value}
-                    </h2>
-                ) : item.type == "subtitle" ? (
-                    <h2 id={item.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')} 
-                        class="text-2xl mb-3 mt-10 font-bold">
-                        {item.value}
-                    </h2>
-                ) : item.type == "paragraph" ? (
-                    <div class="text-lg mt-5 mb-8 overflow-clip leading-loose" set:html={addTargetBlankToLinks(item.value)}></div>
-                ) : item.type == "image" ? (
-                    <img class="w-2/3 mx-auto mt-5 mb-5" src={item.value.large.src} alt="" />
-                ) : item.type == "quote" ? (
-                    <blockquote class="bg-slate-800 p-4 block text-xl mt-5 mb-5 leading-loose" set:html={item.value}></blockquote>
-                ) : item.type == "code_snippet" ? (
-                    <p class="mt-5 mb-5"><Code code={item.value} lang={prog_language} theme="github-dark"/></p>
-                ) : item.type == "video" ? (
-                    <iframe src={item.value} class="w-full aspect-video my-7"></iframe>
-                ) : (
-                    <div>{item.value}</div>
-                )
-            ))
-        }
-    </div>
+    <PortableText value={portableText}  components={components} />
 
-    <div class="mt-5">
-        <span>Tags: </span>
-        <div class="flex flex-wrap">
-            {
-                post.tags.map((tag) => (
-                    <a href={`/tags/${tag}`} class=" me-5 mb-3 md:mb-5 font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
-                        {`#${tag}`}
-                    </a>
-                ))
-            }
-        </div> 
-    </div>
+    {post.tags && post.tags.length > 0 && (
+        <div class="mt-8 pt-6">
+            <h3 class="text-lg font-semibold mb-4 text-sky-600">Tags:</h3>
+            <div class="flex flex-wrap gap-2">
+                {post.tags.map((tag) => {
+                    const colors = getTagColorClasses(tag.color);
+                    return (
+                        <a 
+                            href={`/tags/${tag.slug}`}
+                            class={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
+                            title={tag.description || `Ver todos los posts sobre ${tag.name}`}
+                        >
+                            #{tag.name}
+                        </a>
+                    );
+                })}
+            </div>
+        </div>
+    )}
     
     <Author />
 
