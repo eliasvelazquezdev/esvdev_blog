@@ -1,37 +1,55 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { colorClassesForTags } from '../../utils/tagColors.js';
 
-const API_URL = import.meta.env.API_URL;
+import { sanityClient } from 'sanity:client';
 
-const tags = await fetch (`${API_URL}/api/v2/tags`).then(response => response.json());
+const TAGS_QUERY = `*[_type == "tag"] {
+  name,
+  "slug": slug.current,
+  description,
+  color,
+  featured,
+  "postCount": count(*[_type == "post" && references(^._id)])
+} | order(featured desc, postCount desc)`;
 
-const pageTitle = 'Tags Index';
+const tags = await sanityClient.fetch(TAGS_QUERY);
+
+const pageTitle = 'Tags';
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <main>
-        <div class="mb-5">
+    <Breadcrumbs linkList={[
+        {label: "Tags"}
+    ]} />
 
-            <Breadcrumbs linkList={[
-                {label: "Tags"}
-            ]} 
-            />
+    <h1 class="text-3xl font-bold mb-6">Tags</h1>
+    <p class="text-gray-600 mb-8">Explora posts por tema</p>
 
-            <h2 class="text-3xl font-bold">Tags</h2>
-            <p>Todos los tags utilizados en los posts.</p>
+    <div class="flex flex-wrap gap-3">
+        {tags.filter(tag => tag.postCount > 0).map((tag) => {
+            const colors = colorClassesForTags[tag.color] || colorClassesForTags.blue;
+            return (
+                <a 
+                    href={`/tags/${tag.slug}`}
+                    class={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors ${tag.featured ? 'ring-2 ring-orange-300' : ''}`}
+                    title={tag.description}
+                >
+                    #{tag.name}
+                    <span class={`ml-2 px-2 py-0.5 text-xs ${colors.badge} rounded-full`}>
+                        {tag.postCount}
+                    </span>
+                </a>
+            );
+        })}
+    </div>
+
+    {tags.some(tag => tag.featured) && (
+        <div class="mt-8">
+            <p class="text-sm text-gray-500">
+                💡 Los tags con borde dorado son destacados
+            </p>
         </div>
-
-        <div class="flex lg:flex-row flex-col flex-wrap">
-            {
-                tags.items?.map((tag) => (
-                    <a href={`/tags/${tag.name}`} class="text-xl me-5 mb-3 md:mb-5 font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
-                    {`#${tag.name}`}
-                    </a>
-                ))
-                
-            }
-        </div>
-    </main>
-
+    )}
 </BaseLayout>

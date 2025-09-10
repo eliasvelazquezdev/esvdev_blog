@@ -3,55 +3,136 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PostDescription from "../../../components/PostDescription.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import PaginationArrowsForPostsByTag from "../../../components/PaginationArrowsForPostsByTag.astro";
+import { getTagColorClasses } from "./../../../utils/tagColors.js";
 
-const API_URL = import.meta.env.API_URL;
+import { sanityClient } from "sanity:client";
 
-const { page, tag } = Astro.params;
+export const prerender = true;
 
+export async function getStaticPaths() {
+  // Get all tags that are referenced by posts
+  const TAGS_QUERY = `*[_type == "tag" && count(*[_type == "post" && references(^._id)]) > 0] {
+    "slug": slug.current,
+    name,
+    description,
+    color,
+    featured
+  }`;
+  
+  const tags = await sanityClient.fetch(TAGS_QUERY);
+  
+  const paths = [];
+  const postsPerPage = 5;
+  
+  // For each tag, calculate how many pages it needs
+  for (const tag of tags) {
+    const POSTS_COUNT_QUERY = `count(*[_type == "post" && references(*[_type == "tag" && slug.current == "${tag.slug}"]._id)])`;
+    const totalPosts = await sanityClient.fetch(POSTS_COUNT_QUERY);
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
+    
+    // Generate pages for this tag (starting from page 1)
+    for (let i = 1; i <= totalPages; i++) {
+      paths.push({
+        params: { 
+          tag: tag.slug,
+          page: i.toString() 
+        }
+      });
+    }
+  }
+  
+  return paths;
+}
 
-const tagByName = await fetch (`${API_URL}/api/v2/tags/?name=${tag}`).then(response => response.json());
+const { tag, page } = Astro.params;
+const currentPage = parseInt(page) || 1;
+const postsPerPage = 5;
+const offset = (currentPage - 1) * postsPerPage;
 
-const tagID = tagByName.items[0].id;
+// Fetch tag data
+const TAG_DATA_QUERY = `*[_type == "tag" && slug.current == "${tag}"][0] {
+  "slug": slug.current,
+  name,
+  description,
+  color,
+  featured
+}`;
 
-const posts = await fetch (`${API_URL}/api/v2/posts/?page=${page}&tags=${tagID}`).then(response => response.json());
+const currentTagData = await sanityClient.fetch(TAG_DATA_QUERY);
 
-const prev = posts.previous;
-const next = posts.next;
+// Get posts for current page
+const POSTS_BY_TAG_QUERY = `{
+  "posts": *[_type == "post" && references(*[_type == "tag" && slug.current == "${tag}"]._id)] | order(publishedAt desc) [${offset}...${offset + postsPerPage}] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    publishedAt,
+    "tags": tags[]->{ name, "slug": slug.current, color }
+  },
+  "total": count(*[_type == "post" && references(*[_type == "tag" && slug.current == "${tag}"]._id)])
+}`;
 
+const { posts, total } = await sanityClient.fetch(POSTS_BY_TAG_QUERY);
+
+const totalPages = Math.ceil(total / postsPerPage);
+const hasNext = currentPage < totalPages;
+const hasPrev = currentPage > 1;
+const nextPage = hasNext ? currentPage + 1 : null;
+const prevPage = hasPrev ? currentPage - 1 : null;
+
+const pageTitle = currentPage === 1 
+  ? `Posts etiquetados con ${currentTagData?.name || tag}`
+  : `Posts etiquetados con ${currentTagData?.name || tag} - Página ${currentPage}`;
 ---
-<BaseLayout>
+
+<BaseLayout pageTitle={pageTitle}>
     <Breadcrumbs linkList={[
-        {label: "Tags", link: "/tags/"},
-        {label: tag, link: `/tags/${tag}`},
-        {label: `Página ${page}`}
+        {label: "Tags", link : "/tags"},
+        {label: currentTagData?.name || tag, link: currentPage === 1 ? undefined : `/tags/${tag}`},
+        ...(currentPage > 1 ? [{label: `Página ${currentPage}`}] : [])
     ]} 
     />
 
     <h2 class="text-2xl mb-5">
         Posts con la etiqueta 
-        <span class="font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
-            { `#${tag}` }
+        <span class={`font-bold ${getTagColorClasses(currentTagData?.color).text} hover:border-b-4 hover:border-${currentTagData?.color || 'orange'}-600 hover:border-dashed`}>
+            { `#${currentTagData?.name || tag}` }
         </span>
+        {currentPage > 1 && (
+            <span class="text-sm text-gray-500 ml-2">
+                (Página {currentPage} de {totalPages})
+            </span>
+        )}
     </h2>
 
+    {currentTagData?.description && (
+        <p class="text-gray-600 mb-6 italic">
+            {currentTagData.description}
+        </p>
+    )}
+
     {
-        posts.count == 0 ? 
+        posts.length === 0 ? 
         <h2 class="text-xl">Nada por aquí. Muy pronto voy a hablar de este tema, así que date una vuelta pronto. 😉</h2>
         :
-        <Fragment />
+        <div class="flex lg:flex-row flex-col flex-wrap">
+            {posts.map((post) => 
+                <PostDescription
+                    postURL={`/posts/${post.slug.current}`}
+                    postTitle={post.title}
+                    postDate={post.publishedAt}
+                    postDescription={post.excerpt}
+                />
+            )}
+        </div>
     }
 
-    {
-        posts.results?.map((post) => 
-            <PostDescription
-                postURL={`/posts/${post.meta.slug}`}
-                postTitle={post.title}
-                postDate={post.meta.first_published_at}
-                postDescription={post.intro}
-            />
-        )
-    }
-
-    <PaginationArrowsForPostsByTag prev={prev} next={next} tagName={tag} />
-    
+    <PaginationArrowsForPostsByTag 
+        next={nextPage ? `/tags/${tag}/page${nextPage}` : null}
+        prev={prevPage ? `/tags/${tag}/page${prevPage}` : null}
+        tagName={currentTagData?.name || tag}
+        currentPage={currentPage}
+        totalPages={totalPages}
+    />
 </BaseLayout>
