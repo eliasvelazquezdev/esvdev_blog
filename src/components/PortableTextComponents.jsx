@@ -1,6 +1,6 @@
 import { createSlug } from '../utils/slugify.js';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function extractText(children) {
   if (!children) return '';

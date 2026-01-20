@@ -21,6 +21,23 @@ export default defineConfig(
       react()
     ],
     output: "server",
-    adapter: netlify()
+    adapter: netlify(),
+    vite: {
+      resolve: {
+        alias: [
+          {
+            find: /@babel\/runtime\/helpers\/(?!esm\/)(.*)/,
+            replacement: '@babel/runtime/helpers/esm/$1'
+          },
+          {
+            find: '@babel/runtime/regenerator',
+            replacement: '@babel/runtime/helpers/esm/regeneratorRuntime'
+          }
+        ]
+      },
+      ssr: {
+        noExternal: ['react-syntax-highlighter', 'refractor', '@babel/runtime']
+      }
+    }
   }
 );
