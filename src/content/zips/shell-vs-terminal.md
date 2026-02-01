@@ -8,7 +8,7 @@ Se suelen usar los términos **terminal** y **shell** de manera intercambiable. 
 
 Antes la expresión "terminal" se utilizaba para referirse a un dispositivo físico que permitía escribir comandos a través de un teclado y ver los resultados en pantalla. Algo así como esto:
 
-![Terminal](https://pbs.twimg.com/media/GcHZW2UWUAA6mFk?format=jpg&name=4096x4096)
+![Terminal](https://i.pcmag.com/imagery/lineups/01BRew0rpQZr6y8VTnrj7jb-1.fit_lim.size_1600x900.v1569492764.jpg)
 
 Hoy por hoy la expresión "terminal" se refiere en realidad a un **emulador de terminal**, es decir, una emulación en software de aquellos dispositivos de antaño.
 

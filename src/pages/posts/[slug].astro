@@ -31,6 +31,9 @@ const POST_BY_SLUG_QUERY = `*[
 const post = await sanityClient.fetch<SanityDocument[]>(POST_BY_SLUG_QUERY);
 const portableText = post.body;
 
+// Generate canonical URL for this post
+const canonicalURL = new URL(`/posts/${slug}`, Astro.site).href;
+
 function addTargetBlankToLinks(html: string) {
     return html.replace(/<a /g, '<a target="_blank" ');
 }
@@ -47,7 +50,7 @@ function formatDate(date: Date){
 }
 
 ---
-<BaseLayout pageTitle={post.title}>
+<BaseLayout pageTitle={post.title} canonicalURL={canonicalURL}>
     <div class="mb-20">
         <h2 class="text-4xl font-bold mb-3 text-orange-500">
             {post.title}

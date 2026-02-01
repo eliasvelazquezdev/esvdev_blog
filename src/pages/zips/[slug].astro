@@ -7,12 +7,13 @@ import { marked } from "marked";
 
 const { slug } = Astro.params;
 const zipsEntries = await getCollection('zips');
-const zip = zipsEntries.find(entry => entry.id === slug);
-const htmlContent = marked.parse(zip.body);
+const zip = zipsEntries.find(entry => entry.id.replace(/\.md$/, '') === slug);
 
 if (!zip) {
     throw new Error(`Zip entry not found for slug: ${slug}`);
 }
+
+const htmlContent = marked.parse(zip.body);
 ---
 
 <BaseLayout pageTitle={zip.data.title}>
