@@ -5,7 +5,15 @@ import Separator from '../components/Separator.astro';
 
 import { ViewTransitions } from 'astro:transitions';
 
-const {pageTitle} = Astro.props;
+interface Props {
+  pageTitle: string;
+  canonicalURL?: string;
+}
+
+const { pageTitle, canonicalURL } = Astro.props;
+
+// Generate canonical URL: use provided one or default to current page URL
+const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
 ---
 <html lang="en">
 	<head>
@@ -15,8 +23,10 @@ const {pageTitle} = Astro.props;
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<!-- Canonical URL -->
+		<link rel="canonical" href={canonical} />
 		<!-- Thumbnail -->
-		<meta property='og:title' content='Esvdev Blog'/>
+		<meta property='og:title' content='esvdev Blog'/>
 		<meta property='og:image' content='/thumbnail/esvdev_blog_thumb.png'/>
 		<meta property='og:description' content="Data Engineering - Python - AWS - Filosofia & Mindset - Career Growth"/>
 		<meta property='og:url' content=''/>
@@ -26,7 +36,7 @@ const {pageTitle} = Astro.props;
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />
 		<!-- Dev Icons -->
 		<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-		<title>{pageTitle} - Esvdev</title>
+		<title>{pageTitle} - esvdev</title>
 
 		<ViewTransitions />
 	</head>
