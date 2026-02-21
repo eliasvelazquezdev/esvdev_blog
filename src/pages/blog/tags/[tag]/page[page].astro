@@ -1,9 +1,9 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import PostDescription from "../../../components/PostDescription.astro";
-import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import PaginationArrowsForPostsByTag from "../../../components/PaginationArrowsForPostsByTag.astro";
-import { getTagColorClasses } from "./../../../utils/tagColors.js";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import PostDescription from "../../../../components/PostDescription.astro";
+import Breadcrumbs from "../../../../components/Breadcrumbs.astro";
+import PaginationArrowsForPostsByTag from "../../../../components/PaginationArrowsForPostsByTag.astro";
+import { getTagColorClasses } from "../../../../utils/tagColors.js";
 
 import { sanityClient } from "sanity:client";
 
@@ -18,29 +18,29 @@ export async function getStaticPaths() {
     color,
     featured
   }`;
-  
+
   const tags = await sanityClient.fetch(TAGS_QUERY);
-  
+
   const paths = [];
   const postsPerPage = 5;
-  
+
   // For each tag, calculate how many pages it needs
   for (const tag of tags) {
     const POSTS_COUNT_QUERY = `count(*[_type == "post" && references(*[_type == "tag" && slug.current == "${tag.slug}"]._id)])`;
     const totalPosts = await sanityClient.fetch(POSTS_COUNT_QUERY);
     const totalPages = Math.ceil(totalPosts / postsPerPage);
-    
+
     // Generate pages for this tag (starting from page 1)
     for (let i = 1; i <= totalPages; i++) {
       paths.push({
-        params: { 
+        params: {
           tag: tag.slug,
-          page: i.toString() 
+          page: i.toString()
         }
       });
     }
   }
-  
+
   return paths;
 }
 
@@ -81,21 +81,21 @@ const hasPrev = currentPage > 1;
 const nextPage = hasNext ? currentPage + 1 : null;
 const prevPage = hasPrev ? currentPage - 1 : null;
 
-const pageTitle = currentPage === 1 
+const pageTitle = currentPage === 1
   ? `Posts etiquetados con ${currentTagData?.name || tag}`
   : `Posts etiquetados con ${currentTagData?.name || tag} - Página ${currentPage}`;
 ---
 
 <BaseLayout pageTitle={pageTitle}>
     <Breadcrumbs linkList={[
-        {label: "Tags", link : "/tags"},
-        {label: currentTagData?.name || tag, link: currentPage === 1 ? undefined : `/tags/${tag}`},
+        {label: "Tags", link : "/blog/tags"},
+        {label: currentTagData?.name || tag, link: currentPage === 1 ? undefined : `/blog/tags/${tag}`},
         ...(currentPage > 1 ? [{label: `Página ${currentPage}`}] : [])
-    ]} 
+    ]}
     />
 
     <h2 class="text-2xl mb-5">
-        Posts con la etiqueta 
+        Posts con la etiqueta
         <span class={`font-bold ${getTagColorClasses(currentTagData?.color).text} hover:border-b-4 hover:border-${currentTagData?.color || 'orange'}-600 hover:border-dashed`}>
             { `#${currentTagData?.name || tag}` }
         </span>
@@ -113,13 +113,13 @@ const pageTitle = currentPage === 1
     )}
 
     {
-        posts.length === 0 ? 
+        posts.length === 0 ?
         <h2 class="text-xl">Nada por aquí. Muy pronto voy a hablar de este tema, así que date una vuelta pronto. 😉</h2>
         :
         <div class="flex lg:flex-row flex-col flex-wrap">
-            {posts.map((post) => 
+            {posts.map((post) =>
                 <PostDescription
-                    postURL={`/posts/${post.slug.current}`}
+                    postURL={`/blog/${post.slug.current}`}
                     postTitle={post.title}
                     postDate={post.publishedAt}
                     postDescription={post.excerpt}
@@ -128,9 +128,9 @@ const pageTitle = currentPage === 1
         </div>
     }
 
-    <PaginationArrowsForPostsByTag 
-        next={nextPage ? `/tags/${tag}/page${nextPage}` : null}
-        prev={prevPage ? `/tags/${tag}/page${prevPage}` : null}
+    <PaginationArrowsForPostsByTag
+        next={nextPage ? `/blog/tags/${tag}/page${nextPage}` : null}
+        prev={prevPage ? `/blog/tags/${tag}/page${prevPage}` : null}
         tagName={currentTagData?.name || tag}
         currentPage={currentPage}
         totalPages={totalPages}

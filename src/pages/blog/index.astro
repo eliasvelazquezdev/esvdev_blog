@@ -1,0 +1,108 @@
+---
+import Social from '../../components/Social.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Separator from '../../components/Separator.astro';
+import PostDescription from '../../components/PostDescription.astro';
+
+import { sanityClient } from "sanity:client";
+import type { SanityDocument } from "@sanity/client";
+
+const FEATURED_POSTS_QUERY = `*[
+	contentType == "post" && featured == true
+]|order(publishedAt desc){_id, title, slug, excerpt, publishedAt}
+`;
+
+const featured_posts = await sanityClient.fetch<SanityDocument[]>(FEATURED_POSTS_QUERY);
+
+const LATEST_POSTS_QUERY = `*[
+    _type == "post"
+]|order(publishedAt desc)[0...5]{_id, title, slug, excerpt, publishedAt}
+`;
+const latest_posts = await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY);
+
+const pageTitle = 'Blog'
+---
+
+<BaseLayout pageTitle={pageTitle}>
+	<main>
+		<div class="flex flex-col items-center ">
+			<div class="w-64 lg:w-96 lg:me-5 h-64 lg:h-96 bg-cover bg-center bg-no-repeat rounded-full mb-5"
+				style="background-image: url('https://res.cloudinary.com/dwczjy8e4/image/upload/v1729968282/blog/esvdev_lofi_blog_mx4t7x.png')">
+			</div>
+
+			<div>
+				<h1 class="text-4xl font-bold block mb-3">¡Bienvenido/a a mi blog!</h1>
+
+				<p class="text-lg mb-5 leading-loose">
+					Soy Elías, programador autodidacta desde hace 3 años y Data Engineer JR desde febrero de 2024. Sigo formándome para crecer en este camino, mejorar lo que ya sé y encontrar nuevas formas de hacerlo mejor.
+				</p>
+
+				<p class="text-lg mb-5 leading-loose">
+					Me encanta compartir mi viaje en IT, hablar de desarrollo personal, filosofía y, por supuesto, software. También soy músico, fan de los videojuegos, me gusta leer sobre psicología y finanzas, y de vez en cuando dejo caer algo de todos esos mundos en este blog.
+				</p>
+
+				<p class="text-lg mb-5 leading-loose">
+					Disfruto conocer gente, ayudar y acompañar a quienes están empezando a programar. Podés pasar por mis redes, unirte a mi comunidad <a href="https://share-it.tech" target="_blank" class="font-bold">ShareIT</a>, o leer mi newsletter <a href="https://elingenieroconsciente.substack.com/" target="_blank" class="font-bold">"El Ingeniero Consciente"</a>, donde comparto reflexiones y recursos para crecer en tecnología sin perder lo humano en el proceso.
+				</p>
+
+				<p class="text-lg mb-5 leading-loose">
+					¡Gracias por pasarte! Ojalá disfrutes el contenido del blog. Si tenés feedback, te dejo mis redes a mano. Estoy a un mensaje de distancia 😊
+				</p>
+
+				<div class="mt-5">
+					<Social platform="linkedin" username="eliassvelazquez"/>
+					<Social platform="twitter" username="esvdev"/>
+				</div>
+			</div>
+		</div>
+
+		<Separator />
+
+		<!-- Featured -->
+		<div class="flex flex-col">
+			<h1 class="font-bold text-3xl block mb-5">Destacados</h1>
+
+			<div>
+				{
+                    featured_posts.map((post) => (
+						<PostDescription
+							postURL={`/blog/${post.slug.current}`}
+							postTitle={post.title}
+							postDate={post.publishedAt}
+							postDescription={post.excerpt}
+						/>
+                    ))
+
+                }
+			</div>
+		</div>
+
+		<Separator />
+
+		<!-- Latest posts -->
+		<div class="flex flex-col">
+			<h1 class="font-bold text-3xl block mb-5">Ultimos posts</h1>
+
+			<div>
+				{
+                    latest_posts.map((post) => (
+						<PostDescription
+							postURL={`/blog/${post.slug.current}`}
+							postTitle={post.title}
+							postDate={post.publishedAt}
+							postDescription={post.excerpt}
+						/>
+                    ))
+
+                }
+			</div>
+
+			<div class="flex justify-center text-bold">
+				<a href="/blog/page1" class="text-white hover:text-orange-500">
+				Todos los posts
+				<i class='bx bx-right-arrow-alt'></i>
+				</a>
+			</div>
+		</div>
+	</main>
+</BaseLayout>

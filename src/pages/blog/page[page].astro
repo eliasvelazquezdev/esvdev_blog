@@ -55,9 +55,9 @@ const pageTitle = `Posts - Página ${currentPage}`;
     <main>
         <div class="mb-5">
             <Breadcrumbs linkList={[
-                {label: "Posts", link:"/posts"},
+                {label: "Blog", link:"/blog"},
                 {label: `Página ${currentPage}`}
-            ]} 
+            ]}
             />
 
             <h2 class="text-3xl font-bold">Posts</h2>
@@ -67,7 +67,7 @@ const pageTitle = `Posts - Página ${currentPage}`;
         <div class="flex lg:flex-row flex-col flex-wrap">
             {posts.map((post) => (
                 <PostDescription
-                    postURL={`/posts/${post.slug.current}`}
+                    postURL={`/blog/${post.slug.current}`}
                     postTitle={post.title}
                     postDate={post.publishedAt}
                     postDescription={post.excerpt}
@@ -75,9 +75,9 @@ const pageTitle = `Posts - Página ${currentPage}`;
             ))}
         </div>
 
-        <PaginationArrowsForPosts 
-            next={nextPage ? `/posts/page${nextPage}` : null} 
-            prev={prevPage ? `/posts/page${prevPage}` : null}
+        <PaginationArrowsForPosts
+            next={nextPage ? `/blog/page${nextPage}` : null}
+            prev={prevPage ? `/blog/page${prevPage}` : null}
             currentPage={currentPage}
             totalPages={totalPages}
         />

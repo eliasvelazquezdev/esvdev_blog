@@ -1,11 +1,19 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import ZipsCard from '../../components/ZipsCard.astro';
+import ZipsCard from '../../../components/ZipsCard.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 
-const zipsEntries = await getCollection('zips', ({ id }) => {
-    return id;
-});
+import { sanityClient } from "sanity:client";
+import type { SanityDocument } from "@sanity/client";
+
+const ZIPS_QUERY = `*[contentType == "zip"] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  excerpt
+}`;
+
+const zipsEntries = await sanityClient.fetch<SanityDocument[]>(ZIPS_QUERY);
+
 ---
 
 <BaseLayout pageTitle="Zips">

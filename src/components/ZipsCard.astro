@@ -1,9 +1,9 @@
 ---
 const { zip } = Astro.props;
-const slug = zip.id.replace(/\.md$/, '');
+const slug = zip.slug?.current;
 ---
 
 <div class="card h-full mb-5 p-4 border rounded shadow">
-    <a href={`/zips/${slug}`} class="text-lg font-bold text-orange-500">{zip.data.title}</a>
-    <p class="text-sm mt-2">{zip.data.description}</p>
+    <a href={`/blog/zips/${slug}`} class="text-lg font-bold text-orange-500">{zip.title}</a>
+    <p class="text-sm mt-2">{zip.excerpt}</p>
 </div>

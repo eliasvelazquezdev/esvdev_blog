@@ -1,0 +1,18 @@
+/posts /blog/page1 301
+/posts/ /blog/page1 301
+/posts/page:page /blog/page:page 301
+/posts/page:page/ /blog/page:page 301
+/posts/:slug /blog/:slug 301
+/posts/:slug/ /blog/:slug 301
+
+/tags /blog/tags 301
+/tags/ /blog/tags 301
+/tags/:tag /blog/tags/:tag 301
+/tags/:tag/ /blog/tags/:tag 301
+/tags/:tag/page:page /blog/tags/:tag/page:page 301
+/tags/:tag/page:page/ /blog/tags/:tag/page:page 301
+
+/zips /blog/zips 301
+/zips/ /blog/zips 301
+/zips/:slug /blog/zips/:slug 301
+/zips/:slug/ /blog/zips/:slug 301

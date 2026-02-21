@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = 'Newsletter';
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <main>
+    <h1 class="text-3xl font-bold mb-5">Newsletter</h1>
+
+    <p class="text-lg mb-5 leading-loose">
+      Bienvenido/a a la newsletter de <span class="font-bold">El Ingeniero Consciente</span>.
+      Aquí comparto reflexiones, recursos y aprendizajes sobre tecnología, desarrollo personal
+      y carrera profesional, con una mirada humana y práctica.
+    </p>
+
+    <p class="text-lg mb-5 leading-loose">
+      Si querés recibir nuevas ediciones directamente en tu correo, podés suscribirte acá:
+    </p>
+
+    <a
+      href="https://newsletter.elingenieroconsciente.com"
+      target="_blank"
+      class="font-bold text-orange-500 hover:text-orange-600 underline underline-offset-4 decoration-dotted"
+    >
+      Ir a la newsletter
+    </a>
+  </main>
+</BaseLayout>

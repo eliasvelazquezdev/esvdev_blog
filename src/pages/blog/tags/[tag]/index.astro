@@ -6,9 +6,9 @@ export async function getStaticPaths() {
   const TAGS_QUERY = `*[_type == "tag" && count(*[_type == "post" && references(^._id)]) > 0] {
     "slug": slug.current
   }`;
-  
+
   const tags = await sanityClient.fetch(TAGS_QUERY);
-  
+
   return tags.map(tag => ({
     params: { tag: tag.slug }
   }));
@@ -17,5 +17,5 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 
 // Redirect to page 1
-return Astro.redirect(`/tags/${tag}/page1`);
+return Astro.redirect(`/blog/tags/${tag}/page1`);
 ---
