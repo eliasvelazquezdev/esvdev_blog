@@ -10,7 +10,7 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
   site: "https://elingenieroconsciente.com",
-  trailingSlash: "never",
+  trailingSlash: "ignore",
   integrations: [
     tailwind(),
     sanity({

@@ -1,0 +1,268 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Art of Minimalist Digital Design — Personal Brand Hub</title>
+    <!-- Tailwind CSS CDN with Plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts for Typography -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,700;1,700&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- BEGIN: Custom Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "brand-offwhite": "#e5e5e5",
+              "brand-navy": "#14213d",
+              "brand-navy-dark": "#0a1120",
+              "brand-orange": "#fca311",
+              "brand-gray": "#a3a3a3",
+              "brand-charcoal": "#e5e5e5",
+              "brand-accent": "#e5e5e5",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Lora", "serif"],
+              display: ["Playfair Display", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <!-- END: Custom Tailwind Configuration -->
+    <style data-purpose="typography-refinements">
+      /* Enhancing readability for the main article content */
+      article .content p {
+        line-height: 1.8;
+        margin-bottom: 1.75rem;
+        font-size: 1.125rem;
+      }
+      article .content h2 {
+        font-family: "Playfair Display", serif;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.875rem;
+        color: #fca311;
+      }
+      .selection-highlight::selection {
+        background-color: #fca311;
+        color: #14213d;
+      }
+      article .content a {
+        color: #fca311;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        transition: opacity 0.2s;
+      }
+      article .content a:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-brand-navy text-brand-charcoal font-sans selection-highlight antialiased"
+  >
+    <!-- BEGIN: Navigation -->
+    <nav
+      class="max-w-4xl mx-auto px-6 py-12 flex justify-between items-center"
+      data-purpose="site-navigation"
+    >
+      <a
+        class="text-xl font-semibold tracking-tight uppercase text-brand-orange"
+        href="#"
+        >BrandHub</a
+      >
+      <div
+        class="space-x-8 text-sm font-medium uppercase tracking-widest text-brand-offwhite"
+      >
+        <a class="hover:text-brand-orange transition-colors" href="#">Work</a>
+        <a class="hover:text-brand-orange transition-colors" href="#"
+          >Articles</a
+        >
+        <a class="hover:text-brand-orange transition-colors" href="#">About</a>
+      </div>
+    </nav>
+    <!-- END: Navigation -->
+    <!-- BEGIN: Article Header -->
+    <header
+      class="max-w-3xl mx-auto px-6 pt-16 pb-12"
+      data-purpose="article-header"
+    >
+      <h1
+        class="font-display text-4xl md:text-6xl mb-8 leading-tight text-brand-orange"
+      >
+        The quiet power of intentional minimalist design.
+      </h1>
+      <div
+        class="flex items-center space-x-4 border-b border-gray-700 pb-12"
+        data-purpose="author-byline"
+      >
+        <!-- Author Headshot -->
+        <img
+          alt="Author Headshot"
+          class="w-12 h-12 rounded-full grayscale brightness-110 object-cover"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZbzuyUUHAjUanksihIh2y5XUhGMgz9sB-3lueAKPQAP-zHwV7xEwlWIa6MZRPVGfkCZ3aytne3CcbkiAH0N5NYsx5tTAhylQKwaIm9t7B4bOWUfkeLYWTizQfBMRkHHTtMTe5YqwtNL1rLXAjopZd4uOViJPkIzJx_Eu5O6bVMf8lCFKvRaXuINwdTu2bx834UI8wxWIV1d0oyUIxkiySVivcSrkaaTWXSKUPITi7FUCO_vus9UaIRbPuq78hCoEQuGtyPcRVSKg"
+        />
+        <div class="text-sm">
+          <p class="font-semibold text-brand-offwhite">Alex Sterling</p>
+          <p class="text-brand-gray">October 24, 2023 · 8 min read</p>
+        </div>
+      </div>
+    </header>
+    <!-- END: Article Header -->
+    <!-- BEGIN: Article Body -->
+    <main
+      class="max-w-3xl mx-auto px-6 pb-24"
+      data-purpose="main-article-content"
+    >
+      <article class="content font-serif text-brand-accent">
+        <p>
+          In an era defined by constant noise and sensory overload, the practice
+          of <a href="#">minimalism in digital design</a> is no longer just an
+          aesthetic choice—it's a necessary philosophy. When we strip away the
+          superfluous, we allow the core message to breathe, creating a space
+          where users can focus without distraction.
+        </p>
+        <p>
+          Design isn't just about what you see; it's about what you feel. A
+          clean layout with ample white space communicates a sense of calm and
+          competence. It suggests that the creator values the user's time and
+          cognitive load, curated only the most essential elements for their
+          consumption.
+        </p>
+        <h2>The core principles of negative space</h2>
+        <p>
+          Negative space is often misunderstood as 'empty' space. In reality, it
+          is a structural tool that guides the eye. By increasing the margins
+          and padding around our typography, we elevate the importance of the
+          text itself. It creates a hierarchy that feels natural rather than
+          forced.
+        </p>
+        <blockquote
+          class="italic border-l-2 border-brand-orange pl-6 my-10 text-2xl font-display text-brand-offwhite"
+        >
+          "Simplicity is the ultimate sophistication, yet it requires the most
+          discipline to achieve."
+        </blockquote>
+        <p>
+          To build a personal brand that lasts, focus on the fundamentals:
+          legible typography, a restricted color palette, and high-quality
+          content. These elements form a timeless foundation that transcends
+          fleeting trends and builds genuine trust with your audience.
+        </p>
+      </article>
+      <!-- BEGIN: Social Sharing -->
+      <section
+        class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
+        data-purpose="social-sharing"
+      >
+        <span
+          class="text-xs font-bold uppercase tracking-widest text-brand-gray"
+          >Share this story</span
+        >
+        <div class="flex gap-4">
+          <a
+            class="p-2 hover:bg-white/10 rounded-full transition-colors text-brand-offwhite"
+            href="#"
+            title="Share on Twitter"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+              <path
+                d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
+              ></path>
+            </svg>
+          </a>
+          <a
+            class="p-2 hover:bg-white/10 rounded-full transition-colors text-brand-offwhite"
+            href="#"
+            title="Share on LinkedIn"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451c.981 0 1.771-.773 1.771-1.729V1.729C24 .774 23.207 0 22.225 0z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </section>
+      <!-- END: Social Sharing -->
+    </main>
+    <!-- END: Article Body -->
+    <!-- BEGIN: Newsletter Footer -->
+    <footer
+      class="bg-brand-navy-dark text-brand-offwhite py-24"
+      data-purpose="main-footer"
+    >
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 class="font-display text-3xl mb-4 text-brand-orange">
+              Stay intentional.
+            </h3>
+            <p class="text-brand-gray text-sm leading-relaxed">
+              Join 5,000+ readers who receive bi-weekly insights on design,
+              mindfulness, and the creative process. No spam, ever.
+            </p>
+          </div>
+          <form
+            class="flex flex-col gap-4"
+            data-purpose="subscribe-form"
+            id="newsletter-form"
+          >
+            <input
+              class="bg-transparent border-b border-gray-600 focus:border-brand-orange focus:ring-0 px-0 py-3 text-lg placeholder:text-gray-600 outline-none transition-colors text-brand-offwhite"
+              placeholder="Your email address"
+              required=""
+              type="email"
+            />
+            <button
+              class="bg-brand-orange text-brand-navy py-3 px-8 font-semibold uppercase tracking-widest text-xs hover:opacity-90 transition-opacity w-full md:w-max"
+              type="submit"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+        <div
+          class="mt-24 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-brand-gray uppercase tracking-widest gap-6"
+        >
+          <p>© 2023 Alex Sterling. All rights reserved.</p>
+          <div class="space-x-6">
+            <a class="hover:text-brand-orange transition-colors" href="#"
+              >Privacy</a
+            >
+            <a class="hover:text-brand-orange transition-colors" href="#"
+              >Terms</a
+            >
+            <a class="hover:text-brand-orange transition-colors" href="#"
+              >RSS</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- END: Newsletter Footer -->
+    <script data-purpose="form-submission-handler">
+      document
+        .getElementById("newsletter-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const button = this.querySelector("button");
+          const input = this.querySelector("input");
+
+          button.innerText = "Subscribed";
+          button.disabled = true;
+          input.value = "";
+          input.placeholder = "Thank you for joining.";
+        });
+    </script>
+  </body>
+</html>

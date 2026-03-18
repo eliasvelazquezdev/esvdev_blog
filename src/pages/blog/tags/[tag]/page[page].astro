@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import SiteLayout from "../../../../layouts/SiteLayout.astro";
 import PostDescription from "../../../../components/PostDescription.astro";
 import Breadcrumbs from "../../../../components/Breadcrumbs.astro";
 import PaginationArrowsForPostsByTag from "../../../../components/PaginationArrowsForPostsByTag.astro";
@@ -86,28 +86,29 @@ const pageTitle = currentPage === 1
   : `Posts etiquetados con ${currentTagData?.name || tag} - Página ${currentPage}`;
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-    <Breadcrumbs linkList={[
-        {label: "Tags", link : "/blog/tags"},
-        {label: currentTagData?.name || tag, link: currentPage === 1 ? undefined : `/blog/tags/${tag}`},
-        ...(currentPage > 1 ? [{label: `Página ${currentPage}`}] : [])
-    ]}
-    />
+<SiteLayout pageTitle={pageTitle}>
+    <main class="max-w-3xl mx-auto px-6 pb-24">
+        <Breadcrumbs linkList={[
+            {label: "Tags", link : "/blog/tags"},
+            {label: currentTagData?.name || tag, link: currentPage === 1 ? undefined : `/blog/tags/${tag}`},
+            ...(currentPage > 1 ? [{label: `Página ${currentPage}`}] : [])
+        ]}
+        />
 
-    <h2 class="text-2xl mb-5">
+    <h2 class="text-3xl md:text-4xl font-bold mb-5 text-brand-orange">
         Posts con la etiqueta
         <span class={`font-bold ${getTagColorClasses(currentTagData?.color).text} hover:border-b-4 hover:border-${currentTagData?.color || 'orange'}-600 hover:border-dashed`}>
             { `#${currentTagData?.name || tag}` }
         </span>
         {currentPage > 1 && (
-            <span class="text-sm text-gray-500 ml-2">
+            <span class="text-sm text-brand-gray ml-2">
                 (Página {currentPage} de {totalPages})
             </span>
         )}
     </h2>
 
     {currentTagData?.description && (
-        <p class="text-gray-600 mb-6 italic">
+        <p class="text-brand-gray mb-6 italic">
             {currentTagData.description}
         </p>
     )}
@@ -135,4 +136,5 @@ const pageTitle = currentPage === 1
         currentPage={currentPage}
         totalPages={totalPages}
     />
-</BaseLayout>
+    </main>
+</SiteLayout>

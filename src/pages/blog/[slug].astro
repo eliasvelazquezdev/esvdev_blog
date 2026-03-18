@@ -1,15 +1,12 @@
 ---
-import Author from "../../components/Author.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostLayout from "../../layouts/PostLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
-
+import AuthorLayout from "../../components/AuthorLayout.astro";
 import { getTagColorClasses } from "../../utils/tagColors.js";
-import { formatDate, addTargetBlankToLinks } from "../../utils/utils.js";
 
-
+import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
 import { PortableText } from "astro-portabletext";
-import type { SanityDocument } from "@sanity/client";
 import { components } from '../../components/PortableTextComponents.jsx';
 
 const { slug } = Astro.params;
@@ -37,57 +34,82 @@ const portableText = post.body;
 // Generate canonical URL for this post
 const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
 
+
+
 ---
-<BaseLayout pageTitle={post.title} canonicalURL={canonicalURL}>
-    <div class="mb-20">
-        <h2 class="text-4xl font-bold mb-3 text-orange-500">
+<PostLayout pageTitle={post.title} canonicalURL={canonicalURL}>
+    <header
+        class="max-w-3xl mx-auto px-6 pt-16 pb-12"
+        data-purpose="article-header"
+    >
+        <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
             {post.title}
-        </h2>
-        <div class="flex flex-wrap">
-            <p class="text-gray-500 mt-1 mb-5 me-2">
-                <i class='bx bxs-calendar me-1'></i>
-                Publicado:
-                {formatDate(post.publishedAt)}
-            </p>
-            {
-                post.publishedAt != post._updatedAt ?
-                    <p class="text-gray-500 mt-1  mb-2">
-                        | Actualizado:
-                        {formatDate(post._updatedAt)}
-                    </p>
-                : <div></div>
-            }
-        </div>
-        <div class="text-gray-400">
-            {post.excerpt}
-        </div>
-    </div>
+        </h1>
+        <AuthorLayout publishedAt={post.publishedAt} />
+    </header>
 
-    <TableOfContents items={post.body} />
+    <main class="max-w-3xl mx-auto px-6 pb-24" data-purpose="main-article-content">
+        <article class="content text-brand-accent">
+            {post.excerpt && (
+                <p class="text-brand-gray">{post.excerpt}</p>
+            )}
+            <TableOfContents items={post.body} />
+            <PortableText value={portableText} components={components} />
+        </article>
 
-    <PortableText value={portableText}  components={components} />
-
-    {post.tags && post.tags.length > 0 && (
-        <div class="mt-8 pt-6">
-            <h3 class="text-lg font-semibold mb-4 text-sky-600">Tags:</h3>
-            <div class="flex flex-wrap gap-2">
-                {post.tags.map((tag) => {
-                    const colors = getTagColorClasses(tag.color);
-                    return (
-                        <a
-                            href={`/blog/tags/${tag.slug}`}
-                            class={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
-                            title={tag.description || `Ver todos los posts sobre ${tag.name}`}
-                        >
-                            #{tag.name}
-                        </a>
-                    );
-                })}
+        {post.tags && post.tags.length > 0 && (
+            <div class="mt-12">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-brand-gray mb-4">
+                    Tags
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    {post.tags.map((tag) => {
+                        const colors = getTagColorClasses(tag.color);
+                        return (
+                            <a
+                                href={`/blog/tags/${tag.slug}`}
+                                class={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
+                                title={tag.description || `Ver todos los posts sobre ${tag.name}`}
+                            >
+                                #{tag.name}
+                            </a>
+                        );
+                    })}
+                </div>
             </div>
-        </div>
-    )}
+        )}
 
-    <Author />
-
-
-</BaseLayout>
+        <section
+            class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
+            data-purpose="social-sharing"
+        >
+            <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
+                Compartir
+            </span>
+            <div class="flex gap-4">
+                <a
+                    class="p-2 hover:bg-white/10 rounded-full transition-colors text-brand-offwhite"
+                    href="#"
+                    title="Compartir en X"
+                >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
+                        ></path>
+                    </svg>
+                </a>
+                <a
+                    class="p-2 hover:bg-white/10 rounded-full transition-colors text-brand-offwhite"
+                    href="#"
+                    title="Compartir en LinkedIn"
+                >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451c.981 0 1.771-.773 1.771-1.729V1.729C24 .774 23.207 0 22.225 0z"
+                        ></path>
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+</PostLayout>

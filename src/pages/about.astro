@@ -1,22 +1,23 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 import Author from '../components/Author.astro';
 
 const pageTitle = 'Acerca de'
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-    <h1 class="text-3xl font-bold block mb-5">¡Hola! Soy Elias y te cuento un poco sobre mí 😉</h1>
+<SiteLayout pageTitle={pageTitle}>
+    <main class="max-w-3xl mx-auto px-6 pb-24">
+        <h1 class="text-4xl md:text-5xl font-bold block mb-5 text-brand-orange">¡Hola! Soy Elias y te cuento un poco sobre mí 😉</h1>
 
 
-    <h2 class="text-2xl font-bold block mt-10 mb-3">Mis inicios 👶</h2>
+    <h2 class="text-2xl font-bold block mt-10 mb-3 text-brand-orange">Mis inicios 👶</h2>
     <p class="text-lg mb-5 leading-loose">Siempre me fascinó lo que se puede hacer con una computadora. <strong>Mi primer contacto fue a los 16, con C++</strong>. Spoiler: lo odié. Pero algo en mí sintió que programar era una especie de magia. Estaba logrando que la máquina hiciera algo escribiendo palabras y símbolos raros.</p>
 
     <p class="text-lg mb-5 leading-loose">Después de la secundaria trabajé varios años y probé distintos caminos. En 2020 estudié enfermería, y tras darme cuenta de que no era lo mío, <strong>en 2021 volví a un viejo amor: la programación</strong>. Esta vez con Python, un lenguaje que me devolvió esa sensación de magia, pero con una sintaxis que no me hacía gritarle a la pantalla.</p>
 
     <p class="text-lg mb-5 leading-loose">Desde ahí sigo aprendiendo como autodidacta, combinando curiosidad, práctica y muchas ganas de mejorar cada día.</p>
 
-    <h2 class="text-2xl font-bold block mt-10 mb-3">Mi camino laboral 🚀</h2>
+    <h2 class="text-2xl font-bold block mt-10 mb-3 text-brand-orange">Mi camino laboral 🚀</h2>
     <p class="text-lg mb-5 leading-loose">
         En febrero de 2024 empecé mi camino laboral como Python Developer en <a href="https://www.linkedin.com/company/vordentech/posts/?feedView=all" target="_blank" class="font-bold">Vordentech</a>. Aunque Data Engineering no era mi campo inicial, me encantó el desafío y el ritmo de aprendizaje. Desde entonces, <strong>crecí mucho en desarrollo de software, manejo de datos y uso de la nube</strong>.
     </p>
@@ -30,7 +31,7 @@ const pageTitle = 'Acerca de'
     <p class="text-lg mb-5 leading-loose">Podría escribir mucho más, pero esta es una buena foto general. Si querés ver mis tareas del día a día, podés encontrarlas en mi <a href="https://evelazquez.dev" target="_blank" class="font-bold">web personal</a>.</p>
 
 
-    <h2 class="text-2xl font-bold block mt-10 mb-3">Mi gran objetivo 🎯</h2>
+    <h2 class="text-2xl font-bold block mt-10 mb-3 text-brand-orange">Mi gran objetivo 🎯</h2>
     <p class="text-lg mb-5 leading-loose">Aún recuerdo algunos de los conocimientos que he adquirido durante mis estudios de enfermería. No quiero ahondar en los motivos que me llevaron a abandonar la carrera, pero sí sobre la razón por la cual empecé: <strong>ayudar a los demás</strong></p>
 
     <blockquote class="bg-slate-800 p-4 block text-xl mt-5 mb-5 leading-loose">Si hay algo que me apasiona hacer es poner mis conocimientos al servicio de otros, no importa el campo o especialidad. Mi objetivo es lograr un impacto positivo en la vida de las personas a través de la tecnología. Y por ese motivo es que me preparo persistentemente.</blockquote>
@@ -40,4 +41,5 @@ const pageTitle = 'Acerca de'
     <p class="text-lg mb-5 leading-loose">¡Gracias por haber leído hasta acá! Si tienes alguna pregunta, te gustaría charlar sobre programación/data/jueguitos/Star Wars, no dudes en contactarme 😃</p>
 
     <Author />
-</BaseLayout>
+    </main>
+</SiteLayout>

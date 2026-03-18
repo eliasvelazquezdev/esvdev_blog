@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import { colorClassesForTags } from '../../../utils/tagColors.js';
 
@@ -19,13 +19,14 @@ const tags = await sanityClient.fetch(TAGS_QUERY);
 const pageTitle = 'Tags';
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-    <Breadcrumbs linkList={[
-        {label: "Tags"}
-    ]} />
+<SiteLayout pageTitle={pageTitle}>
+    <main class="max-w-3xl mx-auto px-6 pb-24">
+        <Breadcrumbs linkList={[
+            {label: "Tags"}
+        ]} />
 
-    <h1 class="text-3xl font-bold mb-6">Tags</h1>
-    <p class="text-gray-600 mb-8">Explora posts por tema</p>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-brand-orange">Tags</h1>
+        <p class="text-brand-gray mb-8">Explora posts por tema</p>
 
     <div class="flex flex-wrap gap-3">
         {tags.filter(tag => tag.postCount > 0).map((tag) => {
@@ -47,9 +48,10 @@ const pageTitle = 'Tags';
 
     {tags.some(tag => tag.featured) && (
         <div class="mt-8">
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-brand-gray">
                 💡 Los tags con borde dorado son destacados
             </p>
         </div>
     )}
-</BaseLayout>
+    </main>
+</SiteLayout>

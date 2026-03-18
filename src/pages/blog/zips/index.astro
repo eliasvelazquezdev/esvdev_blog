@@ -1,6 +1,6 @@
 ---
 import ZipsCard from '../../../components/ZipsCard.astro';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
 
 import { sanityClient } from "sanity:client";
 import type { SanityDocument } from "@sanity/client";
@@ -16,11 +16,11 @@ const zipsEntries = await sanityClient.fetch<SanityDocument[]>(ZIPS_QUERY);
 
 ---
 
-<BaseLayout pageTitle="Zips">
-    <main>
-        <h1 class="text-3xl font-bold mb-5">Zips ⚡​</h1>
+<SiteLayout pageTitle="Zips">
+    <main class="max-w-3xl mx-auto px-6 pb-24">
+        <h1 class="text-4xl md:text-5xl font-bold mb-5 text-brand-orange">Zips ⚡​</h1>
 
-        <p class="text-lg mb-14 leading-loose">¡Bienvenido/a a <span class="font-bold">Zips</span>! Aquí encontrarás lecturas rápidas sobre tecnología, programación, etc. La idea es que te lleves un aprendizaje, una reflexión, encuentres recursos, o simplemente te diviertas en lecturas breves de pocos minutos.</p>
+        <p class="text-lg mb-14 leading-loose text-brand-gray">¡Bienvenido/a a <span class="font-bold">Zips</span>! Aquí encontrarás lecturas rápidas sobre tecnología, programación, etc. La idea es que te lleves un aprendizaje, una reflexión, encuentres recursos, o simplemente te diviertas en lecturas breves de pocos minutos.</p>
 
         <div class="grid lg:grid-cols-2 gap-4">
             {
@@ -31,4 +31,4 @@ const zipsEntries = await sanityClient.fetch<SanityDocument[]>(ZIPS_QUERY);
             ))
         }
     </main>
-</BaseLayout>
+</SiteLayout>

@@ -27,9 +27,9 @@ function extractTextFromBlock(block: PortableTextBlock): string {
 
 
 const tocItems = items
-    .filter(item => 
-        item._type === 'block' && 
-        item.style && 
+    .filter(item =>
+        item._type === 'block' &&
+        item.style &&
         ['h1', 'h2', 'h3', 'h4'].includes(item.style)
     )
     .map(item => {
@@ -60,19 +60,19 @@ const groupedItems = tocItems.reduce((acc: any[], item) => {
 ---
 
 {tocItems.length > 0 && (
-    <nav class="toc bg-slate-800 p-6 rounded-lg mb-8">
-        <h3 class="text-xl font-bold mb-4 text-white">Tabla de Contenidos</h3>
-        <ul class="space-y-3 list-disc list-outside ml-4">
+    <nav class="toc bg-brand-navy-dark p-6 rounded-lg mb-8 border border-gray-800">
+        <h3 class="text-xl font-bold mb-4 text-brand-offwhite">Tabla de Contenidos</h3>
+        <ul class="space-y-3 list-disc list-outside ml-4 text-brand-offwhite">
             {groupedItems.map(heading => (
                 <li>
-                    <a href={`#${heading.slug}`} class="text-orange-500 hover:text-orange-400 block">
+                    <a href={`#${heading.slug}`} class="text-brand-orange hover:text-brand-offwhite block">
                         {heading.text}
                     </a>
                     {heading.children.length > 0 && (
                         <ul class="ml-4 mt-2 space-y-2 list-outside">
                             {heading.children.map(subheading => (
                                 <li>
-                                    <a href={`#${subheading.slug}`} class="text-gray-400 hover:text-gray-300 text-sm block">
+                                    <a href={`#${subheading.slug}`} class="text-brand-gray hover:text-brand-offwhite text-sm block">
                                         {subheading.text}
                                     </a>
                                 </li>

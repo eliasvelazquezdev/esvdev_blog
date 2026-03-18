@@ -1,9 +1,9 @@
 ---
-import Author from "../../../components/Author.astro";
-import BaseLayout from "../../../layouts/BaseLayout.astro";
+import AuthorLayout from "../../../components/AuthorLayout.astro";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
 import { components } from '../../../components/PortableTextComponents.jsx';
 
-import { formatDate } from '../../../utils/utils.js';
+
 import { getTagColorClasses } from "../../../utils/tagColors";
 
 import { sanityClient } from "sanity:client";
@@ -39,36 +39,25 @@ const canonicalURL = new URL(`/blog/zips/${slug}`, Astro.site).href;
 
 ---
 
-<BaseLayout pageTitle={zip.title} canonicalURL={canonicalURL}>
-    <div class="mb-20">
-        <h2 class="text-4xl font-bold mb-3 text-orange-500">
-            {zip.title}
-        </h2>
-        <div class="flex flex-wrap">
-            <p class="text-gray-500 mt-1 mb-5 me-2">
-                <i class='bx bxs-calendar me-1'></i>
-                Publicado:
-                {formatDate(zip.publishedAt)}
-            </p>
-            {
-                zip.publishedAt != zip._updatedAt ?
-                    <p class="text-gray-500 mt-1  mb-2">
-                        | Actualizado:
-                        {formatDate(zip._updatedAt)}
-                    </p>
-                : <div></div>
-            }
-        </div>
-        <div class="text-gray-400">
-            {zip.excerpt}
-        </div>
-    </div>
+<SiteLayout pageTitle={zip.title} canonicalURL={canonicalURL}>
+    <main class="max-w-3xl mx-auto px-6 pb-24">
+        <header class="pt-16 pb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-brand-orange">
+                {zip.title}
+            </h1>
+            <AuthorLayout publishedAt={zip.publishedAt} />
+            <div class="text-brand-gray mt-6">
+                {zip.excerpt}
+            </div>
+        </header>
 
-    <PortableText value={portableText}  components={components} />
+        <article class="content text-brand-accent">
+            <PortableText value={portableText} components={components} />
+        </article>
 
     {zip.tags && zip.tags.length > 0 && (
         <div class="mt-8 pt-6">
-            <h3 class="text-lg font-semibold mb-4 text-sky-600">Tags:</h3>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-brand-gray mb-4">Tags</h3>
             <div class="flex flex-wrap gap-2">
                 {zip.tags.map((tag) => {
                     const colors = getTagColorClasses(tag.color);
@@ -86,5 +75,6 @@ const canonicalURL = new URL(`/blog/zips/${slug}`, Astro.site).href;
         </div>
     )}
 
-    <Author />
-</BaseLayout>
+
+    </main>
+</SiteLayout>
