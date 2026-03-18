@@ -6,6 +6,36 @@ const links = [
   { label: "Newsletter", href: "/newsletter/" },
   { label: "About", href: "/about/" },
 ];
+
+const pathname = Astro.url.pathname;
+
+const normalizePath = (path) => {
+  const normalized = path.replace(/\/+$/, "");
+  return normalized === "" ? "/" : normalized;
+};
+
+const isActive = (href) => {
+  const normalizedPath = normalizePath(pathname);
+  const normalizedHref = normalizePath(href);
+
+  if (normalizedHref === "/blog") {
+    return (
+      (normalizedPath === "/blog" || normalizedPath.startsWith("/blog/")) &&
+      !normalizedPath.startsWith("/blog/zips") &&
+      !normalizedPath.startsWith("/blog/tags")
+    );
+  }
+
+  if (normalizedHref === "/blog/zips") {
+    return normalizedPath === "/blog/zips" || normalizedPath.startsWith("/blog/zips/");
+  }
+
+  if (normalizedHref === "/blog/tags") {
+    return normalizedPath === "/blog/tags" || normalizedPath.startsWith("/blog/tags/");
+  }
+
+  return normalizedPath === normalizedHref;
+};
 ---
 
 <nav
@@ -19,8 +49,8 @@ const links = [
         src="/logo/esvdev_logo_no_under.svg"
         alt="esvdev_logo"
       />
-      <span class="text-xl font-semibold tracking-tight uppercase text-brand-orange hidden md:inline">
-        El Ingeniero Consciente
+      <span class="text-xl italic tracking-tight text-brand-gray hidden md:inline">
+        el ingeniero <span class="font-semibold">consciente</span>
       </span>
     </a>
     <button
@@ -43,11 +73,20 @@ const links = [
     id="site-nav-links"
     class="hidden md:flex flex-col md:flex-row w-full md:w-auto gap-6 md:gap-6 text-sm font-medium uppercase tracking-widest text-brand-offwhite bg-white/5 md:bg-transparent rounded-xl p-4 md:p-0"
   >
-    {links.map((link) => (
-      <a class="block w-full md:w-auto py-2 md:py-0 hover:text-brand-orange transition-colors" href={link.href}>
-        {link.label}
-      </a>
-    ))}
+    {links.map((link) => {
+      const active = isActive(link.href);
+      return (
+        <a
+          class={`block w-full md:w-auto py-2 md:py-0 pb-1 border-b-2 ${
+            active ? "border-brand-orange" : "border-transparent"
+          } hover:text-brand-orange transition-colors`}
+          href={link.href}
+          aria-current={active ? "page" : undefined}
+        >
+          {link.label}
+        </a>
+      );
+    })}
   </div>
 </nav>
 

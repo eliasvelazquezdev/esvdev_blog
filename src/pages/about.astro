@@ -1,45 +1,27 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import Author from '../components/Author.astro';
+import AboutHero from '../components/AboutHero.astro';
+import ExperienceGrid from '../components/ExperienceGrid.astro';
 
 const pageTitle = 'Acerca de'
 ---
 
 <SiteLayout pageTitle={pageTitle}>
-    <main class="max-w-3xl mx-auto px-6 pb-24">
-        <h1 class="text-4xl md:text-5xl font-bold block mb-5 text-brand-orange">¡Hola! Soy Elias y te cuento un poco sobre mí 😉</h1>
+    <main class="pb-2">
+        <AboutHero
+            title="¡Hola! Soy Elias"
+            highlight="Te cuento un poco sobre mí 😉"
+            imageUrl="https://res.cloudinary.com/dwczjy8e4/image/upload/v1773862675/esvdev_linkedin_gpt_1_k2tl3z.png"
+        >
+            <p>Comencé mi camino profesional en tecnología en 2024 como Python Developer, donde rápidamente me orienté hacia el mundo del <strong>Data Engineering</strong>. Desde entonces, he trabajado en el desarrollo de soluciones basadas en datos y en la nube, profundizando en herramientas como <strong>AWS</strong>, <strong>Docker</strong> y flujos de trabajo modernos que integran IA para resolver problemas de forma más eficiente.</p>
 
+            <p>A lo largo de este recorrido, no solo consolidé habilidades técnicas, sino también una forma de trabajar: <strong>clara, colaborativa y orientada a resultados</strong>. La comunicación efectiva, la organización y el trabajo en equipo se volvieron tan importantes como el código, especialmente en entornos remotos y dinámicos.</p>
 
-    <h2 class="text-2xl font-bold block mt-10 mb-3 text-brand-orange">Mis inicios 👶</h2>
-    <p class="text-lg mb-5 leading-loose">Siempre me fascinó lo que se puede hacer con una computadora. <strong>Mi primer contacto fue a los 16, con C++</strong>. Spoiler: lo odié. Pero algo en mí sintió que programar era una especie de magia. Estaba logrando que la máquina hiciera algo escribiendo palabras y símbolos raros.</p>
+            <p>Mi enfoque hoy no es solo seguir creciendo como ingeniero, sino hacerlo con criterio. <strong>Me interesa entender el “por qué” detrás de las decisiones técnicas</strong>, construir soluciones sostenibles y mantener una relación consciente con la tecnología que utilizo.</p>
 
-    <p class="text-lg mb-5 leading-loose">Después de la secundaria trabajé varios años y probé distintos caminos. En 2020 estudié enfermería, y tras darme cuenta de que no era lo mío, <strong>en 2021 volví a un viejo amor: la programación</strong>. Esta vez con Python, un lenguaje que me devolvió esa sensación de magia, pero con una sintaxis que no me hacía gritarle a la pantalla.</p>
+            <p>Esa misma intención es la que me lleva a compartir lo que aprendo, ya sea a través de este espacio o en comunidad. <strong>Creo que la tecnología es una herramienta poderosa para generar impacto, y mi objetivo es contribuir a que más personas puedan desarrollarse en este camino con claridad y confianza</strong>.</p>
+        </AboutHero>
 
-    <p class="text-lg mb-5 leading-loose">Desde ahí sigo aprendiendo como autodidacta, combinando curiosidad, práctica y muchas ganas de mejorar cada día.</p>
-
-    <h2 class="text-2xl font-bold block mt-10 mb-3 text-brand-orange">Mi camino laboral 🚀</h2>
-    <p class="text-lg mb-5 leading-loose">
-        En febrero de 2024 empecé mi camino laboral como Python Developer en <a href="https://www.linkedin.com/company/vordentech/posts/?feedView=all" target="_blank" class="font-bold">Vordentech</a>. Aunque Data Engineering no era mi campo inicial, me encantó el desafío y el ritmo de aprendizaje. Desde entonces, <strong>crecí mucho en desarrollo de software, manejo de datos y uso de la nube</strong>.
-    </p>
-
-    <p class="text-lg mb-5 leading-loose">El trabajo en equipo también fue clave: <strong>mejoré mis habilidades de comunicación (en español e inglés)</strong>, colaboración y organización utilizando herramientas como Slack y Git.</p>
-
-    <p class="text-lg mb-5 leading-loose">Uno de mis mayores aprendizajes fue <strong>incorporar IA —como ChatGPT y Claude— a mi flujo de trabajo</strong> para resolver problemas más rápido. Además, <strong>me adentré en AWS</strong>, entendiendo cómo funcionan sus servicios por dentro y cómo desplegar e integrar soluciones en un entorno productivo, tanto con la consola como con la CLI.</p>
-
-    <p class="text-lg mb-5 leading-loose">También aprendí a usar <strong>Docker para crear entornos de desarrollo y producción reproducibles</strong>, lo que me ahorra tiempo y dolores de cabeza.</p>
-
-    <p class="text-lg mb-5 leading-loose">Podría escribir mucho más, pero esta es una buena foto general. Si querés ver mis tareas del día a día, podés encontrarlas en mi <a href="https://evelazquez.dev" target="_blank" class="font-bold">web personal</a>.</p>
-
-
-    <h2 class="text-2xl font-bold block mt-10 mb-3 text-brand-orange">Mi gran objetivo 🎯</h2>
-    <p class="text-lg mb-5 leading-loose">Aún recuerdo algunos de los conocimientos que he adquirido durante mis estudios de enfermería. No quiero ahondar en los motivos que me llevaron a abandonar la carrera, pero sí sobre la razón por la cual empecé: <strong>ayudar a los demás</strong></p>
-
-    <blockquote class="bg-slate-800 p-4 block text-xl mt-5 mb-5 leading-loose">Si hay algo que me apasiona hacer es poner mis conocimientos al servicio de otros, no importa el campo o especialidad. Mi objetivo es lograr un impacto positivo en la vida de las personas a través de la tecnología. Y por ese motivo es que me preparo persistentemente.</blockquote>
-
-    <p class="text-lg mb-5 leading-loose">Hablando de ayudar y de lograr impacto, en Noviembre de 2024 fundé una comunidad tech llamada <strong>ShareIT</strong>. Es una comunidad donde compartimos conocimientos sobre tecnología, programación, nos ayudamos a mejorar nuestros CVs, prepararnos para entrevistas, etc. Si te interesa, puedes unirte a ella <a href="https://share-it.tech/aboutus" target="_blank" class="font-bold">desde la web</a>.</p>
-
-    <p class="text-lg mb-5 leading-loose">¡Gracias por haber leído hasta acá! Si tienes alguna pregunta, te gustaría charlar sobre programación/data/jueguitos/Star Wars, no dudes en contactarme 😃</p>
-
-    <Author />
+        <ExperienceGrid />
     </main>
 </SiteLayout>

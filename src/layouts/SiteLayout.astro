@@ -48,6 +48,16 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
         color: #14213d;
       }
 
+      .narrative-text p {
+        margin-bottom: 1.5rem;
+        line-height: 1.75;
+        color: #a3a3a3;
+      }
+
+      .narrative-text p:last-child {
+        margin-bottom: 0;
+      }
+
       article.content p {
         line-height: 1.8;
         margin-bottom: 1.75rem;
