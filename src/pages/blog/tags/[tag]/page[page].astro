@@ -87,7 +87,7 @@ const pageTitle = currentPage === 1
 ---
 
 <SiteLayout pageTitle={pageTitle}>
-    <main class="max-w-3xl mx-auto px-6 pb-24">
+    <main class="max-w-4xl mx-auto px-6 pb-24">
         <Breadcrumbs linkList={[
             {label: "Tags", link : "/blog/tags"},
             {label: currentTagData?.name || tag, link: currentPage === 1 ? undefined : `/blog/tags/${tag}`},
@@ -95,7 +95,7 @@ const pageTitle = currentPage === 1
         ]}
         />
 
-    <h2 class="text-3xl md:text-4xl font-bold mb-5 text-brand-orange">
+    <h2 class="text-2xl md:text-3xl font-bold mb-5 ">
         Posts con la etiqueta
         <span class={`font-bold ${getTagColorClasses(currentTagData?.color).text} hover:border-b-4 hover:border-${currentTagData?.color || 'orange'}-600 hover:border-dashed`}>
             { `#${currentTagData?.name || tag}` }
@@ -117,16 +117,19 @@ const pageTitle = currentPage === 1
         posts.length === 0 ?
         <h2 class="text-xl">Nada por aquí. Muy pronto voy a hablar de este tema, así que date una vuelta pronto. 😉</h2>
         :
-        <div class="flex lg:flex-row flex-col flex-wrap">
+        <div class="grid grid-cols-1 gap-6">
             {posts.map((post) =>
                 <PostDescription
                     postURL={`/blog/${post.slug.current}`}
                     postTitle={post.title}
                     postDate={post.publishedAt}
                     postDescription={post.excerpt}
+                    clickableCard={true}
+                    className="mb-0"
                 />
             )}
         </div>
+
     }
 
     <PaginationArrowsForPostsByTag

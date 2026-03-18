@@ -39,7 +39,7 @@ const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
 ---
 <PostLayout pageTitle={post.title} canonicalURL={canonicalURL}>
     <header
-        class="max-w-3xl mx-auto px-6 pt-16 pb-12"
+        class="max-w-4xl mx-auto px-6 pt-16 pb-12"
         data-purpose="article-header"
     >
         <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
@@ -48,7 +48,7 @@ const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
         <AuthorLayout publishedAt={post.publishedAt} />
     </header>
 
-    <main class="max-w-3xl mx-auto px-6 pb-24" data-purpose="main-article-content">
+    <main class="max-w-4xl mx-auto px-6 pb-24" data-purpose="main-article-content">
         <article class="content text-brand-accent">
             {post.excerpt && (
                 <p class="text-brand-gray">{post.excerpt}</p>

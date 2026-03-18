@@ -1,33 +1,53 @@
 ---
-const { platform, username} = Astro.props;
----
-{
-    (() => {
-        switch (platform) {
-            case 'linkedin':
-                return (
-                    <a target="_blank" href={`https://www.${platform}.com/in/${username}`}>
-                        <i class={`fa-brands fa-linkedin text-lg lg:text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse`}></i>
-                    </a>
-                );
-            case 'twitter':
-                return (
-                    <a target="_blank" href={`https://www.${platform}.com/${username}`}>
-                        <i class={`fa-brands fa-square-x-twitter text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse`}></i>
-                    </a>
-                );
-            case 'github':
-                return (
-                    <a target="_blank" href={`https://www.${platform}.com/${username}`}>
-                        <i class={`fa-brands fa-square-github text-lg lg:text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse`}></i>
-                    </a>
-                );
-            default:
-                return (
-                    <a target="_blank" href={`https://www.${platform}.com/${username}`}>
-                        <i class={`bx bxl-${platform} text-lg lg:text-2xl me-2 text-white hover:text-orange-500 hover:animate-pulse`}></i>
-                    </a>
-                );
-        }
-    })()
+interface Props {
+  platform: string;
+  username: string;
+  className?: string;
 }
+
+const { platform, username, className = "" } = Astro.props as Props;
+
+const iconBaseClass =
+  "text-brand-offwhite hover:text-brand-orange transition-colors duration-200";
+
+const wrapperClass = `inline-flex items-center justify-center ${className}`;
+
+const getHref = () => {
+  switch (platform) {
+    case "linkedin":
+      return `https://www.linkedin.com/in/${username}`;
+    case "twitter":
+      return `https://www.twitter.com/${username}`;
+    case "github":
+      return `https://www.github.com/${username}`;
+    default:
+      return `https://www.${platform}.com/${username}`;
+  }
+};
+
+const getIconClass = () => {
+  switch (platform) {
+    case "linkedin":
+      return `fa-brands fa-linkedin text-lg lg:text-2xl ${iconBaseClass}`;
+    case "twitter":
+      return `fa-brands fa-square-x-twitter text-lg lg:text-2xl ${iconBaseClass}`;
+    case "github":
+      return `fa-brands fa-square-github text-lg lg:text-2xl ${iconBaseClass}`;
+    default:
+      return `bx bxl-${platform} text-lg lg:text-2xl ${iconBaseClass}`;
+  }
+};
+
+const href = getHref();
+const iconClass = getIconClass();
+---
+
+<a
+  class={wrapperClass}
+  target="_blank"
+  rel="noopener noreferrer"
+  href={href}
+  aria-label={`Ir a ${platform}`}
+>
+  <i class={iconClass}></i>
+</a>

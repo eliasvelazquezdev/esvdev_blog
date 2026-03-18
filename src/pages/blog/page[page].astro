@@ -64,13 +64,15 @@ const pageTitle = `Posts - Página ${currentPage}`;
             <p>Todos los articulos que he publicado. Página {currentPage} de {totalPages}</p>
         </div>
 
-        <div class="flex lg:flex-row flex-col flex-wrap">
+        <div class="grid grid-cols-1 gap-6">
             {posts.map((post) => (
                 <PostDescription
                     postURL={`/blog/${post.slug.current}`}
                     postTitle={post.title}
                     postDate={post.publishedAt}
                     postDescription={post.excerpt}
+                    clickableCard={true}
+                    className="mb-0"
                 />
             ))}
         </div>
