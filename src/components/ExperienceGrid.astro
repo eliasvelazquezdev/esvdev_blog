@@ -1,16 +1,16 @@
 ---
 const experiences = [
   {
-    label: "2024 — Presente",
-    title: "Data Engineer",
-    description:
-      "Diseño y construcción de pipelines de datos, automatización de procesos y desarrollo de soluciones en la nube con foco en escalabilidad y calidad.",
-  },
-  {
     label: "Proyecto clave",
     title: "ShareIT Community",
     description:
       "Fundé y lidero una comunidad tech orientada a compartir conocimiento, mejorar perfiles profesionales y acompañar el crecimiento en IT.",
+  },
+  {
+    label: "2024 — Presente",
+    title: "Data Engineer",
+    description:
+      "Diseño y construcción de pipelines de datos, automatización de procesos y desarrollo de soluciones en la nube con foco en escalabilidad y calidad.",
   },
   {
     label: "Más sobre mí",
@@ -25,8 +25,21 @@ const experiences = [
 <section class="bg-brand-navy-mid pt-16 pb-8 border-t border-gray-800" data-purpose="experience-list">
   <div class="max-w-4xl mx-auto px-6">
     <h2 class="text-2xl font-bold mb-10 text-brand-offwhite">Experiencia & Proyectos</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {experiences.map((item) => {
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Row 1: image (left) -->
+      <figure class="hidden md:block self-start">
+        <img
+          src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1773878447/esvdev_nerdearla_du5s2w.png"
+          alt="Elias hablando en un evento tech con remera de ShareIT Community"
+          class="w-full h-56 lg:h-64 rounded-xl object-cover"
+          loading="lazy"
+        />
+      </figure>
+
+
+      <!-- Row 1: first card (right) -->
+      {experiences.slice(0, 1).map((item) => {
         const Wrapper = item.href ? "a" : "div";
         return (
           <Wrapper
@@ -43,6 +56,27 @@ const experiences = [
           </Wrapper>
         );
       })}
+
+      <!-- Row 2: remaining cards -->
+      {experiences.slice(1).map((item) => {
+        const Wrapper = item.href ? "a" : "div";
+
+        return (
+          <Wrapper
+            class="p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-colors bg-white/5 h-full"
+            href={item.href}
+            target={item.href ? "_blank" : undefined}
+            rel={item.href ? "noopener noreferrer" : undefined}
+          >
+            <span class="text-xs font-semibold uppercase tracking-wider text-brand-orange">
+              {item.label}
+            </span>
+            <h3 class="text-xl font-bold mt-2 mb-3 text-brand-offwhite">{item.title}</h3>
+            <p class="text-brand-gray text-sm">{item.description}</p>
+          </Wrapper>
+        );
+      })}
+
     </div>
   </div>
 </section>

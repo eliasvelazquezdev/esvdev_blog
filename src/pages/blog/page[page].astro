@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
 import PostDescription from '../../components/PostDescription.astro';
 import PaginationArrowsForPosts from '../../components/PaginationArrowsForPosts.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -51,8 +51,8 @@ const prevPage = hasPrev ? currentPage - 1 : null;
 const pageTitle = `Posts - Página ${currentPage}`;
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-    <main>
+<SiteLayout pageTitle={pageTitle}>
+    <main class="max-w-4xl mx-auto px-6 pb-24">
         <div class="mb-5">
             <Breadcrumbs linkList={[
                 {label: "Blog", link:"/blog"},
@@ -84,4 +84,4 @@ const pageTitle = `Posts - Página ${currentPage}`;
             totalPages={totalPages}
         />
     </main>
-</BaseLayout>
+</SiteLayout>

@@ -1,9 +1,131 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 
-const pageTitle = 'Home';
+const pageTitle = 'El Ingeniero Consciente';
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-  <p>Hello world</p>
-</BaseLayout>
+<SiteLayout pageTitle={pageTitle}>
+  <main class="max-w-4xl mx-auto px-6 pb-24">
+    <!-- Hero -->
+    <section class="flex flex-col md:flex-row items-center md:items-start gap-10 py-10 md:py-16 border-b border-gray-800">
+      <div class="w-32 h-32 md:w-44 md:h-44 flex-shrink-0">
+        <img
+          alt="Foto de Elias Velazquez"
+          class="w-full h-full object-cover rounded-full border border-gray-700"
+          src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1773862675/esvdev_linkedin_gpt_1_k2tl3z.png"
+          loading="lazy"
+        />
+      </div>
+      <div class="flex-grow text-center md:text-left">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 text-brand-offwhite">
+          El Ingeniero Consciente
+        </h1>
+        <p class="text-lg text-brand-gray mb-6 leading-relaxed">
+          El hub donde comparto ingeniería de datos, arquitectura cloud y mentalidad profesional,
+          con una mirada humana y práctica.
+        </p>
+        <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto md:mx-0" data-purpose="subscription-form">
+          <input
+            class="flex-grow rounded-md border border-gray-700 bg-transparent focus:border-brand-orange focus:ring-0 px-4 py-3 text-brand-offwhite placeholder:text-gray-600 outline-none transition-colors"
+            placeholder="Tu email"
+            required
+            type="email"
+          />
+          <button
+            class="bg-brand-orange text-brand-navy font-semibold px-8 py-3 rounded-md hover:opacity-90 transition-opacity whitespace-nowrap"
+            type="submit"
+          >
+            Suscribirme
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- What is this -->
+    <section class="py-12">
+      <h2 class="text-2xl md:text-3xl font-bold mb-4 text-brand-orange">
+        ¿Qué es El Ingeniero Consciente?
+      </h2>
+      <p class="text-lg leading-loose text-brand-gray mb-4">
+        Es una newsletter y un espacio de contenido pensado para crecer en tecnología sin perder
+        el criterio ni la claridad. Encontrarás ideas aplicables, aprendizajes reales y recursos
+        útiles para avanzar en tu carrera con foco y propósito.
+      </p>
+      <p class="text-lg leading-loose text-brand-gray">
+        Sin humo: comparto lo que aprendo, valido y utilizo en el día a día.
+      </p>
+    </section>
+
+    <!-- Newsletter structure -->
+    <section class="py-12 border-t border-gray-800">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6 text-brand-orange">
+        ¿Cómo está organizada la newsletter?
+      </h2>
+      <p class="text-lg leading-loose text-brand-gray mb-8">
+        Cada edición gira en torno a uno de estos pilares. Son rutas de lectura claras y complementarias.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 border border-gray-800 rounded-xl bg-white/5">
+          <h3 class="text-xl font-bold text-brand-offwhite mb-2">🛠️ Taller de Datos</h3>
+          <p class="text-brand-gray text-sm leading-relaxed">
+            Data Engineering, Python, SQL, Git y fundamentos técnicos aplicados al trabajo real.
+          </p>
+        </div>
+        <div class="p-6 border border-gray-800 rounded-xl bg-white/5">
+          <h3 class="text-xl font-bold text-brand-offwhite mb-2">☁️ La Senda del Nubearquitecto</h3>
+          <p class="text-brand-gray text-sm leading-relaxed">
+            AWS, cloud y arquitectura desde la práctica: patrones, decisiones y trade-offs.
+          </p>
+        </div>
+        <div class="p-6 border border-gray-800 rounded-xl bg-white/5">
+          <h3 class="text-xl font-bold text-brand-offwhite mb-2">💼 Carrera y Habilidades</h3>
+          <p class="text-brand-gray text-sm leading-relaxed">
+            Crecimiento profesional en IT: comunicación, seniority, decisiones y habilidades clave.
+          </p>
+        </div>
+        <div class="p-6 border border-gray-800 rounded-xl bg-white/5">
+          <h3 class="text-xl font-bold text-brand-offwhite mb-2">🧠 Debug Mental</h3>
+          <p class="text-brand-gray text-sm leading-relaxed">
+            Reflexiones, mentalidad y hábitos para sostener el rendimiento sin quemarte.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expectations -->
+    <section class="py-12 border-t border-gray-800">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6 text-brand-orange">
+        ¿Qué podés esperar?
+      </h2>
+      <ul class="text-lg leading-loose list-disc list-inside text-brand-gray mb-6">
+        <li>Contenido técnico enfocado y digerible.</li>
+        <li>Reflexiones honestas, sin humo.</li>
+        <li>Aprendizajes reales, no solo éxitos.</li>
+        <li>Una mirada consciente sobre la carrera en tecnología.</li>
+      </ul>
+      <p class="text-lg leading-loose text-brand-gray">
+        Si buscás crecer como profesional sin desconectarte de vos mismo/a, estás en el lugar correcto.
+      </p>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-12 border-t border-gray-800">
+      <div class="rounded-xl border border-gray-800 bg-white/5 p-6 md:p-8 text-center">
+        <h3 class="text-2xl font-bold text-brand-offwhite mb-3">
+          Sumate a El Ingeniero Consciente
+        </h3>
+        <p class="text-brand-gray mb-6">
+          Recibí ideas prácticas sobre datos, arquitectura cloud y crecimiento profesional.
+        </p>
+        <a
+          class="inline-flex items-center justify-center bg-brand-orange text-brand-navy font-semibold px-8 py-3 rounded-md hover:opacity-90 transition-opacity"
+          href="https://newsletter.elingenieroconsciente.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Suscribirme
+        </a>
+      </div>
+    </section>
+  </main>
+</SiteLayout>
