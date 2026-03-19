@@ -27,20 +27,17 @@ const pageTitle = 'El Ingeniero Consciente';
         <p class="text-lg  mb-6 leading-relaxed">
             Sumate a la comunidad de <span class="bold text-brand-orange">+200 lectores</span>  que buscan crecer profesionalmente sin perderse a ellos mismos.
         </p>
-        <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto md:mx-0" data-purpose="subscription-form">
-          <input
-            class="flex-grow rounded-md border border-gray-700 bg-transparent focus:border-brand-orange focus:ring-0 px-4 py-3 text-brand-offwhite placeholder:text-gray-600 outline-none transition-colors"
-            placeholder="Tu email"
-            required
-            type="email"
-          />
-          <button
-            class="bg-brand-orange text-brand-navy font-semibold px-8 py-3 rounded-md hover:opacity-90 transition-opacity whitespace-nowrap"
-            type="submit"
-          >
-            Suscribirme
-          </button>
-        </form>
+        <div class="mt-8 max-w-md mx-auto md:mx-0 rounded-xl overflow-hidden shadow-lg border border-gray-800" data-purpose="subscription-form-container">
+          <iframe
+            src="https://newsletter.elingenieroconsciente.com/embed"
+            width="100%"
+            height="150"
+            style="border: none; background: white;"
+            frameborder="0"
+            scrolling="no"
+            title="Suscribirse a El Ingeniero Consciente"
+          ></iframe>
+        </div>
       </div>
     </section>
 
@@ -126,7 +123,7 @@ const pageTitle = 'El Ingeniero Consciente';
           target="_blank"
           rel="noopener noreferrer"
         >
-          Suscribirme
+          Suscribirse
         </a>
       </div>
     </section>
