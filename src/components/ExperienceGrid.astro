@@ -4,7 +4,7 @@ const experiences = [
     label: "Proyecto clave",
     title: "ShareIT Community",
     description:
-      "Fundé y lidero una comunidad tech orientada a compartir conocimiento, mejorar perfiles profesionales y acompañar el crecimiento en IT.",
+      "Fundé y lidero una comunidad tech de +250 miembros orientada a compartir conocimiento, mejorar perfiles profesionales y acompañar el crecimiento en IT.",
   },
   {
     label: "2024 — Presente",
@@ -27,37 +27,37 @@ const experiences = [
     <h2 class="text-2xl font-bold mb-10 text-brand-offwhite">Experiencia & Proyectos</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- Row 1: image (left) -->
-      <figure class="hidden md:block self-start">
-        <img
-          src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1773878447/esvdev_nerdearla_du5s2w.png"
-          alt="Elias hablando en un evento tech con remera de ShareIT Community"
-          class="w-full h-56 lg:h-64 rounded-xl object-cover"
-          loading="lazy"
-        />
-      </figure>
-
-
-      <!-- Row 1: first card (right) -->
+      <!-- First card (Full width on desktop with image inside) -->
       {experiences.slice(0, 1).map((item) => {
         const Wrapper = item.href ? "a" : "div";
         return (
           <Wrapper
-            class="p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-colors bg-white/5"
+            class="p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-colors bg-white/5 md:col-span-2 flex flex-col md:flex-row gap-6 items-center"
             href={item.href}
             target={item.href ? "_blank" : undefined}
             rel={item.href ? "noopener noreferrer" : undefined}
           >
-            <span class="text-xs font-semibold uppercase tracking-wider text-brand-orange">
-              {item.label}
-            </span>
-            <h3 class="text-xl font-bold mt-2 mb-3 text-brand-offwhite">{item.title}</h3>
-            <p class="text-brand-gray text-sm">{item.description}</p>
+            <div class="flex-1">
+                <span class="text-xs font-semibold uppercase tracking-wider text-brand-orange">
+                    {item.label}
+                </span>
+                <h3 class="text-xl font-bold mt-2 mb-3 text-brand-offwhite">{item.title}</h3>
+                <p class="text-brand-gray text-sm leading-relaxed">{item.description}</p>
+            </div>
+
+            <figure class="hidden md:flex flex-shrink-0 justify-end ml-auto">
+                <img
+                    src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1773878447/esvdev_nerdearla_du5s2w.png"
+                    alt="Elias hablando en un evento tech con remera de ShareIT Community"
+                    class="w-48 h-48 rounded-full object-cover border border-gray-700"
+                    loading="lazy"
+                />
+            </figure>
           </Wrapper>
         );
       })}
 
-      <!-- Row 2: remaining cards -->
+      <!-- Remaining cards (1 column each) -->
       {experiences.slice(1).map((item) => {
         const Wrapper = item.href ? "a" : "div";
 
@@ -76,7 +76,6 @@ const experiences = [
           </Wrapper>
         );
       })}
-
     </div>
   </div>
 </section>
