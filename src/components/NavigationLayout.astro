@@ -91,23 +91,26 @@ const isActive = (href) => {
 </nav>
 
 <script>
-  const toggle = document.getElementById("nav-toggle");
-  const menu = document.getElementById("site-nav-links");
+  // Wrap everything in an astro:page-load listener so it runs on every navigation
+  document.addEventListener('astro:page-load', () => {
+    const toggle = document.getElementById("nav-toggle");
+    const menu = document.getElementById("site-nav-links");
 
-  if (toggle && menu) {
-    toggle.addEventListener("click", () => {
-      const isOpen = menu.classList.toggle("hidden") === false;
-      toggle.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    const links = menu.querySelectorAll("a");
-    links.forEach((link) => {
-      link.addEventListener("click", () => {
-        if (!menu.classList.contains("hidden")) {
-          menu.classList.add("hidden");
-          toggle.setAttribute("aria-expanded", "false");
-        }
+    if (toggle && menu) {
+      toggle.addEventListener("click", () => {
+        const isOpen = menu.classList.toggle("hidden") === false;
+        toggle.setAttribute("aria-expanded", String(isOpen));
       });
-    });
-  }
+
+      const links = menu.querySelectorAll("a");
+      links.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (!menu.classList.contains("hidden")) {
+            menu.classList.add("hidden");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+    }
+  });
 </script>
