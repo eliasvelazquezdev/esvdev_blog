@@ -1,24 +1,67 @@
 ---
-const {postTitle, postDescription, postDate, postURL} = Astro.props;
+interface Props {
+  postTitle: string;
+  postDescription: string;
+  postDate: string | Date;
+  postURL: string;
+  clickableCard?: boolean;
+  className?: string;
+}
 
-const dateFormatting =  {
-    weekday: 'short', 
-    year: 'numeric', 
-    month: 'numeric', 
-    day: 'numeric'
+const {
+  postTitle,
+  postDescription,
+  postDate,
+  postURL,
+  clickableCard = false,
+  className = "",
+} = Astro.props;
+
+const dateFormatting: Intl.DateTimeFormatOptions = {
+  weekday: "short",
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
 };
 ---
 
-<div class="w-2/3 mb-5">
-    <a href={postURL} class="text-xl font-bold text-orange-500 hover:border-b-4 hover:border-orange-600 hover:border-dashed">
+{
+  clickableCard ? (
+    <a
+      href={postURL}
+      class={`group block mb-5 rounded-xl border border-gray-800 bg-white/5 p-6 transition-colors hover:border-brand-orange/50 focus:outline-none focus:ring-2 focus:ring-brand-orange/50 no-underline hover:no-underline ${className}`}
+      aria-label={`Leer post: ${postTitle}`}
+    >
+      <h3 class="text-xl font-bold text-brand-orange no-underline group-hover:no-underline">
         {postTitle}
-    </a>
-    <p class="text-gray-500 mt-1 mb-2">
-        <i class='bx bxs-calendar me-1'></i>
-        {new Date(postDate).toLocaleDateString("es-ES", dateFormatting)}
-    </p>
-    <div class="text-gray-400 w-2/3">
-        {postDescription}
-    </div>
-</div>
+      </h3>
 
+      <p class="text-gray-500 mt-1 mb-2">
+        <i class="bx bxs-calendar me-1"></i>
+        {new Date(postDate).toLocaleDateString("es-ES", dateFormatting)}
+      </p>
+
+      <div class="text-gray-400">
+        {postDescription}
+      </div>
+    </a>
+  ) : (
+    <article class={`w-full lg:w-2/3 mb-5 ${className}`}>
+      <a
+        href={postURL}
+        class="text-xl font-bold text-orange-500 no-underline hover:no-underline focus:no-underline hover:text-orange-400 transition-colors"
+      >
+        {postTitle}
+      </a>
+
+      <p class="text-gray-500 mt-1 mb-2">
+        <i class="bx bxs-calendar me-1"></i>
+        {new Date(postDate).toLocaleDateString("es-ES", dateFormatting)}
+      </p>
+
+      <div class="text-gray-400 lg:w-2/3">
+        {postDescription}
+      </div>
+    </article>
+  )
+}

@@ -1,0 +1,33 @@
+---
+interface Props {
+  publishedAt: Date | string;
+}
+
+const { publishedAt } = Astro.props;
+
+function formatDate(date: Date | string) {
+  const dateFormatting = {
+    weekday: "short",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  };
+
+  return new Date(date).toLocaleDateString("es-ES", dateFormatting);
+}
+---
+
+<div
+  class="flex items-center space-x-4 border-b border-gray-700 pb-12"
+  data-purpose="author-byline"
+>
+  <img
+    alt="Autor: Elías Velázquez"
+    class="w-12 h-12 rounded-full grayscale brightness-110 object-cover"
+    src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1773862675/esvdev_linkedin_gpt_1_k2tl3z.png"
+  />
+  <div class="text-sm">
+    <p class="font-semibold text-brand-offwhite">Elías Velázquez</p>
+    <p class="text-brand-gray">{formatDate(publishedAt)}</p>
+  </div>
+</div>

@@ -1,37 +1,36 @@
-import { createSlug } from '../utils/slugify.js';
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { createSlug } from "../utils/slugify.js";
+import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function extractText(children) {
-  if (!children) return '';
-  
-  if (typeof children === 'string') return children;
-  
+  if (!children) return "";
+
+  if (typeof children === "string") return children;
+
   if (Array.isArray(children)) {
-    return children.map(child => extractText(child)).join('');
+    return children.map((child) => extractText(child)).join("");
   }
-  
+
   if (children.props && children.props.value) {
     const value = children.props.value;
     return String(value);
   }
-  
+
   if (children.props) {
-    if (typeof children.props.children === 'string') {
+    if (typeof children.props.children === "string") {
       return children.props.children;
     }
     if (children.props.children) {
       return extractText(children.props.children);
     }
   }
-  
+
   if (children.text) {
     return children.text;
   }
-  
-  return '';
-}
 
+  return "";
+}
 
 export const components = {
   block: {
@@ -84,7 +83,7 @@ export const components = {
     ),
 
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 text-xl  border-gray-400 pl-4 italic text-gray-400 my-10">
+      <blockquote className="my-10 rounded-md bg-brand-orange/30 px-5 py-4 text-xl  text-gray-200">
         {children}
       </blockquote>
     ),
@@ -100,12 +99,8 @@ export const components = {
   },
 
   listItem: {
-    bullet: ({ children }) => (
-      <li className="ml-4 text-lg">{children}</li>
-    ),
-    number: ({ children }) => (
-      <li className="ml-4 text-lg">{children}</li>
-    ),
+    bullet: ({ children }) => <li className="ml-4 text-lg">{children}</li>,
+    number: ({ children }) => <li className="ml-4 text-lg">{children}</li>,
   },
 
   marks: {
@@ -141,7 +136,7 @@ export const components = {
     },
     code: (props) => {
       const { code, language, filename } = props.node || {};
-      
+
       return (
         <div className="my-8">
           {filename && (
@@ -150,18 +145,18 @@ export const components = {
             </div>
           )}
           <SyntaxHighlighter
-            language={language || 'text'}
+            language={language || "text"}
             style={oneDark}
             customStyle={{
-              borderRadius: filename ? '0 0 0.5rem 0.5rem' : '0.5rem',
-              fontSize: '0.875rem',
-              lineHeight: '1.5',
+              borderRadius: filename ? "0 0 0.5rem 0.5rem" : "0.5rem",
+              fontSize: "0.875rem",
+              lineHeight: "1.5",
               margin: 0,
             }}
             showLineNumbers={true}
             wrapLines={true}
           >
-            {code || ''}
+            {code || ""}
           </SyntaxHighlighter>
         </div>
       );
@@ -170,7 +165,7 @@ export const components = {
 
   // Fallback for unknown types
   unknownType: (props) => {
-    console.log('Unknown type encountered:', props);
+    console.log("Unknown type encountered:", props);
     return <div>Unknown content type: {props._type}</div>;
   },
 };

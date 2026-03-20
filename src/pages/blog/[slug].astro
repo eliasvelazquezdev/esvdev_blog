@@ -1,0 +1,111 @@
+---
+import PostLayout from "../../layouts/PostLayout.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import AuthorLayout from "../../components/AuthorLayout.astro";
+import { getTagColorClasses } from "../../utils/tagColors.js";
+
+import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
+import { PortableText } from "astro-portabletext";
+import { components } from '../../components/PortableTextComponents.jsx';
+
+const { slug } = Astro.params;
+
+const POST_BY_SLUG_QUERY = `*[
+    contentType == "post" && slug.current == "${slug}"
+][0]{
+    _id,
+    title,
+    excerpt,
+    publishedAt,
+    _updatedAt,
+    body,
+    "tags": tags[]->{
+    name,
+    "slug": slug.current,
+    color,
+    description
+    }
+}`;
+
+const post = await sanityClient.fetch<SanityDocument[]>(POST_BY_SLUG_QUERY);
+const portableText = post.body;
+
+// Generate canonical URL for this post
+const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
+
+
+
+---
+<PostLayout pageTitle={post.title} canonicalURL={canonicalURL}>
+    <header
+        class="max-w-4xl mx-auto px-6 pt-16 pb-12"
+        data-purpose="article-header"
+    >
+        <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
+            {post.title}
+        </h1>
+        <AuthorLayout publishedAt={post.publishedAt} />
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 pb-24" data-purpose="main-article-content">
+        <article class="content text-brand-accent">
+            {post.excerpt && (
+                <p class="text-brand-gray">{post.excerpt}</p>
+            )}
+            <TableOfContents items={post.body} />
+            <PortableText value={portableText} components={components} />
+        </article>
+
+        {post.tags && post.tags.length > 0 && (
+            <div class="mt-12">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-brand-gray mb-4">
+                    Tags
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    {post.tags.map((tag) => {
+                        const colors = getTagColorClasses(tag.color);
+                        return (
+                            <a
+                                href={`/blog/tags/${tag.slug}`}
+                                class={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
+                                title={tag.description || `Ver todos los posts sobre ${tag.name}`}
+                            >
+                                #{tag.name}
+                            </a>
+                        );
+                    })}
+                </div>
+            </div>
+        )}
+
+        <section
+            class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
+            data-purpose="social-sharing"
+        >
+            <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
+                Compartir
+            </span>
+            <div class="flex gap-4">
+                <a
+                    class="p-2 hover:bg-brand-orange/20 rounded-full transition-colors text-brand-offwhite hover:text-brand-orange"
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(canonicalURL)}&via=ingeconsciente`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Compartir en X"
+                >
+                    <i class="fa-brands fa-square-x-twitter text-xl"></i>
+                </a>
+                <a
+                    class="p-2 hover:bg-brand-orange/20 rounded-full transition-colors text-brand-offwhite hover:text-brand-orange"
+                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalURL)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Compartir en LinkedIn"
+                >
+                    <i class="fa-brands fa-linkedin text-xl"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+</PostLayout>

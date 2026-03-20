@@ -1,108 +1,174 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Social from '../components/Social.astro';
-import Separator from '../components/Separator.astro';
-import PostDescription from '../components/PostDescription.astro';
+import Icon from '../components/Icon.astro'
+import SiteLayout from '../layouts/SiteLayout.astro'
 
-import type { SanityDocument } from "@sanity/client";
-import { sanityClient } from "sanity:client";
-
-const FEATURED_POSTS_QUERY = `*[
-	_type == "post" && featured == true
-]|order(publishedAt desc){_id, title, slug, excerpt, publishedAt}
-`;
-
-const featured_posts = await sanityClient.fetch<SanityDocument[]>(FEATURED_POSTS_QUERY);
-
-const LATEST_POSTS_QUERY = `*[
-    _type == "post"
-]|order(publishedAt desc)[0...5]{_id, title, slug, excerpt, publishedAt}
-`;
-const latest_posts = await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY);
-
-const pageTitle = 'Blog'
+const pageTitle = 'El Ingeniero Consciente'
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-	<main>
-		<div class="flex flex-col items-center ">
-			<div class="w-64 lg:w-96 lg:me-5 h-64 lg:h-96 bg-cover bg-center bg-no-repeat rounded-full mb-5" 
-				style="background-image: url('https://res.cloudinary.com/dwczjy8e4/image/upload/v1729968282/blog/esvdev_lofi_blog_mx4t7x.png')">
-			</div>
-			
-			<div>
-				<h1 class="text-4xl font-bold block mb-3">¡Bienvenido/a a mi blog!</h1>
-				
-				<p class="text-lg mb-5 leading-loose">
-					Soy Elías, programador autodidacta desde hace 3 años y Data Engineer JR desde febrero de 2024. Sigo formándome para crecer en este camino, mejorar lo que ya sé y encontrar nuevas formas de hacerlo mejor.
-				</p>
+<SiteLayout pageTitle={pageTitle}>
+  <main class='max-w-4xl mx-auto px-6 pb-24'>
+    <!-- Hero -->
+    <section
+      class='flex flex-col md:flex-row items-center md:items-start gap-10 py-10 md:py-16 border-b border-gray-800'
+    >
+      <div class='w-32 h-32 md:w-44 md:h-44 flex-shrink-0'>
+        <img
+          alt='Foto de Elias Velazquez'
+          class='w-full h-full object-cover rounded-full border border-gray-700'
+          src='https://res.cloudinary.com/dwczjy8e4/image/upload/v1773862675/esvdev_linkedin_gpt_1_k2tl3z.png'
+          loading='lazy'
+        />
+      </div>
+      <div class='flex-grow text-center md:text-left'>
+        <h1 class='text-3xl md:text-5xl font-bold mb-4 text-brand-offwhite'>
+          El Ingeniero Consciente
+        </h1>
+        <p class='text-lg mb-6 leading-relaxed'>
+          El hub donde comparto ingeniería de datos, arquitectura cloud y
+          mentalidad profesional, con una mirada humana y práctica.
+        </p>
+        <p class='text-lg mb-6 leading-relaxed'>
+          Sumate a la comunidad de <span class='bold text-brand-orange'
+            >+200 lectores</span
+          > que buscan crecer profesionalmente sin perderse a ellos mismos.
+        </p>
+        <div
+          class='mt-8 max-w-md mx-auto md:mx-0 rounded-xl overflow-hidden shadow-lg border border-gray-800'
+          data-purpose='subscription-form-container'
+        >
+          <iframe
+            src='https://newsletter.elingenieroconsciente.com/embed'
+            width='100%'
+            height='150'
+            style='border: none; background: white;'
+            frameborder='0'
+            scrolling='no'
+            title='Suscribirse a El Ingeniero Consciente'></iframe>
+        </div>
+      </div>
+    </section>
 
-				<p class="text-lg mb-5 leading-loose">
-					Me encanta compartir mi viaje en IT, hablar de desarrollo personal, filosofía y, por supuesto, software. También soy músico, fan de los videojuegos, me gusta leer sobre psicología y finanzas, y de vez en cuando dejo caer algo de todos esos mundos en este blog.
-				</p>
+    <!-- What is this -->
+    <section class='py-12'>
+      <h2 class='text-2xl md:text-3xl font-bold mb-4 text-brand-orange'>
+        ¿Qué es El Ingeniero Consciente?
+      </h2>
+      <p class='text-lg leading-loose mb-4'>
+        Es una newsletter y un espacio de contenido pensado para crecer en
+        tecnología sin perder el criterio ni la claridad. Encontrarás ideas
+        aplicables, aprendizajes reales y recursos útiles para avanzar en tu
+        carrera con foco y propósito.
+      </p>
+      <p class='text-lg leading-loose'>
+        Sin humo: comparto lo que aprendo, valido y utilizo en el día a día.
+      </p>
+    </section>
 
-				<p class="text-lg mb-5 leading-loose">
-					Disfruto conocer gente, ayudar y acompañar a quienes están empezando a programar. Podés pasar por mis redes, unirte a mi comunidad <a href="https://share-it.tech" target="_blank" class="font-bold">ShareIT</a>, o leer mi newsletter <a href="https://elingenieroconsciente.substack.com/" target="_blank" class="font-bold">"El Ingeniero Consciente"</a>, donde comparto reflexiones y recursos para crecer en tecnología sin perder lo humano en el proceso.
-				</p>
+    <!-- Newsletter structure -->
+    <section class='py-12 border-t border-gray-800'>
+      <h2 class='text-2xl md:text-3xl font-bold mb-6 text-brand-orange'>
+        ¿Cómo está organizada la newsletter?
+      </h2>
+      <p class='text-lg leading-loose mb-8'>
+        Cada edición gira en torno a uno de estos pilares. Son rutas de lectura
+        claras y complementarias.
+      </p>
+      <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+        <div
+          class='p-6 border border-gray-800 rounded-xl bg-white/5 transition-colors hover:border-brand-orange/50'
+        >
+          <div class='flex items-center gap-2 mb-2'>
+            <Icon name='wrench' size={20} className='text-brand-orange' />
+            <h3 class='text-xl font-bold text-brand-offwhite'>
+              Taller de Datos
+            </h3>
+          </div>
+          <p class='text-sm leading-relaxed'>
+            Data Engineering, Python, SQL, Git y fundamentos técnicos aplicados
+            al trabajo real.
+          </p>
+        </div>
+        <div
+          class='p-6 border border-gray-800 rounded-xl bg-white/5 transition-colors hover:border-brand-orange/50'
+        >
+          <div class='flex items-center gap-2 mb-2'>
+            <Icon name='cloud' size={20} className='text-brand-orange' />
+            <h3 class='text-xl font-bold text-brand-offwhite'>
+              La Senda del Nubearquitecto
+            </h3>
+          </div>
+          <p class='text-sm leading-relaxed'>
+            AWS, cloud y arquitectura desde la práctica: patrones, decisiones y
+            trade-offs.
+          </p>
+        </div>
+        <div
+          class='p-6 border border-gray-800 rounded-xl bg-white/5 transition-colors hover:border-brand-orange/50'
+        >
+          <div class='flex items-center gap-2 mb-2'>
+            <Icon name='briefcase' size={20} className='text-brand-orange' />
+            <h3 class='text-xl font-bold text-brand-offwhite'>
+              Carrera y Habilidades
+            </h3>
+          </div>
+          <p class='text-sm leading-relaxed'>
+            Crecimiento profesional en IT: comunicación, seniority, decisiones y
+            habilidades clave.
+          </p>
+        </div>
+        <div
+          class='p-6 border border-gray-800 rounded-xl bg-white/5 transition-colors hover:border-brand-orange/50'
+        >
+          <div class='flex items-center gap-2 mb-2'>
+            <Icon name='brain' size={20} className='text-brand-orange' />
+            <h3 class='text-xl font-bold text-brand-offwhite'>Debug Mental</h3>
+          </div>
+          <p class='text-sm leading-relaxed'>
+            Reflexiones, mentalidad y hábitos para sostener el rendimiento sin
+            quemarte.
+          </p>
+        </div>
+      </div>
+    </section>
 
-				<p class="text-lg mb-5 leading-loose">
-					¡Gracias por pasarte! Ojalá disfrutes el contenido del blog. Si tenés feedback, te dejo mis redes a mano. Estoy a un mensaje de distancia 😊
-				</p>
+    <!-- Expectations -->
+    <section class='py-12 border-t border-gray-800'>
+      <h2 class='text-2xl md:text-3xl font-bold mb-6 text-brand-orange'>
+        ¿Qué podés esperar?
+      </h2>
+      <ul class='text-lg leading-loose list-disc list-inside mb-6'>
+        <li>Contenido técnico enfocado y digerible.</li>
+        <li>Reflexiones honestas, sin humo.</li>
+        <li>Aprendizajes reales, no solo éxitos.</li>
+        <li>Una mirada consciente sobre la carrera en tecnología.</li>
+      </ul>
+      <p class='text-lg leading-loose'>
+        Si buscás crecer como profesional sin desconectarte de vos mismo/a,
+        estás en el lugar correcto.
+      </p>
+    </section>
 
-				<div class="mt-5">
-					<Social platform="linkedin" username="eliassvelazquez"/>
-					<Social platform="twitter" username="esvdev"/>
-				</div>
-			</div>
-		</div>
-
-		<Separator />
-
-		<!-- Featured -->
-		<div class="flex flex-col">
-			<h1 class="font-bold text-3xl block mb-5">Destacados</h1>
-
-			<div>
-				{
-                    featured_posts.map((post) => (
-						<PostDescription
-							postURL={`/posts/${post.slug.current}`}
-							postTitle={post.title}
-							postDate={post.publishedAt}
-							postDescription={post.excerpt}
-						/>
-                    ))
-                    
-                }
-			</div>
-		</div>
-
-		<Separator />
-
-		<!-- Latest posts -->
-		<div class="flex flex-col">
-			<h1 class="font-bold text-3xl block mb-5">Ultimos posts</h1>
-
-			<div>
-				{
-                    latest_posts.map((post) => (
-						<PostDescription
-							postURL={`/posts/${post.slug.current}`}
-							postTitle={post.title}
-							postDate={post.publishedAt}
-							postDescription={post.excerpt}
-						/>
-                    ))
-                    
-                }
-			</div>
-
-			<div class="flex justify-center text-bold">
-				<a href="/posts/" class="text-white hover:text-orange-500">
-				Todos los posts
-				<i class='bx bx-right-arrow-alt'></i>
-				</a>
-			</div>
-		</div>
-	</main>
-</BaseLayout>
+    <!-- CTA -->
+    <section class='py-12 border-t border-gray-800'>
+      <div
+        class='rounded-xl border border-gray-800 bg-white/5 p-6 md:p-8 text-center'
+      >
+        <h3 class='text-2xl font-bold text-brand-offwhite mb-3'>
+          Sumate a El Ingeniero Consciente
+        </h3>
+        <p class='mb-6'>
+          Recibí ideas prácticas sobre datos, arquitectura cloud y crecimiento
+          profesional.
+        </p>
+        <a
+          class='inline-flex items-center justify-center bg-brand-orange text-brand-navy font-semibold px-8 py-3 rounded-md hover:opacity-90 transition-opacity'
+          href='https://newsletter.elingenieroconsciente.com'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          Ver Archivo y Suscribirse
+        </a>
+      </div>
+    </section>
+  </main>
+</SiteLayout>

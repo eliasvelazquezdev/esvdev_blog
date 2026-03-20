@@ -1,0 +1,116 @@
+---
+const links = [
+  { label: "Blog", href: "/blog/" },
+  { label: "Zips", href: "/blog/zips/" },
+  { label: "Tags", href: "/blog/tags/" },
+
+  { label: "About", href: "/about/" },
+];
+
+const pathname = Astro.url.pathname;
+
+const normalizePath = (path) => {
+  const normalized = path.replace(/\/+$/, "");
+  return normalized === "" ? "/" : normalized;
+};
+
+const isActive = (href) => {
+  const normalizedPath = normalizePath(pathname);
+  const normalizedHref = normalizePath(href);
+
+  if (normalizedHref === "/blog") {
+    return (
+      (normalizedPath === "/blog" || normalizedPath.startsWith("/blog/")) &&
+      !normalizedPath.startsWith("/blog/zips") &&
+      !normalizedPath.startsWith("/blog/tags")
+    );
+  }
+
+  if (normalizedHref === "/blog/zips") {
+    return normalizedPath === "/blog/zips" || normalizedPath.startsWith("/blog/zips/");
+  }
+
+  if (normalizedHref === "/blog/tags") {
+    return normalizedPath === "/blog/tags" || normalizedPath.startsWith("/blog/tags/");
+  }
+
+  return normalizedPath === normalizedHref;
+};
+---
+
+<nav
+  class="max-w-4xl mx-auto px-6 py-12 flex flex-col md:flex-row items-start md:items-center md:justify-between gap-6"
+  data-purpose="site-navigation"
+>
+  <div class="w-full flex items-center justify-between">
+    <a class="flex items-center gap-3" href="/">
+      <img
+        class="w-10 h-10 rounded-full object-cover"
+        src="/logo/ingeniero_consciente_logo_no_under.svg"
+        alt="ingeniero_consciente_logo"
+      />
+      <span class="text-xl italic tracking-tight text-brand-gray hidden md:inline">
+        el ingeniero <span class="font-semibold">consciente</span>
+      </span>
+    </a>
+    <button
+      id="nav-toggle"
+      class="md:hidden inline-flex items-center justify-center rounded-full p-2 hover:bg-white/10 transition-colors text-brand-offwhite"
+      type="button"
+      aria-controls="site-nav-links"
+      aria-expanded="false"
+    >
+      <span class="sr-only">Abrir menú</span>
+      <div class="space-y-1">
+        <span class="block w-6 h-0.5 bg-brand-offwhite"></span>
+        <span class="block w-6 h-0.5 bg-brand-offwhite"></span>
+        <span class="block w-6 h-0.5 bg-brand-offwhite"></span>
+      </div>
+    </button>
+  </div>
+
+  <div
+    id="site-nav-links"
+    class="hidden md:flex flex-col md:flex-row w-full md:w-auto gap-6 md:gap-6 text-sm font-medium uppercase tracking-widest text-brand-offwhite bg-white/5 md:bg-transparent rounded-xl p-4 md:p-0"
+  >
+    {links.map((link) => {
+      const active = isActive(link.href);
+      return (
+        <a
+          class={`block w-full md:w-auto py-2 md:py-0 pb-1 border-b-2 ${
+            active ? "border-brand-orange" : "border-transparent"
+          } hover:text-brand-orange transition-colors`}
+          href={link.href}
+          aria-current={active ? "page" : undefined}
+        >
+          {link.label}
+        </a>
+      );
+    })}
+  </div>
+</nav>
+
+<script>
+  // Wrap everything in an astro:page-load listener so it runs on every navigation
+  document.addEventListener('astro:page-load', () => {
+    const toggle = document.getElementById("nav-toggle");
+    const menu = document.getElementById("site-nav-links");
+
+    if (toggle && menu) {
+      toggle.addEventListener("click", () => {
+        const isOpen = menu.classList.toggle("hidden") === false;
+        toggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      const links = menu.querySelectorAll("a");
+      links.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (!menu.classList.contains("hidden")) {
+            menu.classList.add("hidden");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+    }
+  });
+</script>

@@ -1,7 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import { colorClassesForTags } from '../../utils/tagColors.js';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Icon from '../../../components/Icon.astro';
+import { colorClassesForTags } from '../../../utils/tagColors.js';
 
 import { sanityClient } from 'sanity:client';
 
@@ -19,20 +20,23 @@ const tags = await sanityClient.fetch(TAGS_QUERY);
 const pageTitle = 'Tags';
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-    <Breadcrumbs linkList={[
-        {label: "Tags"}
-    ]} />
+<SiteLayout pageTitle={pageTitle}>
+    <main class="max-w-4xl mx-auto px-6 pb-24">
+        <Breadcrumbs linkList={[
+            {label: "Tags"}
+        ]} />
 
-    <h1 class="text-3xl font-bold mb-6">Tags</h1>
-    <p class="text-gray-600 mb-8">Explora posts por tema</p>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-brand-orange">
+            Tags <Icon name="tags" size={36} className="inline-block align-middle ml-2" />
+        </h1>
+        <p class="text-brand-gray mb-8">Explora posts por tema</p>
 
     <div class="flex flex-wrap gap-3">
         {tags.filter(tag => tag.postCount > 0).map((tag) => {
             const colors = colorClassesForTags[tag.color] || colorClassesForTags.blue;
             return (
-                <a 
-                    href={`/tags/${tag.slug}`}
+                <a
+                    href={`/blog/tags/${tag.slug}`}
                     class={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors ${tag.featured ? 'ring-2 ring-orange-300' : ''}`}
                     title={tag.description}
                 >
@@ -47,9 +51,10 @@ const pageTitle = 'Tags';
 
     {tags.some(tag => tag.featured) && (
         <div class="mt-8">
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-brand-gray">
                 💡 Los tags con borde dorado son destacados
             </p>
         </div>
     )}
-</BaseLayout>
+    </main>
+</SiteLayout>

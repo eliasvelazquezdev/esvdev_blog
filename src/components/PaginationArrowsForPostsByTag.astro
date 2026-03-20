@@ -9,31 +9,30 @@ interface Props {
 
 const { next, prev, tagName, currentPage, totalPages } = Astro.props;
 ---
-<hr class="w-full h-0.5 mx-auto bg-orange-500 border-0 rounded my-6">
-<nav class="flex justify-between items-center mt-8 pt-8">
+<nav class="my-6 flex justify-between items-center mt-8 pt-8">
     <div class="flex-1">
         {prev && (
-            <a 
-                href={prev} 
+            <a
+                href={prev}
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-orange-500 hover:text-white"
             >
                 ← Página anterior
             </a>
         )}
     </div>
-    
+
     {(currentPage && totalPages) && (
         <div class="flex items-center space-x-2">
-            <span class="text-sm text-gray-700">
+            <span class="text-sm text-gray-300">
                 Página {currentPage} de {totalPages} para #{tagName}
             </span>
         </div>
     )}
-    
+
     <div class="flex-1 text-right">
         {next && (
-            <a 
-                href={next} 
+            <a
+                href={next}
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-orange-500 hover:text-white"
             >
                 Página siguiente →

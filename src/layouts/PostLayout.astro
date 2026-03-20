@@ -1,0 +1,40 @@
+---
+import SiteLayout from "./SiteLayout.astro";
+
+interface Props {
+  pageTitle: string;
+  canonicalURL?: string;
+}
+
+const { pageTitle, canonicalURL } = Astro.props;
+---
+
+<SiteLayout pageTitle={pageTitle} canonicalURL={canonicalURL}>
+  <slot />
+
+  <style is:global>
+    article.content p {
+      line-height: 1.8;
+      margin-bottom: 1.75rem;
+      font-size: 1.125rem;
+    }
+
+    article.content h2 {
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-size: 1.875rem;
+      color: #fca311;
+    }
+
+    article.content a {
+      color: #fca311;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: opacity 0.2s;
+    }
+
+    article.content a:hover {
+      opacity: 0.8;
+    }
+  </style>
+</SiteLayout>

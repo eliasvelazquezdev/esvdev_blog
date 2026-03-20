@@ -1,0 +1,101 @@
+---
+import Social from "./Social.astro";
+---
+
+<footer
+  class="bg-brand-navy-dark text-brand-offwhite py-24"
+  data-purpose="main-footer"
+>
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <img
+          class="hidden md:block w-12 h-12 rounded-full object-cover mb-4"
+          src="/logo/ingeniero_consciente_logo_no_under.svg"
+          alt="ingeniero_consciente_logo"
+        />
+        <h3 class="text-3xl mb-4 text-brand-orange">
+          Suscribite a El Ingeniero Consciente
+        </h3>
+        <p class="text-brand-gray text-sm leading-relaxed">
+          Recibí ideas prácticas sobre datos, arquitectura cloud y crecimiento
+          profesional. Sin humo y con foco en lo aplicable.
+        </p>
+
+        <!-- Desktop social links (left side of subscribe section) -->
+        <div class="hidden md:flex items-center gap-3 mt-6">
+          <a
+            href="https://www.evelazquez.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ir a evelazquez.dev"
+            class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
+          >
+            <i class="fa-solid fa-square-poll-horizontal text-lg lg:text-2xl"></i>
+          </a>
+
+          <Social platform="linkedin" username="eliassvelazquez" className="text-brand-offwhite" />
+          <Social platform="twitter" username="ingeconsciente" className="text-brand-offwhite" />
+          <Social platform="github" username="eliasvelazquezdev" className="text-brand-offwhite" />
+
+          <a
+            href="https://newsletter.elingenieroconsciente.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ir a la newsletter"
+            class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
+          >
+            <i class="fa-solid fa-square-pen text-lg lg:text-2xl"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4" data-purpose="subscribe-form-container">
+        <div class="rounded-xl overflow-hidden shadow-lg border border-gray-700">
+          <iframe
+            src="https://newsletter.elingenieroconsciente.com/embed"
+            width="100%"
+            height="150"
+            style="border: none; background: white;"
+            frameborder="0"
+            scrolling="no"
+            title="Suscribirse a El Ingeniero Consciente"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile social links (below main section, not above CTA) -->
+    <div class="flex md:hidden mt-10 items-center justify-center gap-3">
+      <a
+        href="https://www.evelazquez.dev/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Ir a evelazquez.dev"
+        class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
+      >
+        <i class="fa-solid fa-square-poll-horizontal text-lg"></i>
+      </a>
+
+      <Social platform="linkedin" username="eliassvelazquez" className="text-brand-offwhite" />
+      <Social platform="twitter" username="esvdev" className="text-brand-offwhite" />
+      <Social platform="github" username="eliasvelazquezdev" className="text-brand-offwhite" />
+
+      <a
+        href="https://newsletter.elingenieroconsciente.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Ir a la newsletter"
+        class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
+      >
+        <i class="fa-solid fa-square-pen text-lg"></i>
+      </a>
+    </div>
+
+    <div
+      class="mt-24 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-brand-gray uppercase tracking-widest gap-6"
+    >
+      <p>© 2026 El Ingeniero Consciente. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
