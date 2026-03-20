@@ -39,7 +39,10 @@ export const components = {
       const slug = createSlug(text);
 
       return (
-        <h1 id={slug} className="text-6xl font-bold mt-6 mb-4 scroll-mt-20">
+        <h1
+          id={slug}
+          className="text-6xl font-bold mt-6 mb-4 scroll-mt-20 text-brand-orange"
+        >
           {children}
         </h1>
       );
@@ -50,7 +53,10 @@ export const components = {
       const slug = createSlug(text);
 
       return (
-        <h2 id={slug} className="text-4xl font-semibold mt-6 mb-3 scroll-mt-20">
+        <h2
+          id={slug}
+          className="text-4xl font-semibold mt-6 mb-3 scroll-mt-20 text-brand-orange"
+        >
           {children}
         </h2>
       );
@@ -83,7 +89,7 @@ export const components = {
     ),
 
     blockquote: ({ children }) => (
-      <blockquote className="my-10 rounded-md bg-brand-orange/30 px-5 py-4 text-xl  text-gray-200">
+      <blockquote className="my-10 rounded-md bg-brand-navy-mid border-2  border-gray-500 px-5 py-4 text-xl  text-gray-200">
         {children}
       </blockquote>
     ),
