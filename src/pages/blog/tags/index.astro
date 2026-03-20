@@ -1,6 +1,7 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Icon from '../../../components/Icon.astro';
 import { colorClassesForTags } from '../../../utils/tagColors.js';
 
 import { sanityClient } from 'sanity:client';
@@ -26,7 +27,7 @@ const pageTitle = 'Tags';
         ]} />
 
         <h1 class="text-4xl md:text-5xl font-bold mb-6 text-brand-orange">
-            Tags <i class="fa-solid fa-tags"></i>
+            Tags <Icon name="tags" size={36} className="inline-block align-middle ml-2" />
         </h1>
         <p class="text-brand-gray mb-8">Explora posts por tema</p>
 
