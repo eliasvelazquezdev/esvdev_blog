@@ -37,7 +37,10 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
 	<!-- Dev Icons -->
 	<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
-	<title>{pageTitle} - esvdev</title>
+	<title>
+	    {pageTitle === 'El Ingeniero Consciente' ? pageTitle : `${pageTitle} | El Ingeniero Consciente`}
+	</title>
+
 
 	<ViewTransitions />
   </head>
