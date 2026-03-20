@@ -1,81 +1,109 @@
 ---
 const experiences = [
   {
-    label: "Proyecto clave",
-    title: "ShareIT Community",
+    label: 'Proyecto clave',
+    title: 'ShareIT Community',
     description:
-      "Fundé y lidero una comunidad tech de +250 miembros orientada a compartir conocimiento, mejorar perfiles profesionales y acompañar el crecimiento en IT.",
+      'Fundé y lidero una comunidad tech de +250 miembros orientada a compartir conocimiento, mejorar perfiles profesionales y acompañar el crecimiento en IT.',
   },
   {
-    label: "2024 — Presente",
-    title: "Data Engineer",
+    label: '2024 — Presente',
+    title: 'Data Engineer',
     description:
-      "Diseño y construcción de pipelines de datos, automatización de procesos y desarrollo de soluciones en la nube con foco en escalabilidad y calidad.",
+      'Diseño y construcción de pipelines de datos, automatización de procesos y desarrollo de soluciones en la nube con foco en escalabilidad y calidad.',
   },
   {
-    label: "Más sobre mí",
-    title: "Portfolio",
+    label: 'Más sobre mí',
+    title: 'Portfolio',
     description:
-      "Más sobre mi experiencia, habilidades y formación académica en mi web personal.",
-    href: "https://evelazquez.dev",
-  }
-];
+      'Más sobre mi experiencia, habilidades y formación académica en mi web personal.',
+    href: 'https://evelazquez.dev',
+  },
+]
 ---
 
-<section class="bg-brand-navy-mid pt-16 pb-8 border-t border-gray-800" data-purpose="experience-list">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="text-2xl font-bold mb-10 text-brand-offwhite">Experiencia & Proyectos</h2>
+<section
+  class='bg-brand-navy-mid pt-16 pb-8 border-t border-gray-800'
+  data-purpose='experience-list'
+>
+  <div class='max-w-4xl mx-auto px-6'>
+    <h2 class='text-2xl font-bold mb-10 text-brand-offwhite'>
+      Experiencia & Proyectos
+    </h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- First card (Full width on desktop with image inside) -->
-      {experiences.slice(0, 1).map((item) => {
-        const Wrapper = item.href ? "a" : "div";
-        return (
-          <Wrapper
-            class="p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-colors bg-white/5 md:col-span-2 flex flex-col md:flex-row gap-6 items-center"
-            href={item.href}
-            target={item.href ? "_blank" : undefined}
-            rel={item.href ? "noopener noreferrer" : undefined}
-          >
-            <div class="flex-1">
-                <span class="text-xs font-semibold uppercase tracking-wider text-brand-orange">
-                    {item.label}
-                </span>
-                <h3 class="text-xl font-bold mt-2 mb-3 text-brand-offwhite">{item.title}</h3>
-                <p class="text-brand-gray text-sm leading-relaxed">{item.description}</p>
-            </div>
+    <div class='grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8'>
+      <!-- First card (ShareIT) -->
+      {
+        experiences.slice(0, 1).map((item) => {
+          const Wrapper = item.href ? 'a' : 'div'
+          return (
+            <Wrapper
+              class='p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-all bg-white/5 md:col-span-2 flex flex-col justify-center group'
+              href={item.href}
+              target={item.href ? '_blank' : undefined}
+              rel={item.href ? 'noopener noreferrer' : undefined}
+            >
+              <span class='text-xs font-semibold uppercase tracking-wider text-brand-orange'>
+                {item.label}
+              </span>
+              <h3 class='text-xl font-bold mt-2 mb-3 text-brand-offwhite group-hover:text-brand-orange transition-colors'>
+                {item.title}
+              </h3>
+              <p class='text-brand-gray text-sm leading-relaxed'>
+                {item.description}
+              </p>
+            </Wrapper>
+          )
+        })
+      }
 
-            <figure class="hidden md:flex flex-shrink-0 justify-end ml-auto">
-                <img
-                    src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1773878447/esvdev_nerdearla_du5s2w.png"
-                    alt="Elias hablando en un evento tech con remera de ShareIT Community"
-                    class="w-48 h-48 rounded-full object-cover border border-gray-700"
-                    loading="lazy"
-                />
-            </figure>
-          </Wrapper>
-        );
-      })}
+      <!-- Image (Spans 2 rows on desktop) -->
+      <figure
+        class='hidden md:block md:col-span-1 md:row-span-2 relative min-h-[320px] border border-gray-800 rounded-xl overflow-hidden hover:shadow-lg transition-all group'
+      >
+        <img
+          src='https://res.cloudinary.com/dwczjy8e4/image/upload/v1773878447/esvdev_nerdearla_du5s2w.png'
+          alt='Elias hablando en un evento tech'
+          class='absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105'
+          loading='lazy'
+        />
+        <div
+          class='absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent'
+        >
+        </div>
+        <div class='absolute bottom-6 left-6 right-6'>
+          <p class='text-brand-offwhite font-bold text-lg leading-tight mb-1'>
+            Elias Velazquez
+          </p>
+          <p class='text-brand-orange text-xs font-semibold tracking-wider'>
+            Presentando la comunidad ShareIT en Nerdearla 2025
+          </p>
+        </div>
+      </figure>
 
       <!-- Remaining cards (1 column each) -->
-      {experiences.slice(1).map((item) => {
-        const Wrapper = item.href ? "a" : "div";
+      {
+        experiences.slice(1).map((item) => {
+          const Wrapper = item.href ? 'a' : 'div'
 
-        return (
-          <Wrapper
-            class="p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-colors bg-white/5 h-full"
-            href={item.href}
-            target={item.href ? "_blank" : undefined}
-            rel={item.href ? "noopener noreferrer" : undefined}
-          >
-            <span class="text-xs font-semibold uppercase tracking-wider text-brand-orange">
-              {item.label}
-            </span>
-            <h3 class="text-xl font-bold mt-2 mb-3 text-brand-offwhite">{item.title}</h3>
-            <p class="text-brand-gray text-sm">{item.description}</p>
-          </Wrapper>
-        );
-      })}
+          return (
+            <Wrapper
+              class='p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-all bg-white/5 h-full flex flex-col justify-center group'
+              href={item.href}
+              target={item.href ? '_blank' : undefined}
+              rel={item.href ? 'noopener noreferrer' : undefined}
+            >
+              <span class='text-xs font-semibold uppercase tracking-wider text-brand-orange'>
+                {item.label}
+              </span>
+              <h3 class='text-xl font-bold mt-2 mb-3 text-brand-offwhite group-hover:text-brand-orange transition-colors'>
+                {item.title}
+              </h3>
+              <p class='text-brand-gray text-sm'>{item.description}</p>
+            </Wrapper>
+          )
+        })
+      }
     </div>
   </div>
 </section>
