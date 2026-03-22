@@ -22,12 +22,12 @@ const { title, highlight, imageUrl } = Astro.props;
     </div>
 
     <div data-purpose="bio-content">
-      <h1 class="text-2xl font-extrabold text-brand-offwhite sm:text-5xl mb-6">
+      <h1 class="text-2xl font-extrabold sm:text-5xl mb-6">
         {title}
         <br />
         <span class="text-brand-orange">{highlight}</span>
       </h1>
-      <div class="narrative-text text-lg text-brand-gray">
+      <div class="narrative-text text-lg">
         <slot />
       </div>
     </div>

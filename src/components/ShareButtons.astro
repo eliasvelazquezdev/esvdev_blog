@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+  canonicalURL: string;
+  className?: string;
+}
+
+const { title, canonicalURL, className = "" } = Astro.props as Props;
+
+const encodedTitle = encodeURIComponent(title);
+const encodedURL = encodeURIComponent(canonicalURL);
+
+const xShareUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedURL}&via=ingeconsciente`;
+const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedURL}`;
+
+const wrapperClass = `flex gap-4 ${className}`.trim();
+---
+
+<div class={wrapperClass}>
+  <a
+    class="w-10 h-10 inline-flex items-center justify-center rounded-full p-0 hover:bg-brand-orange/20 transition-colors text-brand-offwhite hover:text-brand-orange"
+    href={xShareUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    title="Compartir en X"
+  >
+    <i class="fa-brands fa-square-x-twitter text-xl"></i>
+  </a>
+  <a
+    class="w-10 h-10 inline-flex items-center justify-center rounded-full p-0 hover:bg-brand-orange/20 transition-colors text-brand-offwhite hover:text-brand-orange"
+    href={linkedInShareUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    title="Compartir en LinkedIn"
+  >
+    <i class="fa-brands fa-linkedin text-xl"></i>
+  </a>
+</div>
