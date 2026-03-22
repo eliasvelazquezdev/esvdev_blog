@@ -1,6 +1,7 @@
 ---
 import AuthorLayout from "../../../components/AuthorLayout.astro";
 import SiteLayout from "../../../layouts/SiteLayout.astro";
+import ShareButtons from "../../../components/ShareButtons.astro";
 import { components } from '../../../components/PortableTextComponents.jsx';
 
 
@@ -74,6 +75,16 @@ const canonicalURL = new URL(`/blog/zips/${slug}`, Astro.site).href;
             </div>
         </div>
     )}
+
+    <section
+        class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
+        data-purpose="social-sharing"
+    >
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
+            Compartir
+        </span>
+        <ShareButtons title={zip.title} canonicalURL={canonicalURL} />
+    </section>
 
 
     </main>

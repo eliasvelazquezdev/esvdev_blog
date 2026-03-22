@@ -2,6 +2,7 @@
 import PostLayout from "../../layouts/PostLayout.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import AuthorLayout from "../../components/AuthorLayout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
 import { getTagColorClasses } from "../../utils/tagColors.js";
 
 import type { SanityDocument } from "@sanity/client";
@@ -86,26 +87,7 @@ const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
             <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
                 Compartir
             </span>
-            <div class="flex gap-4">
-                <a
-                    class="p-2 hover:bg-brand-orange/20 rounded-full transition-colors text-brand-offwhite hover:text-brand-orange"
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(canonicalURL)}&via=ingeconsciente`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Compartir en X"
-                >
-                    <i class="fa-brands fa-square-x-twitter text-xl"></i>
-                </a>
-                <a
-                    class="p-2 hover:bg-brand-orange/20 rounded-full transition-colors text-brand-offwhite hover:text-brand-orange"
-                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalURL)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Compartir en LinkedIn"
-                >
-                    <i class="fa-brands fa-linkedin text-xl"></i>
-                </a>
-            </div>
+            <ShareButtons title={post.title} canonicalURL={canonicalURL} />
         </section>
     </main>
 </PostLayout>

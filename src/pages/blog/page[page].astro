@@ -30,7 +30,7 @@ const postsPerPage = 5;
 const offset = (currentPage - 1) * postsPerPage;
 
 const POSTS_QUERY = `{
-  "posts": *[_type == "post"] | order(publishedAt desc) [${offset}...${offset + postsPerPage}] {
+  "posts": *[contentType == "post"] | order(publishedAt desc) [${offset}...${offset + postsPerPage}] {
     _id,
     title,
     slug,
