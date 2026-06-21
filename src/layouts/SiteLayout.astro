@@ -44,7 +44,7 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
 
 	<ViewTransitions />
   </head>
-  <body class="bg-brand-navy text-brand-charcoal selection-highlight antialiased">
+  <body class="bg-brand-navy text-brand-offwhite selection-highlight antialiased">
     <NavigationLayout />
     <slot />
     <FooterLayout />
@@ -58,7 +58,18 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
 
       .selection-highlight::selection {
         background-color: #fca311;
-        color: #14213d;
+        color: #0a1120;
+      }
+
+      strong,
+      b {
+        font-weight: 700;
+        color: #829dd1;
+      }
+
+      em {
+        font-style: italic;
+        color: #a8c0ad;
       }
 
       .narrative-text p {
@@ -70,29 +81,7 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
         margin-bottom: 0;
       }
 
-      article.content p {
-        line-height: 1.8;
-        margin-bottom: 1.75rem;
-        font-size: 1.125rem;
-      }
 
-      article.content h2 {
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
-        font-size: 1.875rem;
-        color: #fca311;
-      }
-
-      article.content a {
-        color: #fca311;
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        transition: opacity 0.2s;
-      }
-
-      article.content a:hover {
-        opacity: 0.8;
-      }
     </style>
   </body>
 </html>
