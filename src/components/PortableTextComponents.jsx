@@ -67,7 +67,10 @@ export const components = {
       const slug = createSlug(text);
 
       return (
-        <h3 id={slug} className="text-3xl font-medium mt-4 mb-2 scroll-mt-20">
+        <h3
+          id={slug}
+          className="text-2xl font-medium mt-4 mb-2 scroll-mt-20 text-brand-orange-600"
+        >
           {children}
         </h3>
       );
@@ -117,7 +120,7 @@ export const components = {
         href={value?.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-blue-600 underline hover:text-blue-800"
+        className="text-brand-orange underline underline-offset-4 transition-opacity hover:opacity-80"
       >
         {children}
       </a>
