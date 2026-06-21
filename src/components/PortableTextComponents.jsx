@@ -112,19 +112,32 @@ export const components = {
     number: ({ children }) => <li className="ml-4 text-lg">{children}</li>,
   },
 
-  marks: {
+  mark: {
     strong: ({ children }) => <strong>{children}</strong>,
     em: ({ children }) => <em>{children}</em>,
-    link: ({ value, children }) => (
-      <a
-        href={value?.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-brand-orange underline underline-offset-4 transition-opacity hover:opacity-80"
-      >
+    code: ({ children }) => (
+      <code className="rounded bg-brand-navy-dark px-1.5 py-0.5 font-mono text-sm text-brand-orange-200">
         {children}
-      </a>
+      </code>
     ),
+    link: ({ node, children }) => {
+      const href = node?.markDef?.href || "";
+      const isExternal =
+        href.startsWith("http://") ||
+        href.startsWith("https://") ||
+        href.startsWith("//");
+
+      return (
+        <a
+          href={href}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          className="text-brand-orange underline underline-offset-4 transition-opacity hover:opacity-80"
+        >
+          {children}
+        </a>
+      );
+    },
   },
 
   type: {
