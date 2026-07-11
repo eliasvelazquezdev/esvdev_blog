@@ -1,7 +1,5 @@
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
-
-import netlify from "@astrojs/netlify/functions";
+import netlify from "@astrojs/netlify";
 
 import sanity from "@sanity/astro";
 
@@ -12,7 +10,6 @@ export default defineConfig({
   site: "https://elingenieroconsciente.com",
   trailingSlash: "ignore",
   integrations: [
-    tailwind(),
     sanity({
       projectId: "y9uq1het",
       dataset: "production",

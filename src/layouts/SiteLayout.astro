@@ -2,6 +2,7 @@
 import NavigationLayout from "../components/NavigationLayout.astro";
 import FooterLayout from "../components/FooterLayout.astro";
 import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
 
 interface Props {
   pageTitle: string;
@@ -47,43 +48,5 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
     <NavigationLayout />
     <slot />
     <FooterLayout />
-
-    <style is:global>
-      @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap");
-
-      body {
-        font-family: "Montserrat", sans-serif;
-      }
-
-      .selection-highlight::selection {
-        background-color: #fca311;
-        color: #0a1120;
-      }
-
-      strong,
-      b {
-        font-weight: 700;
-        color: #829dd1;
-      }
-
-      em {
-        font-style: italic;
-        color: #a8c0ad;
-      }
-
-      .narrative-text p {
-        margin-bottom: 1.5rem;
-        line-height: 1.75;
-      }
-
-      .narrative-text p:last-child {
-        margin-bottom: 0;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-    </style>
   </body>
 </html>
