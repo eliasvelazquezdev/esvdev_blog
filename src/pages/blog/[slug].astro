@@ -29,8 +29,12 @@ const POST_BY_SLUG_QUERY = `*[
     }
 }`;
 
-const post = await sanityClient.fetch<SanityDocument[]>(POST_BY_SLUG_QUERY);
-const portableText = post.body;
+const post = await sanityClient.fetch<SanityDocument | null>(POST_BY_SLUG_QUERY);
+const portableText = post?.body ?? [];
+
+if (!post) {
+    Astro.response.status = 404;
+}
 
 // Generate canonical URL for this post
 const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
@@ -38,56 +42,69 @@ const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
 
 
 ---
-<PostLayout pageTitle={post.title} canonicalURL={canonicalURL}>
-    <header
-        class="max-w-4xl mx-auto px-6 pt-16 pb-12"
-        data-purpose="article-header"
-    >
-        <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
-            {post.title}
-        </h1>
-        <AuthorLayout publishedAt={post.publishedAt} updatedAt={post._updatedAt} />
-    </header>
+<PostLayout pageTitle={post?.title ?? "Post no encontrado"} canonicalURL={canonicalURL}>
+    {post ? (
+        <>
+            <header
+                class="max-w-4xl mx-auto px-6 pt-16 pb-12"
+                data-purpose="article-header"
+            >
+                <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
+                    {post.title}
+                </h1>
+                <AuthorLayout publishedAt={post.publishedAt} updatedAt={post._updatedAt} />
+            </header>
 
-    <main class="max-w-4xl mx-auto px-6 pb-24" data-purpose="main-article-content">
-        <article class="content text-brand-offwhite">
-            {post.excerpt && (
-                <p class="text-brand-gray">{post.excerpt}</p>
-            )}
-            <TableOfContents items={post.body} />
-            <PortableText value={portableText} components={components} />
-        </article>
+            <main class="max-w-4xl mx-auto px-6 pb-24" data-purpose="main-article-content">
+                <article class="content text-brand-offwhite">
+                    {post.excerpt && (
+                        <p class="text-brand-gray">{post.excerpt}</p>
+                    )}
+                    <TableOfContents items={portableText} />
+                    <PortableText value={portableText} components={components} />
+                </article>
 
-        {post.tags && post.tags.length > 0 && (
-            <div class="mt-12">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-brand-gray mb-4">
-                    Tags
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                    {post.tags.map((tag) => {
-                        const colors = getTagColorClasses(tag.color);
-                        return (
-                            <a
-                                href={`/blog/tags/${tag.slug}`}
-                                class={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
-                                title={tag.description || `Ver todos los posts sobre ${tag.name}`}
-                            >
-                                #{tag.name}
-                            </a>
-                        );
-                    })}
-                </div>
-            </div>
-        )}
+                {post.tags && post.tags.length > 0 && (
+                    <div class="mt-12">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-brand-gray mb-4">
+                            Tags
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            {post.tags.map((tag) => {
+                                const colors = getTagColorClasses(tag.color);
+                                return (
+                                    <a
+                                        href={`/blog/tags/${tag.slug}`}
+                                        class={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
+                                        title={tag.description || `Ver todos los posts sobre ${tag.name}`}
+                                    >
+                                        #{tag.name}
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
 
-        <section
-            class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
-            data-purpose="social-sharing"
-        >
-            <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
-                Compartir
-            </span>
-            <ShareButtons title={post.title} canonicalURL={canonicalURL} />
-        </section>
-    </main>
+                <section
+                    class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
+                    data-purpose="social-sharing"
+                >
+                    <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
+                        Compartir
+                    </span>
+                    <ShareButtons title={post.title} canonicalURL={canonicalURL} />
+                </section>
+            </main>
+        </>
+    ) : (
+        <main class="max-w-4xl mx-auto px-6 pt-16 pb-24">
+            <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
+                Post no encontrado
+            </h1>
+            <p class="text-brand-gray">
+                El post que buscas no existe o ya no está disponible.
+            </p>
+        </main>
+    )}
 </PostLayout>

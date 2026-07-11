@@ -1,7 +1,7 @@
 ---
 import NavigationLayout from "../components/NavigationLayout.astro";
 import FooterLayout from "../components/FooterLayout.astro";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   pageTitle: string;
@@ -41,8 +41,7 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
 	    {pageTitle === 'El Ingeniero Consciente' ? pageTitle : `${pageTitle} | El Ingeniero Consciente`}
 	</title>
 
-
-	<ViewTransitions />
+	<ClientRouter />
   </head>
   <body class="bg-brand-navy text-brand-offwhite selection-highlight antialiased">
     <NavigationLayout />
