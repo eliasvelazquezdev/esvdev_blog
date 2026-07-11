@@ -3,22 +3,17 @@ const experiences = [
   {
     label: 'Proyecto clave',
     title: 'ShareIT Community',
+    href: 'https://share-it.tech',
     description:
-      'Fundé y lidero una comunidad tech de +250 miembros orientada a compartir conocimiento, mejorar perfiles profesionales y acompañar el crecimiento en IT.',
+      'Fundé y lidero una comunidad tech de +300 miembros orientada a compartir conocimiento, mejorar perfiles profesionales y acompañar el crecimiento en IT.',
   },
   {
     label: '2024 — Presente',
     title: 'Data Engineer',
-    description:
-      'Diseño y construcción de pipelines de datos, automatización de procesos y desarrollo de soluciones en la nube con foco en escalabilidad y calidad.',
-  },
-  {
-    label: 'Más sobre mí',
-    title: 'Portfolio',
-    description:
-      'Más sobre mi experiencia, habilidades y formación académica en mi web personal.',
     href: 'https://evelazquez.dev',
-  },
+    description:
+      'Diseño y construcción de pipelines de datos, automatización de procesos y desarrollo de soluciones en la nube con foco en escalabilidad y calidad. Más sobre mi experiencia, habilidades y formación académica en mi web personal.',
+  }
 ]
 ---
 
@@ -88,7 +83,7 @@ const experiences = [
 
           return (
             <Wrapper
-              class='p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-all bg-white/5 h-full flex flex-col justify-center group'
+              class='p-6 border border-gray-800 rounded-xl hover:shadow-lg transition-all bg-white/5 h-full flex flex-col justify-center group md:col-span-2'
               href={item.href}
               target={item.href ? '_blank' : undefined}
               rel={item.href ? 'noopener noreferrer' : undefined}

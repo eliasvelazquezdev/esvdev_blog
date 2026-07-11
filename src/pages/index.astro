@@ -9,108 +9,224 @@ const pageTitle = 'El Ingeniero Consciente'
   <main class='max-w-4xl mx-auto px-6 pb-24'>
     <!-- Hero -->
     <section
-      class='flex flex-col md:flex-row items-center md:items-start gap-10 py-10 md:py-16 border-b border-gray-800'
+      class='py-10 md:py-16 border-b border-gray-800'
     >
-      <div class='w-32 h-32 md:w-44 md:h-44 flex-shrink-0'>
-        <img
-          alt='Foto de Elias Velazquez'
-          class='w-full h-full object-cover rounded-full border border-gray-700'
-          src='https://res.cloudinary.com/dwczjy8e4/image/upload/v1773862675/esvdev_linkedin_gpt_1_k2tl3z.png'
-          loading='lazy'
-        />
-      </div>
-      <div class='flex-grow text-center md:text-left'>
+      <div class='text-center max-w-3xl mx-auto'>
         <h1 class='text-3xl md:text-5xl font-bold mb-4 text-brand-offwhite'>
-          El Ingeniero Consciente
+          Se puede ser un gran Ingeniero de Datos  <span class="text-brand-orange">sin dejar la vida frente a la pantalla</span>
         </h1>
         <p class='text-lg mb-6 leading-relaxed'>
-          El hub donde comparto ingeniería de datos, arquitectura cloud y
-          mentalidad profesional, con una mirada humana y práctica.
+          Sumate a la comunidad de <span class='bold text-brand-orange'>+250 lectores</span
+          > que buscan crecer en Data Engineering, arquitectura en AWS y mentalidad profesional sin perderse a ellos mismos en el camino.
         </p>
-        <p class='text-lg mb-6 leading-relaxed'>
-          Sumate a la comunidad de <span class='bold text-brand-orange'
-            >+200 lectores</span
-          > que buscan crecer profesionalmente sin perderse a ellos mismos.
-        </p>
-        <div
-          class='mt-8 max-w-md mx-auto md:mx-0 rounded-xl overflow-hidden shadow-lg border border-gray-800'
-          data-purpose='subscription-form-container'
+
+        <a
+          href="#subscribe"
+          class="inline-flex items-center justify-center rounded-full bg-brand-orange px-6 py-3 text-sm font-bold text-brand-navy transition-opacity hover:opacity-90"
         >
-          <iframe
-            src='https://newsletter.elingenieroconsciente.com/embed'
-            width='100%'
-            height='150'
-            style='border: none; background: white;'
-            frameborder='0'
-            scrolling='no'
-            title='Suscribirse a El Ingeniero Consciente'></iframe>
-        </div>
+          <i class="fa-solid fa-envelope-circle-check me-2"></i>
+          <span> Suscribite Gratis </span>
+        </a>
       </div>
     </section>
 
     <!-- What is this -->
     <section class='py-12'>
       <h2 class='text-2xl md:text-3xl font-bold mb-4 text-brand-orange'>
-        ¿Qué es El Ingeniero Consciente?
+        ¿Qué es "El Ingeniero Consciente"?
       </h2>
       <p class='text-lg leading-loose mb-4'>
-        Es una newsletter y un espacio de contenido pensado para crecer en
-        tecnología sin perder el criterio ni la claridad. Encontrarás ideas
-        aplicables, aprendizajes reales y recursos útiles para avanzar en tu
-        carrera con foco y propósito.
+          Una newsletter semanal para ingenieros de datos que buscan la excelencia técnica, sin comprar el humo del hype <span class="font-bold">ni quemar su salud mental en el camino</span>.
       </p>
       <p class='text-lg leading-loose'>
-        Sin humo: comparto lo que aprendo, valido y utilizo en el día a día.
+        Comparto lo que aprendo, valido y utilizo en el día a día.
       </p>
+    </section>
+
+    <section class="py-10 md:py-16 border-b border-gray-800">
+        <h2 class='text-2xl md:text-3xl font-bold mb-4 text-brand-orange'>
+            ¿De qué va la newsletter?
+        </h2>
+
+        <ul class="mt-6 space-y-3 pl-6 mb-8 text-lg leading-relaxed marker:text-brand-orange list-disc">
+          <li>De Ingeniería de Datos</li>
+          <li>AWS desde el camino real</li>
+          <li>Y de la humanidad detrás del teclado</li>
+        </ul>
+
+        <p class='text-lg mb-6 leading-relaxed'>
+        La industria tech suele decirnos que para ser exitoso tenés que estar
+        conectado 24/7 y aprender tres frameworks de IA antes de desayunar.
+        </p>
+
+        <p class='text-lg mb-6 leading-relaxed'>
+        Yo pienso que no tiene porqué ser así. Eso no es excelencia.
+        </p>
+
+        <p class="text-lg mb-6 font-semibold text-brand-orange">
+        Es el camino directo al burnout.
+        </p>
+
+        <p class='text-lg mb-6 leading-relaxed'>
+        Acá vas a encontrar fundamentos sólidos de Data Engineering,
+        arquitectura práctica en AWS y las herramientas mentales para gestionar
+        tu carrera con consciencia e intención.
+        </p>
+
+        <p class='text-lg mb-6 leading-relaxed'>
+        La tecnología es útil si te libera tiempo para lo más importante: <span class="font-bold text-brand-offwhite"> tu vida fuera de la pantalla</span>.
+        </p>
+
+        <p class="text-lg mb-6 leading-relaxed text-brand-offwhite">
+          <span class="bg-brand-orange/20 px-1.5 py-0.5">
+            No soy mi trabajo ni mi profesión.
+          </span>
+        </p>
+
+        <p class='text-lg mb-6 leading-relaxed'>
+        Si esto resuena con vos, entonces estás en el lugar correcto.
+        </p>
+
+    </section>
+
+    <!-- Target Audience -->
+    <section class='py-12'>
+      <h2 class='text-2xl md:text-3xl font-bold mb-4 text-brand-orange'>
+          ¿Para quién es?
+      </h2>
+
+      <ul class="mt-6 space-y-3 pl-6 mb-8 text-lg leading-relaxed marker:text-brand-orange list-disc">
+        <li>Para quienes quieren dar sus primeros pasos en Data Engineering y AWS</li>
+        <li>Para profesionales intermedios que buscan progresar hacia conceptos más avanzados y tener criterios claros de arquitectura</li>
+        <li>Para cualquiera en IT que quiera crecer profesionalmente (escalar en su puesto, negociar un mejor sueldo) pero se niegue a dejar la vida en una oficina o rol</li>
+      </ul>
+
+      <div class="text-center">
+          <a
+            href="#subscribe"
+            class="inline-flex items-center justify-center rounded-full bg-brand-orange px-6 py-3 text-sm font-bold text-brand-navy transition-opacity hover:opacity-90"
+          >
+            <i class="fa-solid fa-envelope-circle-check me-2"></i>
+            <span> Suscribite Ahora </span>
+          </a>
+      </div>
     </section>
 
     <!-- Newsletter structure -->
     <section class='py-12 border-t border-gray-800'>
       <h2 class='text-2xl md:text-3xl font-bold mb-6 text-brand-orange'>
-        ¿Cómo está organizada la newsletter?
+        ¿Cómo está organizada?
       </h2>
-      <p class='text-lg leading-loose mb-8'>
-        Cada edición gira en torno a uno de estos pilares. Son rutas de lectura
-        claras y complementarias.
+      <p class='text-lg leading-loose mb-6'>
+          Recibirás un correo <span class="font-bold">cada semana, según disponibilidad</span>. Priorizo el respeto a tu tiempo y la calidad del contenido antes que la cantidad.
       </p>
-      <div class='flex flex-col gap-4'>
-        <div
-          class='p-6 border border-gray-800 rounded-xl bg-white/5 transition-colors hover:border-brand-orange/50'
-        >
-          <div class='flex items-center gap-2 mb-2'>
-            <Icon name='wrench' size={20} className='text-brand-orange' />
-            <h3 class='text-xl font-bold text-brand-offwhite'>
-              Taller de Datos
+
+      <p class='text-lg leading-loose mb-6'>
+          Si no hay nada que realmente te aporte valor o te invite a la acción, no te escribo.
+      </p>
+
+      <p class='text-lg leading-loose mb-6'>
+          Cada edición se enfoca en uno de estos tres pilares:
+      </p>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3 mb-10">
+        <div class="overflow-hidden rounded-xl border border-gray-800 bg-white/5 transition-colors hover:border-brand-orange/50">
+          <img
+            src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/taller_datos_prof_iab4fn.webp"
+            alt="Taller de Datos"
+            class="h-48 w-full object-cover"
+          />
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <Icon name="wrench" size={20} className="text-brand-orange" />
+              <h3 class="text-xl font-bold text-brand-offwhite">
+                Taller de Datos
+              </h3>
+            </div>
+            <p class="text-sm leading-relaxed">
+                Data Engineering, Python, SQL, Git y herramientas técnicas. Conceptos fundamentales explicados de forma práctica y aplicable.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-gray-800 bg-white/5 transition-colors hover:border-brand-orange/50">
+          <img
+            src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/senda_nubearquitecto_prof_hdohen.webp"
+            alt="La Senda del Nubearquitecto"
+            class="h-48 w-full object-cover"
+          />
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <Icon name="cloud" size={20} className="text-brand-orange" />
+              <h3 class="text-xl font-bold text-brand-offwhite">
+                La Senda del Nubearquitecto
+              </h3>
+            </div>
+            <p class="text-sm leading-relaxed">
+                AWS, cloud computing y arquitectura. Aprendizajes, buenas prácticas y herramientas desde el recorrido real (no desde la teoría pura).
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-gray-800 bg-white/5 transition-colors hover:border-brand-orange/50">
+          <img
+            src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/carrera_y_debug_mental_prof_xsmgaw.webp"
+            alt="Carrera y Debug Mental"
+            class="h-48 w-full object-cover"
+          />
+          <div class="p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <Icon name="brain" size={20} className="text-brand-orange" />
+              <h3 class="text-xl font-bold text-brand-offwhite">
+                Carrera y Debug Mental
+              </h3>
+            </div>
+            <p class="text-sm leading-relaxed">
+                El costado humano del desarrollo profesional. Estrategia laboral, toma de decisiones, foco, hábitos y cómo nuestra mente determina la clase de profesionales que somos.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class='text-2xl md:text-2xl font-bold mb-6'>
+        Lo que condimenta cada edición
+      </h3>
+
+      <p class="text-lg leading-loose mb-6">
+          Para que las lecturas sean dinámicas y te lleves valor aplicable de inmediato, los pilares principales suelen venir acompañados por dos secciones especiales:
+      </p>
+
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 mb-8">
+        <div class="rounded-xl border border-gray-800 bg-white/3 p-5">
+          <div class="mb-3 flex items-center gap-2">
+            <Icon name="fire" size={18} className="text-brand-orange" />
+            <h3 class="text-base font-semibold text-brand-offwhite">
+              Datazo
             </h3>
           </div>
-          <p class='text-sm leading-relaxed'>
-            Data Engineering, Python, SQL, Git y fundamentos técnicos aplicados
-            al trabajo real.
+
+          <p class="text-sm leading-relaxed text-brand-gray">
+            Un recurso concreto que encontré y que pienso que te puede servir.
+            Puede ser un tutorial, un hilo de Twitter, un blog post técnico, un
+            curso o una herramienta que te va a ahorrar horas de trabajo y
+            frustración.
           </p>
         </div>
-        <div
-          class='p-6 border border-gray-800 rounded-xl bg-white/5 transition-colors hover:border-brand-orange/50'
-        >
-          <div class='flex items-center gap-2 mb-2'>
-            <Icon name='cloud' size={20} className='text-brand-orange' />
-            <h3 class='text-xl font-bold text-brand-offwhite'>
-              La Senda del Nubearquitecto
+
+        <div class="rounded-xl border border-gray-800 bg-white/3 p-5">
+          <div class="mb-3 flex items-center gap-2">
+            <Icon name="sprout" size={18} className="text-brand-orange" />
+            <h3 class="text-base font-semibold text-brand-offwhite">
+              Lo que aprendí hace poco
             </h3>
           </div>
-          <p class='text-sm leading-relaxed'>
-            AWS, cloud y arquitectura desde la práctica: patrones, decisiones y
-            trade-offs.
-          </p>
-        </div>
-        <div
-          class='p-6 border border-gray-800 rounded-xl bg-white/5 transition-colors hover:border-brand-orange/50'
-        >
-          <div class='flex items-center gap-2 mb-2'>
-            <Icon name='brain' size={20} className='text-brand-orange' />
-            <h3 class='text-xl font-bold text-brand-offwhite'>Carrera y Debug Mental</h3>
-          </div>
-          <p class='text-sm leading-relaxed'>
-              El costado humano del desarrollo profesional. Estrategia laboral, toma de decisiones, foco, hábitos y cómo nuestra mente determina la clase de profesionales que somos.
+
+          <p class="text-sm leading-relaxed text-brand-gray">
+            Mi cable a tierra con vos. Acá te comparto de forma rápida un
+            aprendizaje real y reciente que tuve en la trinchera. No me las sé
+            todas, sigo estudiando todas las semanas y te lo muestro sin filtros.
+            Al final, vas a poder votar si querés que desarrolle ese tema en
+            profundidad en una futura edición.
           </p>
         </div>
       </div>
@@ -119,41 +235,70 @@ const pageTitle = 'El Ingeniero Consciente'
     <!-- Expectations -->
     <section class='py-12 border-t border-gray-800'>
       <h2 class='text-2xl md:text-3xl font-bold mb-6 text-brand-orange'>
-        ¿Qué podés esperar?
+        ¿Qué vas a recibir?
       </h2>
-      <ul class='text-lg leading-loose list-disc list-inside mb-6'>
+      <ul class='mt-6 space-y-3 pl-6 mb-8 text-lg leading-relaxed marker:text-brand-orange list-disc'>
         <li>Contenido técnico enfocado y digerible.</li>
         <li>Reflexiones honestas, sin humo.</li>
         <li>Aprendizajes reales, no solo éxitos.</li>
         <li>Una mirada consciente sobre la carrera en tecnología.</li>
       </ul>
-      <p class='text-lg leading-loose'>
+      <p class='text-lg leading-loose mb-6'>
         Si buscás crecer como profesional sin desconectarte de vos mismo/a,
         estás en el lugar correcto.
       </p>
-    </section>
 
-    <!-- CTA -->
-    <section class='py-12 border-t border-gray-800'>
-      <div
-        class='rounded-xl border border-gray-800 bg-white/5 p-6 md:p-8 text-center'
-      >
-        <h3 class='text-2xl font-bold text-brand-offwhite mb-3'>
-          Sumate a El Ingeniero Consciente
-        </h3>
-        <p class='mb-6'>
-          Recibí ideas prácticas sobre datos, arquitectura cloud y crecimiento
-          profesional.
-        </p>
-        <a
-          class='inline-flex items-center justify-center bg-brand-orange text-brand-navy font-semibold px-8 py-3 rounded-md hover:opacity-90 transition-opacity'
-          href='https://newsletter.elingenieroconsciente.com'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Ver Archivo y Suscribirse
-        </a>
+      <div class="text-center">
+          <a
+            href="#subscribe"
+            class="inline-flex items-center justify-center rounded-full bg-brand-orange px-6 py-3 text-sm font-bold text-brand-navy transition-opacity hover:opacity-90"
+          >
+            <i class="fa-solid fa-envelope-circle-check me-2"></i>
+            <span> Suscribite Gratis </span>
+          </a>
       </div>
     </section>
+
+    <!-- About the Author -->
+    <section class="py-12 border-t border-gray-800">
+        <h2 class="text-2xl md:text-3xl font-bold mb-6 text-brand-orange">
+            ¿Quién está detrás de “El Ingeniero Consciente”?
+        </h2>
+
+        <p class="text-lg leading-loose mb-8">
+            Hola, soy Elias Velazquez. No soy un gurú infalible que se las sabe
+            todas. Soy un ingeniero de datos con ~2 años y medio de experiencia
+            profesional, enfocado en cloud architecture dentro de AWS que se equivoca,
+            investiga y aprende todos los días en la trinchera real: producción.
+        </p>
+
+        <div class="flex justify-center mb-8">
+            <img
+            src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1783794573/WhatsApp_Image_2026-07-07_at_20.21.52_hsr773.jpg"
+            alt="Elias Velazquez"
+            class="h-60 w-60 rounded-full object-cover border border-gray-700"
+            />
+        </div>
+
+        <p class="text-lg leading-loose mb-6">
+            Escribo esto como un compañero de ruta. En mis ediciones no vas a
+            encontrar verdades absolutas, sino mis aciertos y, sobre todo, mis
+            errores (de los que se aprende el triple).
+        </p>
+
+        <p class="text-lg leading-loose mb-6">
+            Te comparto lo que me funciona a mí para construir una carrera sólida y
+            mantener la cabeza cuerda en este ecosistema tan acelerado.
+        </p>
+
+        <p class="text-lg leading-loose mb-6 text-brand-offwhite">
+            <span class="bg-brand-orange/20 px-1.5 py-0.5">
+            Si buscás crecer como profesional sin desconectarte de vos mismo/a,
+            ¡sumate!
+            </span>
+        </p>
+    </section>
+
+
   </main>
 </SiteLayout>
