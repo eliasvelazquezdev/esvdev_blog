@@ -14,7 +14,7 @@ const FEATURED_POSTS_QUERY = `*[
 const featured_posts = await sanityClient.fetch<SanityDocument[]>(FEATURED_POSTS_QUERY);
 
 const LATEST_POSTS_QUERY = `*[
-    _type == "post"
+  contentType == "post"
 ]|order(publishedAt desc)[0...5]{_id, title, slug, excerpt, publishedAt}
 `;
 const latest_posts = await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY);
