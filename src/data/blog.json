@@ -1,0 +1,114 @@
+{
+  "$descripcion": "Textos de las páginas del blog: listado, paginación, zips, tags, artículos y páginas de error. El contenido de los posts sigue viniendo de Sanity.",
+
+  "blogIndex": {
+    "pageTitle": "Blog",
+    "hero": {
+      "kicker": "El hub técnico de El Ingeniero Consciente",
+      "title": "Blog",
+      "titleLight": " técnico",
+      "ghost": "Blog",
+      "description": "En este espacio publico contenido estrictamente técnico: __Data Engineering__, __arquitectura AWS__ y conceptos aplicados al software. Sin reflexión extensa ni desarrollo personal."
+    },
+    "lead": "Este espacio está dedicado a ^^lo concreto, lo ejecutable y lo que puede ponerse en práctica^^.",
+    "paragraphs": [
+      "Cada nuevo artículo es anunciado en la newsletter, dentro de las secciones **Taller de Datos** y **La Senda del Nubearquitecto**.",
+      "Si solo te interesa lo técnico, ==la newsletter funciona como un sistema de notificaciones para no perderte nuevas publicaciones==.",
+      "Si además te interesa crecer como profesional —criterio, mentalidad y carrera— esa conversación también vive allí."
+    ],
+    "proTip": {
+      "kicker": "Pro tip",
+      "text": "En ^^Zips^^ encontrás ideas técnicas comprimidas a lo esencial.",
+      "linkLabel": "Explorar Zips",
+      "href": "/blog/zips/"
+    },
+    "featuredTitle": "Posts ~destacados~",
+    "featuredCountLabel": "artículos",
+    "latestTitle": "Últimos ~posts~",
+    "seeAll": "Ver todos",
+    "allPostsButton": "Todos los posts"
+  },
+
+  "postsPage": {
+    "pageTitle": "Posts - Página {page}",
+    "title": "Todos los",
+    "titleLight": " posts",
+    "ghost": "Posts",
+    "breadcrumbPage": "Página {page}",
+    "description": "Todos los artículos que he publicado. Página {page} de {total}."
+  },
+
+  "zips": {
+    "pageTitle": "Zips",
+    "kicker": "Ideas técnicas comprimidas",
+    "title": "Zips",
+    "ghost": "Zips",
+    "description": "¡Bienvenido/a a **Zips**! Aquí encontrarás lecturas rápidas de índole técnica. La idea es que te lleves un aprendizaje, encuentres recursos, o simplemente te diviertas en lecturas breves de pocos minutos.",
+    "countLabel": "zips",
+    "durationLabel": "Menos de 5 minutos",
+    "cardCta": "Lectura rápida"
+  },
+
+  "tags": {
+    "pageTitle": "Tags",
+    "kicker": "Explorá posts por tema",
+    "title": "Tags",
+    "ghost": "#Tags",
+    "description": "{count} temas para navegar el contenido. Elegí uno y encontrá todos los artículos relacionados.",
+    "featuredLabel": "Destacados",
+    "featuredBadge": "Destacado",
+    "allTitle": "Todos los ~temas~",
+    "post": "post",
+    "posts": "posts"
+  },
+
+  "tagPage": {
+    "pageTitle": "Posts etiquetados con {tag}",
+    "pageTitlePaged": "Posts etiquetados con {tag} - Página {page}",
+    "kicker": "Posts con la etiqueta",
+    "pageLabel": "Página {page} de {total}",
+    "empty": "Nada por aquí. Muy pronto voy a hablar de este tema, así que date una vuelta pronto. 😉",
+    "backToTags": "Todos los tags"
+  },
+
+  "article": {
+    "breadcrumbPost": "Artículo",
+    "breadcrumbZip": "Zip",
+    "readingTime": "{min} min de lectura",
+    "updated": "Actualizado el",
+    "tagsLabel": "Tags",
+    "shareLabel": "Compartir",
+    "writtenBy": "Escrito por",
+    "aboutButton": { "label": "Sobre mí", "href": "/about/" },
+    "backTo": "Volver a {section}",
+    "tocTitle": "En este artículo",
+    "tocTitleMobile": "Tabla de contenidos",
+    "newsletterCard": {
+      "kicker": "Newsletter",
+      "text": "¿Te sirvió? Recibí el próximo artículo en tu correo.",
+      "cta": "Suscribite gratis"
+    }
+  },
+
+  "cards": {
+    "featuredBadge": "Destacado",
+    "readMore": "Leer artículo"
+  },
+
+  "notFound": {
+    "kicker": "Error 404",
+    "post": { "title": "Post no", "titleLight": " encontrado", "text": "El post que buscas no existe o ya no está disponible.", "button": "Volver al blog", "href": "/blog" },
+    "zip": { "title": "Zip no", "titleLight": " encontrado", "text": "El contenido que buscas no existe o ya no está disponible.", "button": "Volver a Zips", "href": "/blog/zips" }
+  },
+
+  "ui": {
+    "home": "Inicio",
+    "prevPage": "Página anterior",
+    "nextPage": "Página siguiente",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "copyLink": "Copiar enlace",
+    "shareX": "Compartir en X",
+    "shareLinkedIn": "Compartir en LinkedIn"
+  }
+}

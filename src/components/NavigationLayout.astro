@@ -1,20 +1,18 @@
 ---
-const links = [
-  { label: "Blog", href: "/blog/" },
-  { label: "Zips", href: "/blog/zips/" },
-  { label: "Tags", href: "/blog/tags/" },
+import site from "../data/site.json";
 
-  { label: "About", href: "/about/" },
-];
+const links = site.nav.links;
+const cta = site.nav.cta;
+const { brand } = site;
 
 const pathname = Astro.url.pathname;
 
-const normalizePath = (path) => {
+const normalizePath = (path: string) => {
   const normalized = path.replace(/\/+$/, "");
   return normalized === "" ? "/" : normalized;
 };
 
-const isActive = (href) => {
+const isActive = (href: string) => {
   const normalizedPath = normalizePath(pathname);
   const normalizedHref = normalizePath(href);
 
@@ -25,92 +23,166 @@ const isActive = (href) => {
       !normalizedPath.startsWith("/blog/tags")
     );
   }
-
   if (normalizedHref === "/blog/zips") {
     return normalizedPath === "/blog/zips" || normalizedPath.startsWith("/blog/zips/");
   }
-
   if (normalizedHref === "/blog/tags") {
     return normalizedPath === "/blog/tags" || normalizedPath.startsWith("/blog/tags/");
   }
-
   return normalizedPath === normalizedHref;
 };
 ---
 
 <nav
-  class="max-w-4xl mx-auto px-6 py-12 flex flex-col md:flex-row items-start md:items-center md:justify-between gap-6"
-  data-purpose="site-navigation"
+  id="site-nav"
+  data-scrolled="false"
+  class="group/nav fixed inset-x-0 top-0 z-40 backdrop-blur-xl transition-[background-color] duration-500 ease-out data-[scrolled=true]:bg-blue-primary/75"
+  aria-label="Navegación principal"
 >
-  <div class="w-full flex items-center justify-between">
-    <a class="flex items-center gap-3" href="/">
-      <img
-        class="w-10 h-10 rounded-full object-cover"
-        src="/logo/ingeniero_consciente_logo_no_under.svg"
-        alt="ingeniero_consciente_logo"
-      />
-      <span class="text-xl italic tracking-tight hidden md:inline">
-        el ingeniero <span class="font-semibold">consciente</span>
+  <!-- Línea de marca + progreso de lectura -->
+  <span class="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] bg-orange-primary lg:h-[4px]" aria-hidden="true">
+    <span
+      data-nav-progress
+      class="block h-full origin-left scale-x-0 bg-gradient-to-r from-orange-secondary to-[#ffd27a]"
+    ></span>
+  </span>
+
+  <div
+    class="relative mx-auto flex h-20 max-w-[2400px] items-center justify-between gap-6 px-5 transition-[height] duration-500 ease-out lg:h-24 lg:px-8 lg:group-data-[scrolled=true]/nav:h-20 xl:px-10"
+  >
+    <!-- Izquierda: CTA (desktop) / logo (mobile) -->
+    <a href="/" class="flex items-center gap-3 lg:hidden" aria-label={brand.name}>
+      <img src={brand.logo} alt="" class="h-12 w-auto" />
+      <span class="text-base font-semibold tracking-tight text-gray-primary">
+        {brand.wordmark.light} <span class="font-extrabold text-orange-secondary">{brand.wordmark.strong}</span>
       </span>
     </a>
+
+    <a href={cta.href} class="btn-outline hidden !py-2 lg:inline-flex">
+      <span>{cta.label}</span>
+      <i class="fa-regular fa-envelope text-[0.95em] transition-transform duration-300 group-hover:translate-y-0.5" aria-hidden="true"></i>
+    </a>
+
+    <!-- Derecha: links + logo (desktop) -->
+    <div class="hidden items-center gap-6 lg:flex xl:gap-10">
+      <div class="flex items-center gap-1 xl:gap-2">
+        {
+          links.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <a
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                class="group/link relative px-3 py-2 text-base font-medium tracking-tight text-gray-primary/85 transition-colors duration-300 hover:text-gray-secondary aria-[current=page]:text-orange-secondary xl:px-4 xl:text-lg"
+              >
+                {link.label}
+              </a>
+            );
+          })
+        }
+      </div>
+
+      <a href="/" class="flex items-center gap-3" aria-label={brand.name}>
+        <img
+          src={brand.logo}
+          alt=""
+          class="h-16 w-auto origin-center transition-transform duration-500 ease-out group-data-[scrolled=true]/nav:scale-[0.85] xl:h-[4.5rem]"
+        />
+      </a>
+    </div>
+
+    <!-- Botón menú mobile -->
     <button
       id="nav-toggle"
-      class="md:hidden inline-flex items-center justify-center rounded-full p-2 hover:bg-white/10 transition-colors text-brand-offwhite"
+      class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-orange-secondary/40 text-orange-secondary transition-colors hover:border-orange-secondary lg:hidden"
       type="button"
       aria-controls="site-nav-links"
       aria-expanded="false"
     >
       <span class="sr-only">Abrir menú</span>
-      <div class="space-y-1">
-        <span class="block w-6 h-0.5 bg-brand-offwhite"></span>
-        <span class="block w-6 h-0.5 bg-brand-offwhite"></span>
-        <span class="block w-6 h-0.5 bg-brand-offwhite"></span>
-      </div>
+      <svg data-icon-open class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M10 17h10"></path>
+      </svg>
+      <svg data-icon-close class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
     </button>
   </div>
 
+  <!-- Menú mobile -->
   <div
     id="site-nav-links"
-    class="hidden md:flex flex-col md:flex-row w-full md:w-auto gap-6 md:gap-6 text-sm font-medium uppercase tracking-widest text-brand-offwhite bg-white/5 md:bg-transparent rounded-xl p-4 md:p-0"
+    class="grid grid-rows-[0fr] bg-blue-primary/95 transition-[grid-template-rows] duration-500 ease-out data-[open=true]:grid-rows-[1fr] lg:hidden"
+    data-open="false"
   >
-    {links.map((link) => {
-      const active = isActive(link.href);
-      return (
-        <a
-          class={`block w-full md:w-auto py-2 md:py-0 pb-1 border-b-2 ${
-            active ? "border-brand-orange" : "border-transparent"
-          } hover:text-brand-orange transition-colors`}
-          href={link.href}
-          aria-current={active ? "page" : undefined}
-        >
-          {link.label}
+    <div class="overflow-hidden">
+      <div class="flex flex-col px-5 pb-8 pt-2">
+        {
+          links.map((link, i) => {
+            const active = isActive(link.href);
+            return (
+              <a
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                class="flex items-center justify-between border-b border-white/10 py-4 text-2xl font-semibold tracking-tight text-gray-primary transition-colors duration-300 hover:text-orange-secondary aria-[current=page]:text-orange-secondary"
+              >
+                <span>{link.label}</span>
+                <span class="index-num">{String(i + 1).padStart(2, "0")}</span>
+              </a>
+            );
+          })
+        }
+        <a href={cta.href} class="btn-outline mt-6 w-fit">
+          <span>{cta.label}</span>
+          <i class="fa-regular fa-envelope text-[0.95em]" aria-hidden="true"></i>
         </a>
-      );
-    })}
+      </div>
+    </div>
   </div>
 </nav>
 
 <script>
-  // Wrap everything in an astro:page-load listener so it runs on every navigation
-  document.addEventListener('astro:page-load', () => {
+  let nav: HTMLElement | null = null;
+  let progress: HTMLElement | null = null;
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+    const scroll = window.scrollY;
+    const limit = document.documentElement.scrollHeight - window.innerHeight;
+    if (nav) nav.dataset.scrolled = scroll > 40 ? "true" : "false";
+    if (progress) progress.style.transform = `scaleX(${limit > 0 ? Math.min(1, scroll / limit) : 0})`;
+  };
+  const onScroll = () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+
+  document.addEventListener("astro:page-load", () => {
+    nav = document.getElementById("site-nav");
+    progress = document.querySelector("[data-nav-progress]");
+    update();
+
     const toggle = document.getElementById("nav-toggle");
     const menu = document.getElementById("site-nav-links");
+    if (!toggle || !menu) return;
+    const iconOpen = toggle.querySelector("[data-icon-open]");
+    const iconClose = toggle.querySelector("[data-icon-close]");
 
-    if (toggle && menu) {
-      toggle.addEventListener("click", () => {
-        const isOpen = menu.classList.toggle("hidden") === false;
-        toggle.setAttribute("aria-expanded", String(isOpen));
-      });
+    const setOpen = (open: boolean) => {
+      menu.dataset.open = String(open);
+      toggle.setAttribute("aria-expanded", String(open));
+      iconOpen?.classList.toggle("hidden", open);
+      iconClose?.classList.toggle("hidden", !open);
+      if (open && nav) nav.dataset.scrolled = "true";
+      else update();
+    };
 
-      const links = menu.querySelectorAll("a");
-      links.forEach((link) => {
-        link.addEventListener("click", () => {
-          if (!menu.classList.contains("hidden")) {
-            menu.classList.add("hidden");
-            toggle.setAttribute("aria-expanded", "false");
-          }
-        });
-      });
-    }
+    toggle.addEventListener("click", () => setOpen(menu.dataset.open !== "true"));
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
   });
 </script>

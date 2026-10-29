@@ -1,7 +1,9 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import PostDescription from '../../components/PostDescription.astro';
-import Icon from '../../components/Icon.astro';
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHero from "../../components/PageHero.astro";
+import PostDescription from "../../components/PostDescription.astro";
+import blog from "../../data/blog.json";
+import { rich } from "../../utils/richText.js";
 
 import { sanityClient } from "sanity:client";
 import type { SanityDocument } from "@sanity/client";
@@ -19,89 +21,102 @@ const LATEST_POSTS_QUERY = `*[
 `;
 const latest_posts = await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY);
 
-const pageTitle = 'Blog'
+// Los textos de esta página están en src/data/blog.json → "blogIndex"
+const t = blog.blogIndex;
+const pageTitle = t.pageTitle;
 ---
 
 <SiteLayout pageTitle={pageTitle}>
-	<main class="max-w-4xl mx-auto px-6 pb-24">
-		<div class="flex flex-col items-center ">
-			<div>
-                <h1 class="text-4xl md:text-5xl font-bold mb-5 text-brand-orange">
-                    Blog <Icon name="notebook" size={36} className="inline-block ml-2 align-middle" />
-                </h1>
+  <PageHero title={t.hero.title} titleLight={t.hero.titleLight} kicker={t.hero.kicker} ghost={t.hero.ghost}>
+    <p set:html={rich(t.hero.description)} />
+  </PageHero>
 
-				<p class="text-lg mb-5 leading-loose">
-				    Este es el hub técnico de <span class="font-bold italic">El Ingeniero Consciente</span>.
-				</p>
+  <main class="shell pb-20 lg:pb-28">
+    <!-- Intro -->
+    <section class="grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <div class="space-y-6 text-lg leading-relaxed text-gray-primary/80 lg:col-span-7 lg:text-xl">
+        <p data-reveal class="text-2xl font-bold leading-snug tracking-tight text-gray-primary lg:text-3xl" set:html={rich(t.lead)} />
+        {t.paragraphs.map((text) => <p data-reveal set:html={rich(text)} />)}
+      </div>
 
-				<p class="text-lg mb-5 leading-loose">
-    				En este espacio publico contenido estrictamente técnico: Data Engineering, arquitectura AWS y conceptos aplicados al software. Sin reflexión extensa ni desarrollo personal. <span class="font-bold italic">Este espacio está dedicado a lo concreto, lo ejecutable y lo que puede ponerse en práctica</span>.
-				</p>
+      <aside class="lg:col-span-5">
+        <a
+          href={t.proTip.href}
+          data-reveal
+          class="card card-hover group block p-7 lg:p-9"
+        >
+          <div class="mb-5 flex items-center justify-between">
+            <span class="kicker !text-orange-secondary">{t.proTip.kicker}</span>
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl border border-orange-secondary/50 bg-orange-secondary/10 text-orange-secondary">
+              <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+            </span>
+          </div>
+          <p class="text-2xl font-bold leading-snug tracking-tight text-gray-primary lg:text-3xl" set:html={rich(t.proTip.text)} />
+          <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-orange-secondary">
+            {t.proTip.linkLabel}
+            <i class="fa-solid fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true"></i>
+          </span>
+          <span class="accent-line !h-[2px]" aria-hidden="true"></span>
+        </a>
+      </aside>
+    </section>
 
-				<p class="text-lg mb-5 leading-loose">
-    				Cada nuevo artículo es anunciado en la newsletter, dentro de las secciones <span class="font-bold italic">Taller de Datos</span> y <span class="font-bold italic">La Senda del Nubearquitecto</span>.
-				</p>
+    <!-- Destacados -->
+    {
+      featured_posts.length > 0 && (
+        <section class="mt-24 lg:mt-32">
+          <div class="mb-10 flex items-end justify-between gap-6 lg:mb-14">
+            <h2 data-reveal class="section-title" set:html={rich(t.featuredTitle)} />
+            <span data-reveal class="index-num hidden sm:block">
+              {String(featured_posts.length).padStart(2, "0")} {t.featuredCountLabel}
+            </span>
+          </div>
+          <div class="grid gap-6 md:grid-cols-2 lg:gap-8 xl:grid-cols-3">
+            {featured_posts.map((post, i) => (
+              <PostDescription
+                variant="card"
+                index={i}
+                postURL={`/blog/${post.slug.current}`}
+                postTitle={post.title}
+                postDate={post.publishedAt}
+                postDescription={post.excerpt}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
 
-				<p class="text-lg mb-5 leading-loose">
-    				Si solo te interesa lo técnico, <span class="font-bold italic">la newsletter funciona como un sistema de notificaciones para no perderte nuevas publicaciones</span>.
-				</p>
+    <!-- Últimos posts -->
+    <section class="mt-24 lg:mt-32">
+      <div class="mb-4 flex items-end justify-between gap-6 lg:mb-6">
+        <h2 data-reveal class="section-title" set:html={rich(t.latestTitle)} />
+        <a data-reveal href="/blog/page1" class="group hidden items-center gap-2 font-bold text-orange-secondary sm:inline-flex">
+          {t.seeAll}
+          <i class="fa-solid fa-arrow-right text-sm transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true"></i>
+        </a>
+      </div>
 
-				<p class="text-lg mb-5 leading-loose">
-    				Si además te interesa crecer como profesional —criterio, mentalidad y carrera— esa conversación también vive allí.
-				</p>
+      <div>
+        {
+          latest_posts.map((post, i) => (
+            <PostDescription
+              index={i}
+              postURL={`/blog/${post.slug.current}`}
+              postTitle={post.title}
+              postDate={post.publishedAt}
+              postDescription={post.excerpt}
+            />
+          ))
+        }
+      </div>
 
-                <blockquote class="my-10 rounded-md bg-brand-navy-mid border-2  border-gray-500 px-5 py-4 text-xl  text-gray-200">
-                    <strong>Pro tip:</strong> en <a href="/blog/zips" class="text-brand-orange hover:text-orange-400">Zips</a> encontrarás ideas técnicas comprimidas a lo esencial
-                </blockquote>
-
-			</div>
-		</div>
-
-		<!-- Featured -->
-		<div class="flex flex-col mt-12">
-			<h1 class="font-bold text-3xl block mb-5">Destacados</h1>
-
-			<div>
-				{
-                    featured_posts.map((post) => (
-						<PostDescription
-							postURL={`/blog/${post.slug.current}`}
-							postTitle={post.title}
-							postDate={post.publishedAt}
-							postDescription={post.excerpt}
-							clickableCard={true}
-						/>
-                    ))
-
-                }
-			</div>
-		</div>
-
-		<!-- Latest posts -->
-		<div class="flex flex-col mt-12">
-			<h1 class="font-bold text-3xl block mb-5">Ultimos posts</h1>
-
-			<div>
-				{
-                    latest_posts.map((post) => (
-						<PostDescription
-							postURL={`/blog/${post.slug.current}`}
-							postTitle={post.title}
-							postDate={post.publishedAt}
-							postDescription={post.excerpt}
-							clickableCard={true}
-						/>
-                    ))
-
-                }
-			</div>
-
-			<div class="flex justify-center text-bold">
-				<a href="/blog/page1" class="text-white hover:text-orange-500">
-    				Todos los posts
-    				<i class='fa-solid fa-arrow-right'></i>
-				</a>
-			</div>
-		</div>
-	</main>
+      <div data-reveal class="mt-12 flex justify-center">
+        <a href="/blog/page1" class="btn-outline group">
+          <span>{t.allPostsButton}</span>
+          <i class="fa-solid fa-arrow-right text-sm transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true"></i>
+        </a>
+      </div>
+    </section>
+  </main>
 </SiteLayout>

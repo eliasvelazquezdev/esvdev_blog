@@ -1,0 +1,65 @@
+---
+import PlexusBackground from "./PlexusBackground.astro";
+
+interface Props {
+  title: string;
+  /** Parte del título en peso normal (como "About Me" en la web) */
+  titleLight?: string;
+  kicker?: string;
+  /** Palabra gigante con contorno de fondo */
+  ghost?: string;
+  size?: "lg" | "md";
+}
+
+const { title, titleLight, kicker, ghost, size = "lg" } = Astro.props;
+---
+
+<header class="relative overflow-hidden pb-14 pt-32 lg:pb-20 lg:pt-44">
+  <PlexusBackground density="soft" />
+
+  {
+    ghost && (
+      <span class="ghost-word -right-4 top-24 z-[1] text-[22vw] lg:top-20 lg:text-[16vw]" aria-hidden="true">
+        {ghost}
+      </span>
+    )
+  }
+
+  <div class="shell relative z-10">
+    {Astro.slots.has("breadcrumbs") && <div class="hero-appear mb-8"><slot name="breadcrumbs" /></div>}
+
+    {
+      kicker && (
+        <p class="hero-appear kicker mb-5 !text-orange-secondary" style="--d: 60ms">
+          {kicker}
+        </p>
+      )
+    }
+
+    <h1
+      data-bg-quiet
+      class:list={[
+        "hero-appear max-w-5xl font-extrabold tracking-tight text-gray-primary",
+        size === "lg" ? "text-5xl leading-[1.02] sm:text-6xl lg:text-7xl xl:text-8xl" : "text-4xl leading-[1.08] sm:text-5xl lg:text-6xl",
+      ]}
+      style="--d: 120ms; text-shadow: 0 2px 18px rgba(8, 18, 40, 0.7);"
+    >
+      {title}
+      {titleLight && <span class="font-normal">{titleLight}</span>}
+    </h1>
+
+    {
+      Astro.slots.has("default") && (
+        <div
+          data-bg-quiet
+          class="hero-appear mt-7 max-w-3xl text-lg leading-relaxed text-gray-primary/80 lg:text-xl"
+          style="--d: 260ms"
+        >
+          <slot />
+        </div>
+      )
+    }
+
+    {Astro.slots.has("after") && <div class="hero-appear mt-8" style="--d: 380ms"><slot name="after" /></div>}
+  </div>
+</header>

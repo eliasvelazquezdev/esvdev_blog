@@ -1,304 +1,323 @@
 ---
-import Icon from '../components/Icon.astro'
-import SiteLayout from '../layouts/SiteLayout.astro'
+// Todos los textos de esta página están en src/data/home.json
+import Icon from "../components/Icon.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import PlexusBackground from "../components/PlexusBackground.astro";
+import BrandOrb from "../components/BrandOrb.astro";
+import TopicMarquee from "../components/TopicMarquee.astro";
+import home from "../data/home.json";
+import { rich } from "../utils/richText.js";
 
-const pageTitle = 'El Ingeniero Consciente'
+const { hero, intro, topics, manifesto, audience, structure, expectations, author } = home;
+
+const pad = (n: number) => String(n + 1).padStart(2, "0");
 ---
 
-<SiteLayout pageTitle={pageTitle}>
-  <main class='max-w-4xl mx-auto px-6 pb-24'>
-    <!-- Hero -->
-    <section
-      class='py-10 md:py-16 border-b border-gray-800'
-    >
-      <div class='text-center max-w-3xl mx-auto'>
-        <h1 class='text-3xl md:text-5xl font-bold mb-4 text-brand-offwhite'>
-          Se puede ser un gran Ingeniero de Datos  <span class="text-brand-orange">sin dejar la vida frente a la pantalla</span>
-        </h1>
-        <p class='text-lg mb-6 leading-relaxed'>
-          Sumate a la comunidad de <span class='bold text-brand-orange'>+250 lectores</span
-          > que buscan crecer en Data Engineering, arquitectura en AWS y mentalidad profesional sin perderse a ellos mismos en el camino.
-        </p>
+<SiteLayout pageTitle={home.pageTitle}>
+  <!-- ============================== HERO ============================== -->
+  <header class="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-blue-secondary px-5 pb-24 pt-28 lg:pb-16">
+    <PlexusBackground density="full" />
 
-        <a
-          href="#subscribe"
-          class="inline-flex items-center justify-center rounded-full bg-brand-orange px-6 py-3 text-sm font-bold text-brand-navy transition-opacity hover:opacity-90"
+    <section
+      class="relative z-10 mx-auto flex w-full max-w-[2400px] flex-col items-center gap-12 sm:px-6 lg:flex-row lg:justify-between lg:gap-10 lg:px-8"
+    >
+      <BrandOrb />
+
+      <div
+        data-bg-quiet
+        class="flex w-full min-w-0 flex-col items-center gap-6 text-center lg:w-auto lg:max-w-[52rem] lg:items-end lg:text-right 2xl:max-w-[64rem]"
+        style="text-shadow: 0 2px 18px rgba(8, 18, 40, 0.7);"
+      >
+        <p class="hero-appear kicker !text-orange-secondary">{hero.kicker}</p>
+
+        <h1
+          class="hero-appear text-4xl font-extrabold leading-[1.05] tracking-tight text-gray-primary sm:text-5xl xl:text-6xl 2xl:text-7xl"
+          style="--d: 80ms"
         >
-          <i class="fa-solid fa-envelope-circle-check me-2"></i>
-          <span> Suscribite Gratis </span>
+          {hero.title}
+          <span class="block text-orange-secondary">{hero.titleAccent}</span>
+        </h1>
+
+        <p
+          class="hero-appear max-w-2xl text-lg font-medium leading-relaxed text-gray-primary/85 lg:text-xl 2xl:text-2xl"
+          style="--d: 220ms"
+          set:html={rich(hero.description)}
+        />
+
+        <div class="hero-appear flex flex-wrap items-center justify-center gap-4 lg:justify-end" style="--d: 340ms">
+          <a href={hero.primaryCta.href} class="btn-primary">
+            <i class="fa-solid fa-envelope-circle-check" aria-hidden="true"></i>
+            <span>{hero.primaryCta.label}</span>
+          </a>
+          <a href={hero.secondaryCta.href} class="btn-outline group">
+            <span>{hero.secondaryCta.label}</span>
+            <i class="fa-solid fa-arrow-right text-sm transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <div class="hero-appear mt-2 w-full" style="--d: 460ms">
+          <TopicMarquee topics={hero.topics} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Indicador de scroll -->
+    <a
+      href="#que-es"
+      class="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-primary/50 transition-colors hover:text-orange-secondary lg:flex"
+      aria-label="Bajar"
+    >
+      Scroll
+      <span class="relative h-10 w-[2px] overflow-hidden rounded-full bg-white/10">
+        <span class="absolute inset-x-0 top-0 h-1/2 animate-[scrollHint_1.8s_ease-in-out_infinite] rounded-full bg-orange-secondary"></span>
+      </span>
+    </a>
+  </header>
+
+  <main>
+    <!-- ============================== QUÉ ES ============================== -->
+    <section id="que-es" class="shell relative overflow-x-clip scroll-mt-24 pb-20 pt-24 lg:pb-28 lg:pt-32">
+      <span class="ghost-word -right-6 top-10 text-[20vw] lg:text-[15vw]" aria-hidden="true">{intro.ghost}</span>
+
+      <p data-reveal class="kicker mb-6">{intro.kicker}</p>
+      <p
+        data-reveal
+        class="relative max-w-5xl text-3xl font-bold leading-[1.18] tracking-tight text-gray-primary lg:text-4xl xl:text-5xl"
+        style="--d: 80ms"
+        set:html={rich(intro.statement)}
+      />
+      <p data-reveal class="mt-8 max-w-2xl text-lg leading-relaxed text-gray-primary/75 lg:text-xl" style="--d: 160ms" set:html={rich(intro.text)} />
+    </section>
+
+    <!-- ============================== DE QUÉ VA ============================== -->
+    <section class="shell pb-20 lg:pb-28">
+      <h2 data-reveal class="section-title mb-10 lg:mb-14" set:html={rich(topics.title)} />
+
+      <div class="border-t-2 border-orange-primary">
+        {
+          topics.items.map((t, i) => (
+            <div
+              data-reveal
+              style={`--d: ${i * 90}ms`}
+              class="group flex flex-col gap-3 border-b-2 border-orange-primary py-7 lg:flex-row lg:items-baseline lg:gap-10 lg:py-9"
+            >
+              <span class="index-num w-10 shrink-0 transition-colors duration-300 group-hover:text-orange-secondary">{pad(i)}</span>
+              <h3 class="flex-1 text-2xl font-bold tracking-tight text-gray-primary transition-colors duration-300 group-hover:text-orange-secondary lg:text-4xl">
+                {t.title}
+              </h3>
+              <p class="text-base text-gray-primary/60 lg:max-w-sm lg:text-right lg:text-lg" set:html={rich(t.text)} />
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Manifiesto -->
+      <div class="mt-20 grid gap-10 lg:mt-28 lg:grid-cols-12 lg:gap-14">
+        <div class="lg:col-span-4">
+          <div class="lg:sticky lg:top-32">
+            <p data-reveal class="kicker mb-4 !text-orange-secondary">{manifesto.kicker}</p>
+            <p
+              data-reveal
+              class="text-3xl font-extrabold leading-tight tracking-tight text-gray-primary lg:text-4xl"
+              style="--d: 80ms"
+              set:html={rich(manifesto.title)}
+            />
+          </div>
+        </div>
+
+        <div class="space-y-7 text-lg leading-relaxed text-gray-primary/80 lg:col-span-8 lg:text-xl">
+          {
+            manifesto.blocks.map((block) =>
+              block.type === "quote" ? (
+                <p
+                  data-reveal
+                  class="border-l-4 border-orange-primary py-1 pl-6 text-2xl font-bold tracking-tight text-orange-secondary lg:text-3xl"
+                  set:html={rich(block.text)}
+                />
+              ) : block.type === "statement" ? (
+                <p
+                  data-reveal
+                  class="py-4 text-3xl font-extrabold leading-tight tracking-tight text-gray-primary lg:text-5xl"
+                  set:html={rich(block.text)}
+                />
+              ) : (
+                <p data-reveal set:html={rich(block.text)} />
+              ),
+            )
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== PARA QUIÉN ============================== -->
+    <section class="shell pb-20 lg:pb-28">
+      <h2 data-reveal class="section-title mb-10 lg:mb-14" set:html={rich(audience.title)} />
+
+      <div class="grid gap-6 md:grid-cols-3 lg:gap-8">
+        {
+          audience.items.map((text, i) => (
+            <article data-reveal style={`--d: ${i * 100}ms`} class="card card-hover group p-7 lg:p-9">
+              <span class="index-num mb-6 block">{pad(i)}</span>
+              <div class="flex items-start gap-3 lg:gap-4">
+                <span class="dash" aria-hidden="true" />
+                <p class="text-base leading-relaxed text-gray-primary/85 lg:text-lg" set:html={rich(text)} />
+              </div>
+              <span class="accent-line !h-[2px]" aria-hidden="true" />
+            </article>
+          ))
+        }
+      </div>
+
+      <div data-reveal class="mt-12 flex justify-center">
+        <a href={audience.cta.href} class="btn-primary">
+          <i class="fa-solid fa-envelope-circle-check" aria-hidden="true"></i>
+          <span>{audience.cta.label}</span>
         </a>
       </div>
     </section>
 
-    <!-- What is this -->
-    <section class='py-12'>
-      <h2 class='text-2xl md:text-3xl font-bold mb-4 text-brand-orange'>
-        ¿Qué es "El Ingeniero Consciente"?
-      </h2>
-      <p class='text-lg leading-loose mb-4'>
-          Una newsletter semanal para ingenieros de datos que buscan la excelencia técnica, sin comprar el humo del hype <span class="font-bold">ni quemar su salud mental en el camino</span>.
-      </p>
-      <p class='text-lg leading-loose'>
-        Comparto lo que aprendo, valido y utilizo en el día a día.
-      </p>
+    <!-- ============================== ORGANIZACIÓN ============================== -->
+    <section class="relative overflow-hidden border-y border-white/5 bg-blue-secondary/25 py-20 lg:py-28">
+      <div class="halftone pointer-events-none absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_50%_60%_at_100%_0%,#000,transparent)]" aria-hidden="true"></div>
+
+      <div class="shell relative">
+        <div class="grid gap-8 lg:grid-cols-12 lg:gap-14">
+          <h2 data-reveal class="section-title lg:col-span-5" set:html={rich(structure.title)} />
+          <div class="space-y-5 text-lg leading-relaxed text-gray-primary/80 lg:col-span-7 lg:text-xl">
+            {structure.paragraphs.map((text) => <p data-reveal set:html={rich(text)} />)}
+          </div>
+        </div>
+
+        <!-- Pilares -->
+        <div class="mt-14 grid gap-6 md:grid-cols-3 lg:gap-8">
+          {
+            structure.pillars.map((p, i) => (
+              <article data-reveal style={`--d: ${i * 110}ms`} class="card card-hover group flex flex-col">
+                <div class="relative h-52 overflow-hidden lg:h-60">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    loading="lazy"
+                    class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-blue-secondary via-blue-secondary/20 to-transparent" aria-hidden="true" />
+                  <span class="absolute right-5 top-4 text-5xl font-extralight tabular-nums text-white/70 drop-shadow">{pad(i)}</span>
+                </div>
+                <div class="flex flex-1 flex-col p-7 pt-2 lg:p-9 lg:pt-3">
+                  <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-orange-secondary/50 bg-orange-secondary/10 text-orange-secondary">
+                    <Icon name={p.icon as any} size={20} />
+                  </div>
+                  <h3 class="mb-3 text-xl font-bold tracking-tight text-orange-secondary lg:text-2xl">{p.title}</h3>
+                  <p class="text-base leading-relaxed text-gray-primary/75" set:html={rich(p.text)} />
+                </div>
+                <span class="accent-line !h-[2px]" aria-hidden="true" />
+              </article>
+            ))
+          }
+        </div>
+
+        <!-- Extras -->
+        <div class="mt-20 grid gap-8 lg:mt-24 lg:grid-cols-12 lg:gap-14">
+          <div class="lg:col-span-5">
+            <h3 data-reveal class="text-3xl font-extrabold tracking-tight text-gray-primary lg:text-4xl" set:html={rich(structure.extrasTitle)} />
+            <p data-reveal class="mt-5 text-lg leading-relaxed text-gray-primary/75" style="--d: 80ms" set:html={rich(structure.extrasText)} />
+          </div>
+
+          <div class="grid gap-6 sm:grid-cols-2 lg:col-span-7">
+            {
+              structure.extras.map((e, i) => (
+                <article
+                  data-reveal
+                  style={`--d: ${i * 110}ms`}
+                  class="group relative overflow-hidden rounded-2xl border border-orange-secondary/40 bg-blue-primary/60 p-6 transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-orange-secondary lg:p-7"
+                >
+                  <div class="mb-4 flex items-center gap-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-secondary/10 text-orange-secondary">
+                      <Icon name={e.icon as any} size={18} />
+                    </span>
+                    <h4 class="text-lg font-bold tracking-tight text-gray-primary">{e.title}</h4>
+                  </div>
+                  <p class="text-sm leading-relaxed text-gray-primary/70 lg:text-base" set:html={rich(e.text)} />
+                  <span class="accent-line" aria-hidden="true" />
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="py-10 md:py-16 border-b border-gray-800">
-        <h2 class='text-2xl md:text-3xl font-bold mb-4 text-brand-orange'>
-            ¿De qué va la newsletter?
-        </h2>
+    <!-- ============================== QUÉ VAS A RECIBIR ============================== -->
+    <section class="shell py-20 lg:py-28">
+      <h2 data-reveal class="section-title mb-10 lg:mb-14" set:html={rich(expectations.title)} />
 
-        <ul class="mt-6 space-y-3 pl-6 mb-8 text-lg leading-relaxed marker:text-brand-orange list-disc">
-          <li>De Ingeniería de Datos</li>
-          <li>AWS desde el camino real</li>
-          <li>Y de la humanidad detrás del teclado</li>
-        </ul>
-
-        <p class='text-lg mb-6 leading-relaxed'>
-        La industria tech suele decirnos que para ser exitoso tenés que estar
-        conectado 24/7 y aprender tres frameworks de IA antes de desayunar.
-        </p>
-
-        <p class='text-lg mb-6 leading-relaxed'>
-        Yo pienso que no tiene porqué ser así. Eso no es excelencia.
-        </p>
-
-        <p class="text-lg mb-6 font-semibold text-brand-orange">
-        Es el camino directo al burnout.
-        </p>
-
-        <p class='text-lg mb-6 leading-relaxed'>
-        Acá vas a encontrar fundamentos sólidos de Data Engineering,
-        arquitectura práctica en AWS y las herramientas mentales para gestionar
-        tu carrera con consciencia e intención.
-        </p>
-
-        <p class='text-lg mb-6 leading-relaxed'>
-        La tecnología es útil si te libera tiempo para lo más importante: <span class="font-bold text-brand-offwhite"> tu vida fuera de la pantalla</span>.
-        </p>
-
-        <p class="text-lg mb-6 leading-relaxed text-brand-offwhite">
-          <span class="bg-brand-orange/20 px-1.5 py-0.5">
-            No soy mi trabajo ni mi profesión.
-          </span>
-        </p>
-
-        <p class='text-lg mb-6 leading-relaxed'>
-        Si esto resuena con vos, entonces estás en el lugar correcto.
-        </p>
-
-    </section>
-
-    <!-- Target Audience -->
-    <section class='py-12'>
-      <h2 class='text-2xl md:text-3xl font-bold mb-4 text-brand-orange'>
-          ¿Para quién es?
-      </h2>
-
-      <ul class="mt-6 space-y-3 pl-6 mb-8 text-lg leading-relaxed marker:text-brand-orange list-disc">
-        <li>Para quienes quieren dar sus primeros pasos en Data Engineering y AWS</li>
-        <li>Para profesionales intermedios que buscan progresar hacia conceptos más avanzados y tener criterios claros de arquitectura</li>
-        <li>Para cualquiera en IT que quiera crecer profesionalmente (escalar en su puesto, negociar un mejor sueldo) pero se niegue a dejar la vida en una oficina o rol</li>
+      <ul class="grid gap-x-10 border-t-2 border-orange-primary sm:grid-cols-2">
+        {
+          expectations.items.map((item, i) => (
+            <li data-reveal style={`--d: ${i * 80}ms`} class="flex items-center gap-5 border-b border-white/10 py-6 lg:py-8">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-orange-secondary text-orange-secondary">
+                <i class="fa-solid fa-check text-sm" aria-hidden="true" />
+              </span>
+              <span class="text-lg font-semibold tracking-tight text-gray-primary lg:text-2xl" set:html={rich(item)} />
+            </li>
+          ))
+        }
       </ul>
 
-      <div class="text-center">
-          <a
-            href="#subscribe"
-            class="inline-flex items-center justify-center rounded-full bg-brand-orange px-6 py-3 text-sm font-bold text-brand-navy transition-opacity hover:opacity-90"
-          >
-            <i class="fa-solid fa-envelope-circle-check me-2"></i>
-            <span> Suscribite Ahora </span>
-          </a>
+      <div class="mt-12 flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
+        <p data-reveal class="max-w-2xl text-lg leading-relaxed text-gray-primary/80 lg:text-xl" set:html={rich(expectations.closing)} />
+        <a data-reveal href={expectations.cta.href} class="btn-primary shrink-0">
+          <i class="fa-solid fa-envelope-circle-check" aria-hidden="true"></i>
+          <span>{expectations.cta.label}</span>
+        </a>
       </div>
     </section>
 
-    <!-- Newsletter structure -->
-    <section class='py-12 border-t border-gray-800'>
-      <h2 class='text-2xl md:text-3xl font-bold mb-6 text-brand-orange'>
-        ¿Cómo está organizada?
-      </h2>
-      <p class='text-lg leading-loose mb-6'>
-          Recibirás un correo <span class="font-bold">cada semana, según disponibilidad</span>. Priorizo el respeto a tu tiempo y la calidad del contenido antes que la cantidad.
-      </p>
+    <!-- ============================== AUTOR ============================== -->
+    <section class="shell relative pb-20 pt-4 lg:pb-28">
+      <h2 data-reveal class="section-title mb-12 max-w-4xl lg:mb-16" set:html={rich(author.title)} />
 
-      <p class='text-lg leading-loose mb-6'>
-          Si no hay nada que realmente te aporte valor o te invite a la acción, no te escribo.
-      </p>
-
-      <p class='text-lg leading-loose mb-6'>
-          Cada edición se enfoca en uno de estos tres pilares:
-      </p>
-
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-3 mb-10">
-        <div class="overflow-hidden rounded-xl border border-gray-800 bg-white/5 transition-colors hover:border-brand-orange/50">
-          <img
-            src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/taller_datos_prof_iab4fn.webp"
-            alt="Taller de Datos"
-            class="h-48 w-full object-cover"
-          />
-          <div class="p-6">
-            <div class="flex items-center gap-2 mb-3">
-              <Icon name="wrench" size={20} className="text-brand-orange" />
-              <h3 class="text-xl font-bold text-brand-offwhite">
-                Taller de Datos
-              </h3>
+      <div class="grid items-start gap-10 lg:grid-cols-12 lg:gap-16">
+        <aside class="flex justify-center lg:sticky lg:top-32 lg:col-span-5">
+          <figure data-reveal class="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-orange-primary bg-blue-secondary">
+            <div class="aspect-[4/5] w-full overflow-hidden">
+              <img src={author.photo} alt={author.photoAlt} loading="lazy" class="h-full w-full object-cover" />
             </div>
-            <p class="text-sm leading-relaxed">
-                Data Engineering, Python, SQL, Git y herramientas técnicas. Conceptos fundamentales explicados de forma práctica y aplicable.
-            </p>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-blue-primary via-blue-primary/10 to-transparent" aria-hidden="true"></div>
+            <figcaption class="absolute inset-x-0 bottom-0 p-6 lg:p-7">
+              <span class="mb-3 inline-flex items-center gap-1.5 rounded-full border border-orange-secondary/60 bg-blue-primary/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-secondary backdrop-blur-sm">
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                {author.photoTag}
+              </span>
+              <p class="text-xl font-bold tracking-tight text-gray-primary">{author.photoName}</p>
+              <p class="text-sm font-medium text-gray-primary/70">{author.photoRole}</p>
+            </figcaption>
+          </figure>
+        </aside>
+
+        <article class="space-y-7 text-lg leading-relaxed text-gray-primary/80 lg:col-span-7 lg:text-xl">
+          <p data-reveal class="text-2xl font-bold leading-snug tracking-tight text-gray-primary lg:text-3xl" set:html={rich(author.lead)} />
+          {author.paragraphs.map((text) => <p data-reveal set:html={rich(text)} />)}
+          <p data-reveal class="text-xl font-semibold text-gray-primary lg:text-2xl" set:html={rich(author.closing)} />
+          <div data-reveal class="flex flex-wrap gap-4 pt-2">
+            <a href={author.cta.href} class="btn-outline group">
+              <span>{author.cta.label}</span>
+              <i class="fa-solid fa-arrow-right text-sm transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true"></i>
+            </a>
           </div>
-        </div>
-
-        <div class="overflow-hidden rounded-xl border border-gray-800 bg-white/5 transition-colors hover:border-brand-orange/50">
-          <img
-            src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/senda_nubearquitecto_prof_hdohen.webp"
-            alt="La Senda del Nubearquitecto"
-            class="h-48 w-full object-cover"
-          />
-          <div class="p-6">
-            <div class="flex items-center gap-2 mb-3">
-              <Icon name="cloud" size={20} className="text-brand-orange" />
-              <h3 class="text-xl font-bold text-brand-offwhite">
-                La Senda del Nubearquitecto
-              </h3>
-            </div>
-            <p class="text-sm leading-relaxed">
-                AWS, cloud computing y arquitectura. Aprendizajes, buenas prácticas y herramientas desde el recorrido real (no desde la teoría pura).
-            </p>
-          </div>
-        </div>
-
-        <div class="overflow-hidden rounded-xl border border-gray-800 bg-white/5 transition-colors hover:border-brand-orange/50">
-          <img
-            src="https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/carrera_y_debug_mental_prof_xsmgaw.webp"
-            alt="Carrera y Debug Mental"
-            class="h-48 w-full object-cover"
-          />
-          <div class="p-6">
-            <div class="flex items-center gap-2 mb-3">
-              <Icon name="brain" size={20} className="text-brand-orange" />
-              <h3 class="text-xl font-bold text-brand-offwhite">
-                Carrera y Debug Mental
-              </h3>
-            </div>
-            <p class="text-sm leading-relaxed">
-                El costado humano del desarrollo profesional. Estrategia laboral, toma de decisiones, foco, hábitos y cómo nuestra mente determina la clase de profesionales que somos.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <h3 class='text-2xl md:text-2xl font-bold mb-6'>
-        Lo que condimenta cada edición
-      </h3>
-
-      <p class="text-lg leading-loose mb-6">
-          Para que las lecturas sean dinámicas y te lleves valor aplicable de inmediato, los pilares principales suelen venir acompañados por dos secciones especiales:
-      </p>
-
-      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 mb-8">
-        <div class="rounded-xl border border-gray-800 bg-white/3 p-5">
-          <div class="mb-3 flex items-center gap-2">
-            <Icon name="fire" size={18} className="text-brand-orange" />
-            <h3 class="text-base font-semibold text-brand-offwhite">
-              Datazo
-            </h3>
-          </div>
-
-          <p class="text-sm leading-relaxed text-brand-gray">
-            Un recurso concreto que encontré y que pienso que te puede servir.
-            Puede ser un tutorial, un hilo de Twitter, un blog post técnico, un
-            curso o una herramienta que te va a ahorrar horas de trabajo y
-            frustración.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-gray-800 bg-white/3 p-5">
-          <div class="mb-3 flex items-center gap-2">
-            <Icon name="sprout" size={18} className="text-brand-orange" />
-            <h3 class="text-base font-semibold text-brand-offwhite">
-              Lo que aprendí hace poco
-            </h3>
-          </div>
-
-          <p class="text-sm leading-relaxed text-brand-gray">
-            Mi cable a tierra con vos. Acá te comparto de forma rápida un
-            aprendizaje real y reciente que tuve en la trinchera. No me las sé
-            todas, sigo estudiando todas las semanas y te lo muestro sin filtros.
-            Al final, vas a poder votar si querés que desarrolle ese tema en
-            profundidad en una futura edición.
-          </p>
-        </div>
+        </article>
       </div>
     </section>
-
-    <!-- Expectations -->
-    <section class='py-12 border-t border-gray-800'>
-      <h2 class='text-2xl md:text-3xl font-bold mb-6 text-brand-orange'>
-        ¿Qué vas a recibir?
-      </h2>
-      <ul class='mt-6 space-y-3 pl-6 mb-8 text-lg leading-relaxed marker:text-brand-orange list-disc'>
-        <li>Contenido técnico enfocado y digerible.</li>
-        <li>Reflexiones honestas, sin humo.</li>
-        <li>Aprendizajes reales, no solo éxitos.</li>
-        <li>Una mirada consciente sobre la carrera en tecnología.</li>
-      </ul>
-      <p class='text-lg leading-loose mb-6'>
-        Si buscás crecer como profesional sin desconectarte de vos mismo/a,
-        estás en el lugar correcto.
-      </p>
-
-      <div class="text-center">
-          <a
-            href="#subscribe"
-            class="inline-flex items-center justify-center rounded-full bg-brand-orange px-6 py-3 text-sm font-bold text-brand-navy transition-opacity hover:opacity-90"
-          >
-            <i class="fa-solid fa-envelope-circle-check me-2"></i>
-            <span> Suscribite Gratis </span>
-          </a>
-      </div>
-    </section>
-
-    <!-- About the Author -->
-    <section class="py-12 border-t border-gray-800">
-        <h2 class="text-2xl md:text-3xl font-bold mb-6 text-brand-orange">
-            ¿Quién está detrás de “El Ingeniero Consciente”?
-        </h2>
-
-        <p class="text-lg leading-loose mb-8">
-            Hola, soy Elias Velazquez. No soy un gurú infalible que se las sabe
-            todas. Soy un ingeniero de datos con ~2 años y medio de experiencia
-            profesional, enfocado en cloud architecture dentro de AWS que se equivoca,
-            investiga y aprende todos los días en la trinchera real: producción.
-        </p>
-
-        <div class="flex justify-center mb-8">
-            <img
-            src="/images/profile_pics/elias_linkedin.jpg"
-            alt="Elias Velazquez"
-            class="h-60 w-60 rounded-full object-cover border border-gray-700"
-            />
-        </div>
-
-        <p class="text-lg leading-loose mb-6">
-            Escribo esto como un compañero de ruta. En mis ediciones no vas a
-            encontrar verdades absolutas, sino mis aciertos y, sobre todo, mis
-            errores (de los que se aprende el triple).
-        </p>
-
-        <p class="text-lg leading-loose mb-6">
-            Te comparto lo que me funciona a mí para construir una carrera sólida y
-            mantener la cabeza cuerda en este ecosistema tan acelerado.
-        </p>
-
-        <p class="text-lg leading-loose mb-6 text-brand-offwhite">
-            <span class="bg-brand-orange/20 px-1.5 py-0.5">
-            Si buscás crecer como profesional sin desconectarte de vos mismo/a,
-            ¡sumate!
-            </span>
-        </p>
-    </section>
-
-
   </main>
 </SiteLayout>
+
+<style is:global>
+  @keyframes scrollHint {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(200%);
+    }
+  }
+</style>

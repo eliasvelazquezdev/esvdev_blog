@@ -1,0 +1,33 @@
+---
+import { getTagColorClasses } from "../utils/tagColors.js";
+
+interface Props {
+  name: string;
+  slug: string;
+  color?: string;
+  description?: string;
+  count?: number;
+  featured?: boolean;
+  size?: "sm" | "md";
+}
+
+const { name, slug, color, description, count, featured = false, size = "sm" } = Astro.props;
+const c = getTagColorClasses(color);
+---
+
+<a
+  href={`/blog/tags/${slug}`}
+  title={description || `Ver todos los posts sobre ${name}`}
+  class:list={[
+    "group inline-flex items-center gap-2 rounded-full font-semibold transition-[border-color,background-color,transform] duration-300 hover:-translate-y-0.5",
+    c.bg,
+    c.text,
+    c.hover,
+    size === "md" ? "px-4 py-2 text-sm lg:text-base" : "px-3 py-1.5 text-xs lg:text-sm",
+    featured && "ring-1 ring-orange-secondary/70 ring-offset-2 ring-offset-blue-primary",
+  ]}
+>
+  <span class:list={["h-1.5 w-1.5 rounded-full", c.dot]} aria-hidden="true"></span>
+  <span>#{name}</span>
+  {count !== undefined && <span class:list={["rounded-full px-2 py-0.5 text-[11px] tabular-nums", c.badge]}>{count}</span>}
+</a>

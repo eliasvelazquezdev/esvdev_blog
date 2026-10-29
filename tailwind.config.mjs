@@ -103,7 +103,18 @@ export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Manrope Variable"', '"Manrope"', "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
+      },
       colors: {
+        // Paleta compartida con evelazquez.dev
+        "blue-primary": "#01161e",
+        "blue-secondary": "#14213d",
+        "orange-primary": "#f97316",
+        "orange-secondary": "#F4A518",
+        "gray-primary": "#e5e5e5",
+        "gray-secondary": "#fafafa",
         "brand-offwhite": offwhiteScale,
         "brand-navy": navyScale,
         "brand-navy-mid": navyMidScale,

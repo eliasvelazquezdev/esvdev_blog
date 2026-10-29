@@ -4,6 +4,9 @@ import PostDescription from "../../../../components/PostDescription.astro";
 import Breadcrumbs from "../../../../components/Breadcrumbs.astro";
 import PaginationArrowsForPostsByTag from "../../../../components/PaginationArrowsForPostsByTag.astro";
 import { getTagColorClasses } from "../../../../utils/tagColors.js";
+import PageHero from "../../../../components/PageHero.astro";
+import blog from "../../../../data/blog.json";
+import { fmt } from "../../../../utils/richText.js";
 
 import { sanityClient } from "sanity:client";
 
@@ -81,63 +84,68 @@ const hasPrev = currentPage > 1;
 const nextPage = hasNext ? currentPage + 1 : null;
 const prevPage = hasPrev ? currentPage - 1 : null;
 
-const pageTitle = currentPage === 1
-  ? `Posts etiquetados con ${currentTagData?.name || tag}`
-  : `Posts etiquetados con ${currentTagData?.name || tag} - Página ${currentPage}`;
+const tagColor = getTagColorClasses(currentTagData?.color);
+const tagName = currentTagData?.name || tag;
+
+// Los textos de esta página están en src/data/blog.json → "tagPage"
+const t = blog.tagPage;
+const pageTitle = fmt(currentPage === 1 ? t.pageTitle : t.pageTitlePaged, { tag: tagName, page: currentPage });
 ---
 
 <SiteLayout pageTitle={pageTitle}>
-    <main class="max-w-4xl mx-auto px-6 pb-24">
-        <Breadcrumbs linkList={[
-            {label: "Tags", link : "/blog/tags"},
-            {label: currentTagData?.name || tag, link: currentPage === 1 ? undefined : `/blog/tags/${tag}`},
-            ...(currentPage > 1 ? [{label: `Página ${currentPage}`}] : [])
-        ]}
+    <PageHero title={`#${tagName}`} kicker={t.kicker} ghost={`#${tagName}`} size="md">
+        <Breadcrumbs
+            slot="breadcrumbs"
+            linkList={[
+                { label: blog.tags.title, link: "/blog/tags" },
+                { label: tagName, link: currentPage === 1 ? undefined : `/blog/tags/${tag}` },
+                ...(currentPage > 1 ? [{ label: fmt(blog.postsPage.breadcrumbPage, { page: currentPage }) }] : []),
+            ]}
+        />
+        {currentTagData?.description && <p>{currentTagData.description}</p>}
+        <div slot="after" class="flex flex-wrap items-center gap-3">
+            <span class={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-semibold ${tagColor.bg} ${tagColor.text}`}>
+                <span class={`h-1.5 w-1.5 rounded-full ${tagColor.dot}`} aria-hidden="true" />
+                {total} {total === 1 ? blog.tags.post : blog.tags.posts}
+            </span>
+            {totalPages > 1 && <span class="kicker">{fmt(t.pageLabel, { page: currentPage, total: totalPages })}</span>}
+        </div>
+    </PageHero>
+
+    <main class="shell pb-20 lg:pb-28">
+        {
+            posts.length === 0 ? (
+                <div data-reveal class="card p-10 text-center">
+                    <p class="text-xl font-semibold text-gray-primary">{t.empty}</p>
+                </div>
+            ) : (
+                <div>
+                    {posts.map((post, i) => (
+                        <PostDescription
+                            index={offset + i}
+                            postURL={`/blog/${post.slug.current}`}
+                            postTitle={post.title}
+                            postDate={post.publishedAt}
+                            postDescription={post.excerpt}
+                        />
+                    ))}
+                </div>
+            )
+        }
+
+        <PaginationArrowsForPostsByTag
+            next={nextPage ? `/blog/tags/${tag}/page${nextPage}` : null}
+            prev={prevPage ? `/blog/tags/${tag}/page${prevPage}` : null}
+            tagName={tagName}
+            currentPage={currentPage}
+            totalPages={totalPages}
         />
 
-    <h2 class="text-2xl md:text-3xl font-bold mb-5 ">
-        Posts con la etiqueta
-        <span class={`font-bold ${getTagColorClasses(currentTagData?.color).text} hover:border-b-4 hover:border-${currentTagData?.color || 'orange'}-600 hover:border-dashed`}>
-            { `#${currentTagData?.name || tag}` }
-        </span>
-        {currentPage > 1 && (
-            <span class="text-sm text-brand-gray ml-2">
-                (Página {currentPage} de {totalPages})
-            </span>
-        )}
-    </h2>
-
-    {currentTagData?.description && (
-        <p class="text-brand-gray mb-6 italic">
-            {currentTagData.description}
-        </p>
-    )}
-
-    {
-        posts.length === 0 ?
-        <h2 class="text-xl">Nada por aquí. Muy pronto voy a hablar de este tema, así que date una vuelta pronto. 😉</h2>
-        :
-        <div class="grid grid-cols-1 gap-6">
-            {posts.map((post) =>
-                <PostDescription
-                    postURL={`/blog/${post.slug.current}`}
-                    postTitle={post.title}
-                    postDate={post.publishedAt}
-                    postDescription={post.excerpt}
-                    clickableCard={true}
-                    className="mb-0"
-                />
-            )}
+        <div data-reveal class="mt-12 flex justify-center">
+            <a href="/blog/tags" class="btn-outline group">
+                <i class="fa-solid fa-arrow-left text-sm transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true"></i>
+                <span>{t.backToTags}</span>
+            </a>
         </div>
-
-    }
-
-    <PaginationArrowsForPostsByTag
-        next={nextPage ? `/blog/tags/${tag}/page${nextPage}` : null}
-        prev={prevPage ? `/blog/tags/${tag}/page${prevPage}` : null}
-        tagName={currentTagData?.name || tag}
-        currentPage={currentPage}
-        totalPages={totalPages}
-    />
     </main>
 </SiteLayout>

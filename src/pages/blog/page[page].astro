@@ -3,6 +3,9 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import PostDescription from '../../components/PostDescription.astro';
 import PaginationArrowsForPosts from '../../components/PaginationArrowsForPosts.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
+import blog from '../../data/blog.json';
+import { fmt } from '../../utils/richText.js';
 
 import { sanityClient } from "sanity:client";
 
@@ -48,31 +51,32 @@ const hasPrev = currentPage > 1;
 const nextPage = hasNext ? currentPage + 1 : null;
 const prevPage = hasPrev ? currentPage - 1 : null;
 
-const pageTitle = `Posts - Página ${currentPage}`;
+// Los textos de esta página están en src/data/blog.json → "postsPage"
+const t = blog.postsPage;
+const pageTitle = fmt(t.pageTitle, { page: currentPage });
 ---
 
 <SiteLayout pageTitle={pageTitle}>
-    <main class="max-w-4xl mx-auto px-6 pb-24">
-        <div class="mb-5">
-            <Breadcrumbs linkList={[
-                {label: "Blog", link:"/blog"},
-                {label: `Página ${currentPage}`}
+    <PageHero title={t.title} titleLight={t.titleLight} ghost={t.ghost} size="md">
+        <Breadcrumbs
+            slot="breadcrumbs"
+            linkList={[
+                { label: "Blog", link: "/blog" },
+                { label: fmt(t.breadcrumbPage, { page: currentPage }) },
             ]}
-            />
+        />
+        <p>{fmt(t.description, { page: currentPage, total: totalPages })}</p>
+    </PageHero>
 
-            <h2 class="text-3xl font-bold">Posts</h2>
-            <p>Todos los articulos que he publicado. Página {currentPage} de {totalPages}</p>
-        </div>
-
-        <div class="grid grid-cols-1 gap-6">
-            {posts.map((post) => (
+    <main class="shell pb-20 lg:pb-28">
+        <div>
+            {posts.map((post, i) => (
                 <PostDescription
+                    index={offset + i}
                     postURL={`/blog/${post.slug.current}`}
                     postTitle={post.title}
                     postDate={post.publishedAt}
                     postDescription={post.excerpt}
-                    clickableCard={true}
-                    className="mb-0"
                 />
             ))}
         </div>

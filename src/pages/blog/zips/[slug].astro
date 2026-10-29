@@ -1,14 +1,10 @@
 ---
-import AuthorLayout from "../../../components/AuthorLayout.astro";
-import SiteLayout from "../../../layouts/SiteLayout.astro";
-import ShareButtons from "../../../components/ShareButtons.astro";
-import { components } from '../../../components/PortableTextComponents.jsx';
-
-
-import { getTagColorClasses } from "../../../utils/tagColors";
+import PostLayout from "../../../layouts/PostLayout.astro";
+import ArticleView from "../../../components/ArticleView.astro";
+import blog from "../../../data/blog.json";
+import PageHero from "../../../components/PageHero.astro";
 
 import { sanityClient } from "sanity:client";
-import { PortableText } from "astro-portabletext";
 import type { SanityDocument } from "@sanity/client";
 
 const { slug } = Astro.params;
@@ -31,7 +27,6 @@ const ZIP_BY_SLUG_QUERY = `*[
 }`;
 
 const zip = await sanityClient.fetch<SanityDocument | null>(ZIP_BY_SLUG_QUERY);
-const portableText = zip?.body ?? [];
 
 if (!zip) {
     Astro.response.status = 404;
@@ -41,61 +36,13 @@ const canonicalURL = new URL(`/blog/zips/${slug}`, Astro.site).href;
 
 ---
 
-<SiteLayout pageTitle={zip?.title ?? "Zip no encontrado"} canonicalURL={canonicalURL}>
+<PostLayout pageTitle={zip?.title ?? `${blog.notFound.zip.title}${blog.notFound.zip.titleLight}`} canonicalURL={canonicalURL} description={zip?.excerpt}>
     {zip ? (
-        <main class="max-w-3xl mx-auto px-6 pb-24">
-            <header class="pt-16 pb-12">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4 text-brand-orange">
-                    {zip.title}
-                </h1>
-                <AuthorLayout publishedAt={zip.publishedAt} />
-                <div class="text-brand-gray mt-6">
-                    {zip.excerpt}
-                </div>
-            </header>
-
-            <article class="content text-brand-offwhite">
-                <PortableText value={portableText} components={components} />
-            </article>
-
-            {zip.tags && zip.tags.length > 0 && (
-                <div class="mt-8 pt-6">
-                    <h3 class="text-xs font-bold uppercase tracking-widest text-brand-gray mb-4">Tags</h3>
-                    <div class="flex flex-wrap gap-2">
-                        {zip.tags.map((tag) => {
-                            const colors = getTagColorClasses(tag.color);
-                            return (
-                                <a
-                                    href={`/blog/tags/${tag.slug}`}
-                                    class={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
-                                    title={tag.description || `Ver todos los posts sobre ${tag.name}`}
-                                >
-                                    #{tag.name}
-                                </a>
-                            );
-                        })}
-                    </div>
-                </div>
-            )}
-
-            <section
-                class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
-                data-purpose="social-sharing"
-            >
-                <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
-                    Compartir
-                </span>
-                <ShareButtons title={zip.title} canonicalURL={canonicalURL} />
-            </section>
-        </main>
+        <ArticleView doc={zip} canonicalURL={canonicalURL} kind="zip" />
     ) : (
-        <main class="max-w-3xl mx-auto px-6 pt-16 pb-24">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-brand-orange">
-                Zip no encontrado
-            </h1>
-            <p class="text-brand-gray">
-                El contenido que buscas no existe o ya no está disponible.
-            </p>
-        </main>
+        <PageHero title={blog.notFound.zip.title} titleLight={blog.notFound.zip.titleLight} kicker={blog.notFound.kicker} size="md">
+            <p>{blog.notFound.zip.text}</p>
+            <a slot="after" href={blog.notFound.zip.href} class="btn-outline">{blog.notFound.zip.button}</a>
+        </PageHero>
     )}
-</SiteLayout>
+</PostLayout>

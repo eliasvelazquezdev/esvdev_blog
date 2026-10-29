@@ -1,0 +1,49 @@
+---
+import home from "../data/home.json";
+
+interface Props {
+  topics?: string[];
+  align?: "left" | "right";
+}
+
+const { topics = home.hero.topics, align = "right" } = Astro.props;
+const loop = [...topics, ...topics];
+---
+
+<div
+  class:list={[
+    "marquee relative w-full max-w-xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_12%,#000_88%,transparent)] 2xl:max-w-3xl",
+    align === "right" ? "lg:ml-auto" : "",
+  ]}
+  aria-label={topics.join(", ")}
+>
+  <ul class="marquee__track flex w-max items-center py-2" aria-hidden="true">
+    {
+      loop.map((t) => (
+        <li class="flex items-center gap-5 whitespace-nowrap pr-5">
+          <span class="text-base font-bold uppercase tracking-[0.18em] text-orange-secondary lg:text-lg">{t}</span>
+          <span class="text-orange-primary/70">✦</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .marquee__track {
+    animation: marquee 28s linear infinite;
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

@@ -1,42 +1,15 @@
 ---
+import PaginationArrowsForPosts from "./PaginationArrowsForPosts.astro";
+
 interface Props {
-    next?: string | null;
-    prev?: string | null;
-    tagName: string;
-    currentPage?: number;
-    totalPages?: number;
+  next?: string | null;
+  prev?: string | null;
+  tagName: string;
+  currentPage?: number;
+  totalPages?: number;
 }
 
-const { next, prev, tagName, currentPage, totalPages } = Astro.props;
+const { next, prev, tagName, currentPage = 1, totalPages = 1 } = Astro.props;
 ---
-<nav class="my-6 flex justify-between items-center mt-8 pt-8">
-    <div class="flex-1">
-        {prev && (
-            <a
-                href={prev}
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-orange-500 hover:text-white"
-            >
-                ← Página anterior
-            </a>
-        )}
-    </div>
 
-    {(currentPage && totalPages) && (
-        <div class="flex items-center space-x-2">
-            <span class="text-sm text-gray-300">
-                Página {currentPage} de {totalPages} para #{tagName}
-            </span>
-        </div>
-    )}
-
-    <div class="flex-1 text-right">
-        {next && (
-            <a
-                href={next}
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-orange-500 hover:text-white"
-            >
-                Página siguiente →
-            </a>
-        )}
-    </div>
-</nav>
+<PaginationArrowsForPosts next={next} prev={prev} currentPage={currentPage} totalPages={totalPages} context={`#${tagName}`} />

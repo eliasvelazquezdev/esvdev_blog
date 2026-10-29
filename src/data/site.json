@@ -1,0 +1,72 @@
+{
+  "$descripcion": "Datos globales del sitio: marca, SEO, autor, navegación, redes, newsletter y footer. Se usan en todas las páginas.",
+
+  "brand": {
+    "name": "El Ingeniero Consciente",
+    "wordmark": { "light": "el ingeniero", "strong": "consciente" },
+    "logo": "/favicon.svg"
+  },
+
+  "seo": {
+    "defaultDescription": "Data Engineering - AWS - Python",
+    "ogImage": "/thumbnail/ingeniero_consciente_thumb.jpg",
+    "lang": "es"
+  },
+
+  "author": {
+    "name": "Elias Velázquez",
+    "role": "Data Engineer · AWS",
+    "location": "Buenos Aires",
+    "avatar": "/images/profile_pics/elias_linkedin.jpg",
+    "bio": "Data Engineer en Buenos Aires. Escribo sobre datos, AWS y cómo crecer en tecnología sin perderte en el camino.",
+    "website": "https://www.evelazquez.dev/",
+    "xHandle": "ingeconsciente"
+  },
+
+  "nav": {
+    "links": [
+      { "label": "Blog", "href": "/blog/" },
+      { "label": "Zips", "href": "/blog/zips/" },
+      { "label": "Tags", "href": "/blog/tags/" },
+      { "label": "About", "href": "/about/" }
+    ],
+    "cta": { "label": "Suscribite", "href": "#subscribe" }
+  },
+
+  "social": [
+    { "name": "Web personal", "href": "https://www.evelazquez.dev/", "icon": "fa-solid fa-globe" },
+    { "name": "LinkedIn", "href": "https://www.linkedin.com/in/eliassvelazquez", "icon": "fa-brands fa-linkedin-in" },
+    { "name": "GitHub", "href": "https://www.github.com/eliasvelazquezdev", "icon": "fa-brands fa-github" },
+    { "name": "X", "href": "https://x.com/ingeconsciente", "icon": "fa-brands fa-x-twitter" },
+    { "name": "Newsletter", "href": "https://newsletter.elingenieroconsciente.com", "icon": "fa-solid fa-pen-nib" }
+  ],
+
+  "newsletter": {
+    "formAction": "https://newsletter.elingenieroconsciente.com/api/v1/free?nojs=true",
+    "kicker": "Newsletter semanal",
+    "title": "Suscribite a ^^El Ingeniero^^ ~Consciente~",
+    "description": "Recibí ideas prácticas sobre datos, arquitectura cloud y crecimiento profesional. Sin humo y con foco en lo aplicable.",
+    "chips": [
+      { "icon": "fa-solid fa-users", "label": "+250 lectores" },
+      { "icon": "fa-solid fa-calendar-week", "label": "Cada semana" },
+      { "icon": "fa-solid fa-heart", "label": "100% gratis" }
+    ],
+    "emailLabel": "Tu correo electrónico",
+    "emailPlaceholder": "vos@ejemplo.com",
+    "button": "Suscribirme",
+    "legal": "Podés darte de baja cuando quieras, con un solo click. Al suscribirte aceptás los [Términos de uso de Substack](https://substack.com/tos) y su [Política de privacidad](https://substack.com/privacy)."
+  },
+
+  "footer": {
+    "links": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Blog", "href": "/blog/" },
+      { "label": "Zips", "href": "/blog/zips/" },
+      { "label": "Tags", "href": "/blog/tags/" },
+      { "label": "About", "href": "/about/" }
+    ],
+    "backToTop": "Volver arriba",
+    "copyright": "El Ingeniero Consciente. Todos los derechos reservados.",
+    "credit": { "prefix": "Diseñado y desarrollado por ", "name": "Elias Velazquez", "href": "https://www.evelazquez.dev/" }
+  }
+}

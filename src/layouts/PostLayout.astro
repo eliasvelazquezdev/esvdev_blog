@@ -4,37 +4,62 @@ import SiteLayout from "./SiteLayout.astro";
 interface Props {
   pageTitle: string;
   canonicalURL?: string;
+  description?: string;
 }
 
-const { pageTitle, canonicalURL } = Astro.props;
+const { pageTitle, canonicalURL, description } = Astro.props;
 ---
 
-<SiteLayout pageTitle={pageTitle} canonicalURL={canonicalURL}>
+<SiteLayout pageTitle={pageTitle} canonicalURL={canonicalURL} description={description}>
   <slot />
 
   <style is:global>
-    article.content p {
-      line-height: 1.8;
-      margin-bottom: 1.75rem;
-      font-size: 1.125rem;
+    /* Estilos del cuerpo de los artículos (contenido de Sanity) */
+    article.content > :first-child {
+      margin-top: 0;
     }
 
-    article.content h2 {
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-      font-size: 1.875rem;
-      color: #fca311;
+    article.content pre {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(244, 165, 24, 0.5) transparent;
     }
 
-    article.content a {
-      color: #fca311;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-      transition: opacity 0.2s;
+    article.content pre::-webkit-scrollbar {
+      height: 8px;
     }
 
-    article.content a:hover {
-      opacity: 0.8;
+    article.content hr {
+      margin: 3.5rem 0;
+      height: 2px;
+      border: 0;
+      background: linear-gradient(to right, #f97316, rgba(244, 165, 24, 0.4), transparent);
     }
   </style>
+
+  <script>
+    // Botón "Copiar" de los bloques de código
+    document.addEventListener("astro:page-load", () => {
+      document.querySelectorAll<HTMLButtonElement>("[data-code-copy]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const block = btn.closest(".code-block");
+          const code = block?.querySelector("code");
+          if (!code) return;
+          const clone = code.cloneNode(true) as HTMLElement;
+          clone.querySelectorAll(".linenumber, .react-syntax-highlighter-line-number").forEach((n) => n.remove());
+          const label = btn.querySelector("[data-code-copy-label]");
+          try {
+            await navigator.clipboard.writeText(clone.textContent || "");
+            if (label) label.textContent = btn.dataset.copiedLabel || "";
+            btn.classList.add("!border-orange-secondary", "!text-orange-secondary");
+            setTimeout(() => {
+              if (label) label.textContent = btn.dataset.copyLabel || "";
+              btn.classList.remove("!border-orange-secondary", "!text-orange-secondary");
+            }, 1800);
+          } catch {
+            /* sin permisos de portapapeles */
+          }
+        });
+      });
+    });
+  </script>
 </SiteLayout>

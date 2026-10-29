@@ -1,103 +1,158 @@
 ---
-import Social from "./Social.astro";
+import site from "../data/site.json";
+import { rich } from "../utils/richText.js";
+
+const { brand, newsletter, footer, social } = site;
 ---
 
-<footer
-  class="bg-brand-navy-dark text-brand-offwhite py-24"
-  data-purpose="main-footer"
->
-  <div class="max-w-4xl mx-auto px-6">
-    <div class="grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <img
-          class="hidden md:block w-12 h-12 rounded-full object-cover mb-4"
-          src="/logo/ingeniero_consciente_logo_no_under.svg"
-          alt="ingeniero_consciente_logo"
-        />
-        <h3 class="text-3xl mb-4 text-brand-orange">
-          Suscribite a El Ingeniero Consciente
-        </h3>
-        <p class="text-brand-gray text-sm leading-relaxed">
-          Recibí ideas prácticas sobre datos, arquitectura cloud y crecimiento
-          profesional. Sin humo y con foco en lo aplicable.
-        </p>
-
-        <!-- Desktop social links (left side of subscribe section) -->
-        <div class="hidden md:flex items-center gap-3 mt-6">
-          <a
-            href="https://www.evelazquez.dev/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Ir a evelazquez.dev"
-            class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
-          >
-            <i class="fa-solid fa-square-poll-horizontal text-lg lg:text-2xl"></i>
-          </a>
-
-          <Social platform="linkedin" username="eliassvelazquez" className="text-brand-offwhite" />
-          <Social platform="github" username="eliasvelazquezdev" className="text-brand-offwhite" />
-
-          <a
-            href="https://newsletter.elingenieroconsciente.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Ir a la newsletter"
-            class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
-          >
-            <i class="fa-solid fa-square-pen text-lg lg:text-2xl"></i>
-          </a>
-        </div>
-      </div>
-
-      <div
-        id="subscribe"
-        class="flex flex-col gap-4"
-        data-purpose="subscribe-form-container"
-      >
-        <div class="rounded-xl overflow-hidden shadow-lg border border-gray-700">
-          <iframe
-            src="https://newsletter.elingenieroconsciente.com/embed"
-            width="100%"
-            height="150"
-            style="border: none; background: white;"
-            frameborder="0"
-            scrolling="no"
-            title="Suscribirse a El Ingeniero Consciente"
-          ></iframe>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile social links (below main section, not above CTA) -->
-    <div class="flex md:hidden mt-10 items-center justify-center gap-3">
-      <a
-        href="https://www.evelazquez.dev/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Ir a evelazquez.dev"
-        class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
-      >
-        <i class="fa-solid fa-square-poll-horizontal text-lg"></i>
-      </a>
-
-      <Social platform="linkedin" username="eliassvelazquez" className="text-brand-offwhite" />
-      <Social platform="github" username="eliasvelazquezdev" className="text-brand-offwhite" />
-
-      <a
-        href="https://newsletter.elingenieroconsciente.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Ir a la newsletter"
-        class="inline-flex items-center justify-center text-brand-offwhite hover:text-brand-orange transition-colors duration-200"
-      >
-        <i class="fa-solid fa-square-pen text-lg"></i>
-      </a>
-    </div>
-
-    <div
-      class="mt-24 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-brand-gray uppercase tracking-widest gap-6"
+<!-- Suscripción -->
+<section id="subscribe" class="shell scroll-mt-28 pb-24 pt-10 lg:pb-32" data-purpose="subscribe">
+  <div
+    data-reveal
+    class="relative overflow-hidden rounded-3xl border-2 border-orange-primary bg-blue-secondary"
+  >
+    <!-- Decoración -->
+    <div class="halftone pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_45%_70%_at_0%_100%,#000,transparent)]" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(244,165,24,0.16),transparent_65%)]" aria-hidden="true"></div>
+    <span
+      class="ghost-word -bottom-6 right-4 text-[9rem] lg:text-[13rem]"
+      aria-hidden="true">{"{ }"}</span
     >
-      <p>© 2026 El Ingeniero Consciente. Todos los derechos reservados.</p>
+
+    <div class="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-12 lg:gap-14 lg:p-14">
+      <div class="lg:col-span-6">
+        <p class="kicker mb-4 !text-orange-secondary">{newsletter.kicker}</p>
+        <h2
+          class="text-3xl font-extrabold leading-[1.1] tracking-tight text-gray-primary sm:text-4xl xl:text-5xl"
+          set:html={rich(newsletter.title)}
+        />
+        <p class="mt-5 max-w-xl text-base leading-relaxed text-gray-primary/75 lg:text-lg" set:html={rich(newsletter.description)} />
+        <ul class="mt-7 flex flex-wrap gap-2.5">
+          {
+            newsletter.chips.map((chip) => (
+              <li class="chip">
+                <i class={`${chip.icon} text-xs text-orange-secondary`} aria-hidden="true" />
+                {chip.label}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="lg:col-span-6" data-purpose="subscribe-form-container">
+        <!-- Formulario nativo: envía directo a Substack (sin iframe) -->
+        <form
+          action={newsletter.formAction}
+          method="post"
+          target="_blank"
+          class="group/form"
+        >
+          <label for="subscribe-email" class="kicker mb-4 block">{newsletter.emailLabel}</label>
+          <div
+            class="flex flex-col gap-3 border-b-2 border-orange-secondary/40 pb-3 transition-colors duration-300 focus-within:border-orange-secondary sm:flex-row sm:items-center"
+          >
+            <div class="flex flex-1 items-center gap-3">
+              <i class="fa-regular fa-envelope text-xl text-orange-secondary/70" aria-hidden="true"></i>
+              <input
+                id="subscribe-email"
+                type="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder={newsletter.emailPlaceholder}
+                class="w-full min-w-0 bg-transparent py-2 text-lg font-medium text-gray-primary placeholder:text-gray-primary/35 focus:outline-none focus-visible:outline-none lg:text-xl"
+              />
+            </div>
+            <button type="submit" class="btn-primary shrink-0 justify-center">
+              <span>{newsletter.button}</span>
+              <i class="fa-solid fa-arrow-right text-sm transition-transform duration-300 group-hover/form:translate-x-0.5" aria-hidden="true"></i>
+            </button>
+          </div>
+        </form>
+        <p
+          class="mt-4 text-xs leading-relaxed text-gray-primary/45"
+          set:html={rich(newsletter.legal, { linkClass: "underline underline-offset-2 hover:text-orange-secondary" })}
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="relative w-full bg-blue-primary" data-purpose="main-footer">
+  <!-- Línea de marca (igual que la navbar) -->
+  <span class="pointer-events-none absolute inset-x-0 top-0 h-[4px] bg-orange-primary" aria-hidden="true"></span>
+
+  <div class="mx-auto max-w-[2400px] px-5 pb-8 pt-12 lg:px-10 xl:px-20">
+    <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+      <!-- Marca -->
+      <a href="/" class="flex w-fit items-center gap-4" aria-label={brand.name}>
+        <img src={brand.logo} alt="" class="h-16 w-auto" />
+        <span class="text-lg font-semibold leading-tight tracking-tight text-gray-primary">
+          {brand.wordmark.light}<br /><span class="font-extrabold text-orange-secondary">{brand.wordmark.strong}</span>
+        </span>
+      </a>
+
+      <!-- Navegación -->
+      <nav class="-mx-3 flex flex-wrap items-center gap-x-1 gap-y-2 lg:mx-0 lg:gap-x-2" aria-label="Footer">
+        {
+          footer.links.map((link) => (
+            <a
+              href={link.href}
+              class="rounded-md px-3 py-2 text-base font-medium tracking-tight text-gray-primary/75 transition-colors duration-300 hover:text-orange-secondary"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <!-- Redes + volver arriba -->
+      <div class="flex flex-wrap items-center gap-3">
+        {
+          social.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={link.name}
+              title={link.name}
+              class="flex h-11 w-11 items-center justify-center rounded-lg border border-orange-secondary/30 bg-blue-secondary/30 text-orange-secondary transition-[border-color,background-color,transform] duration-300 hover:-translate-y-0.5 hover:border-orange-secondary hover:bg-orange-secondary/10"
+            >
+              <i class={`${link.icon} text-lg`} aria-hidden="true" />
+            </a>
+          ))
+        }
+        <a href="#top" data-footer-top class="btn-outline group/top !px-4 !py-2 !text-base">
+          <span>{footer.backToTop}</span>
+          <i class="fa-solid fa-arrow-up text-sm transition-transform duration-300 group-hover/top:-translate-y-0.5" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Fila inferior -->
+    <div
+      class="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-gray-primary/55 md:flex-row md:items-center md:justify-between"
+    >
+      <p>&copy; {new Date().getFullYear()} {footer.copyright}</p>
+      <a
+        href={footer.credit.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-fit transition-colors duration-300 hover:text-gray-primary"
+      >
+        {footer.credit.prefix}<span class="font-semibold text-orange-secondary">{footer.credit.name}</span>
+      </a>
     </div>
   </div>
 </footer>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLAnchorElement>("[data-footer-top]").forEach((el) =>
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }),
+    );
+  });
+</script>
