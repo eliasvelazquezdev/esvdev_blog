@@ -3,8 +3,8 @@
   "pageTitle": "El Ingeniero Consciente",
   "seo": {
     "$descripcion": "Título (hasta ~60) y descripción (hasta ~155) para Google y redes.",
-    "title": "El Ingeniero Consciente · Newsletter de Data Engineering y AWS",
-    "description": "Newsletter semanal de Elias Velazquez sobre Data Engineering, AWS y carrera en tecnología para crecer profesionalmente sin quemarte en el camino.",
+    "title": "El Ingeniero Consciente — Data Engineering, AWS y Carrera",
+    "description": "Blog y newsletter de Elias Velazquez sobre ingeniería de datos, arquitectura en AWS y carrera tech. Guías prácticas y lecturas rápidas para ingenieros.",
     "ogKicker": "Newsletter semanal"
   },
   "hero": {

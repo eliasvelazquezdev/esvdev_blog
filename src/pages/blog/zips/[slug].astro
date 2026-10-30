@@ -60,7 +60,7 @@ const jsonLd = zip
               mainEntityOfPage: { "@id": `${canonical}#webpage` },
               headline: zip.title,
               description: seoDescription,
-              image: { "@type": "ImageObject", url: ogImage, width: 1200, height: 630 },
+              image: { "@type": "ImageObject", url: ogImage },
               datePublished: zip.publishedAt,
               dateModified: zip._updatedAt ?? zip.publishedAt,
               author: personRef,

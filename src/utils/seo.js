@@ -23,7 +23,11 @@ export const fullTitle = (title) => {
 };
 
 /** URL de la miniatura generada automáticamente (ver src/pages/og/[kind]/[slug].png.ts) */
-export const ogImageUrl = (kind, slug, version = "") =>
+// Hoy todas las páginas usan la imagen fija de site.json → seo.ogImage (cuadrada, carga instantánea en WhatsApp).
+// Las tarjetas generadas por artículo siguen disponibles en /og/<tipo>/<slug>.png por si se quieren volver a usar.
+export const OG_IMAGE = abs(site.seo.ogImage);
+export const ogImageUrl = () => OG_IMAGE;
+export const generatedOgImageUrl = (kind, slug, version = "") =>
   abs(`/og/${kind}/${encodeURIComponent(slug)}.png${version ? `?v=${encodeURIComponent(version)}` : ""}`);
 
 // ===== Datos estructurados =====
@@ -89,7 +93,7 @@ export const pageNode = (type, { url, title, description, image, breadcrumb = fa
   description,
   inLanguage: site.seo.lang,
   isPartOf: { "@id": `${SITE_URL}/#website` },
-  ...(image ? { primaryImageOfPage: { "@type": "ImageObject", url: image, width: 1200, height: 630 } } : {}),
+  ...(image ? { primaryImageOfPage: { "@type": "ImageObject", url: image } } : {}),
   ...(breadcrumb ? { breadcrumb: { "@id": `${url}#breadcrumb` } } : {}),
   ...extra,
 });
