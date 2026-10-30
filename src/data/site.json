@@ -11,12 +11,14 @@
   "seo": {
     "$descripcion": "SEO global del blog. Los títulos y descripciones de cada página están en home.json, blog.json y about.json (bloque \"seo\"). Los de cada artículo salen de Sanity (título y extracto).",
     "siteUrl": "https://elingenieroconsciente.com",
+    "$ayuda_ogImage": "Imagen cuadrada (600x600) que muestran WhatsApp, LinkedIn y demás redes al compartir cualquier página del blog. Va en public/.",
+    "ogImage": "/og/el-ingeniero-consciente.jpg",
     "lang": "es",
     "locale": "es_AR",
     "defaultDescription": "Newsletter y blog de Elias Velazquez sobre Data Engineering, arquitectura en AWS y carrera en tecnología, sin humo y sin quemarte en el camino.",
     "twitterHandle": "@ingeconsciente",
     "themeColor": "#01161e",
-    "ogImageAlt": "El Ingeniero Consciente — newsletter y blog de Data Engineering y AWS por Elias Velazquez",
+    "ogImageAlt": "El Ingeniero Consciente — logo",
     "keywords": [
       "El Ingeniero Consciente",
       "Elias Velazquez",
