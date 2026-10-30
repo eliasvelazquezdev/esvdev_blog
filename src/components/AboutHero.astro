@@ -17,21 +17,21 @@ const { kicker, ghost, title, highlight, imageUrl, imageAlt = "Foto del autor", 
 
 <section class="relative overflow-x-clip" data-purpose="about-hero">
   <!-- Encabezado -->
-  <div class="relative overflow-hidden pb-10 pt-32 lg:pb-16 lg:pt-44">
+  <div class="relative flex min-h-[26rem] flex-col justify-center overflow-hidden pb-16 pt-36 sm:min-h-[30rem] lg:min-h-[36rem] lg:pb-24 lg:pt-48 xl:min-h-[40rem]">
     <PlexusBackground density="soft" />
-    {ghost && <span class="ghost-word -right-4 top-24 z-[1] text-[22vw] lg:text-[16vw]" aria-hidden="true">{ghost}</span>}
-    <div class="shell relative z-10">
-      {kicker && <p class="hero-appear kicker mb-5 !text-orange-secondary">{kicker}</p>}
+    {ghost && <span class="ghost-word -right-4 top-1/2 z-[1] -translate-y-[38%] text-[22vw] lg:text-[16vw]" aria-hidden="true">{ghost}</span>}
+    <div class="shell relative z-10 w-full">
+      {kicker && <p class="hero-appear kicker mb-6 !text-orange-secondary lg:mb-8">{kicker}</p>}
       <h1
         data-bg-quiet
-        class="hero-appear max-w-5xl text-5xl font-extrabold leading-[1.02] tracking-tight text-gray-primary sm:text-6xl lg:text-7xl xl:text-8xl"
+        class="hero-appear max-w-5xl text-5xl font-extrabold leading-[1.06] tracking-tight text-gray-primary sm:text-6xl lg:text-7xl xl:text-8xl"
         style="--d: 120ms; text-shadow: 0 2px 18px rgba(8, 18, 40, 0.7);"
       >
         {title}
       </h1>
       <p
         data-bg-quiet
-        class="hero-appear mt-4 text-2xl font-normal tracking-tight text-orange-secondary sm:text-3xl lg:text-4xl"
+        class="hero-appear mt-5 text-2xl lg:mt-7 font-normal tracking-tight text-orange-secondary sm:text-3xl lg:text-4xl"
         style="--d: 220ms"
       >
         {highlight}

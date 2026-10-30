@@ -1,49 +1,94 @@
 {
   "$descripcion": "Textos de la portada (/). Cada bloque corresponde a una sección, en el orden en que aparecen.",
-
   "pageTitle": "El Ingeniero Consciente",
-
+  "seo": {
+    "$descripcion": "Título (hasta ~60) y descripción (hasta ~155) para Google y redes.",
+    "title": "El Ingeniero Consciente · Newsletter de Data Engineering y AWS",
+    "description": "Newsletter semanal de Elias Velazquez sobre Data Engineering, AWS y carrera en tecnología para crecer profesionalmente sin quemarte en el camino.",
+    "ogKicker": "Newsletter semanal"
+  },
   "hero": {
     "kicker": "Newsletter · Data Engineering · AWS",
     "title": "Se puede ser un gran Ingeniero de Datos",
     "titleAccent": "sin dejar la vida frente a la pantalla",
     "description": "Sumate a la comunidad de **^^+250 lectores^^** que buscan crecer en Data Engineering, arquitectura en AWS y mentalidad profesional sin perderse a ellos mismos en el camino.",
-    "primaryCta": { "label": "Suscribite gratis", "href": "#subscribe" },
-    "secondaryCta": { "label": "Leer el blog", "href": "/blog/" },
-    "topics": ["Data Engineering", "AWS", "Python", "SQL", "Arquitectura Cloud", "DataOps", "Carrera", "Mentalidad"]
+    "primaryCta": {
+      "label": "Suscribite gratis",
+      "href": "#subscribe"
+    },
+    "secondaryCta": {
+      "label": "Leer el blog",
+      "href": "/blog/"
+    },
+    "topics": [
+      "Data Engineering",
+      "AWS",
+      "Python",
+      "SQL",
+      "Arquitectura Cloud",
+      "DataOps",
+      "Carrera",
+      "Mentalidad"
+    ]
   },
-
   "intro": {
     "kicker": "¿Qué es \"El Ingeniero Consciente\"?",
     "ghost": "Consciente",
     "statement": "Una ^^newsletter semanal^^ para ingenieros de datos que buscan la excelencia técnica, sin comprar el humo del hype ~~ni quemar su salud mental en el camino.~~",
     "text": "Comparto lo que aprendo, valido y utilizo en el día a día."
   },
-
   "topics": {
     "title": "¿De qué va la ~newsletter?~",
     "items": [
-      { "title": "De Ingeniería de Datos", "text": "Pipelines, SQL, Python y los fundamentos que no pasan de moda." },
-      { "title": "AWS desde el camino real", "text": "Arquitectura cloud aprendida en producción, no en un slide." },
-      { "title": "Y de la humanidad detrás del teclado", "text": "Carrera, foco y criterio para crecer sin perderte en el camino." }
+      {
+        "title": "De Ingeniería de Datos",
+        "text": "Pipelines, SQL, Python y los fundamentos que no pasan de moda."
+      },
+      {
+        "title": "AWS desde el camino real",
+        "text": "Arquitectura cloud aprendida en producción, no en un slide."
+      },
+      {
+        "title": "Y de la humanidad detrás del teclado",
+        "text": "Carrera, foco y criterio para crecer sin perderte en el camino."
+      }
     ]
   },
-
   "manifesto": {
     "kicker": "Manifiesto",
     "title": "Eso no es ^^excelencia.^^",
     "$ayuda_blocks": "Cada bloque es un párrafo. type: \"text\" (normal), \"quote\" (frase naranja con barra lateral) o \"statement\" (frase grande resaltada).",
     "blocks": [
-      { "type": "text", "text": "La industria tech suele decirnos que para ser exitoso tenés que estar conectado 24/7 y aprender tres frameworks de IA antes de desayunar." },
-      { "type": "text", "text": "Yo pienso que no tiene porqué ser así. Eso no es excelencia." },
-      { "type": "quote", "text": "Es el camino directo al burnout." },
-      { "type": "text", "text": "Acá vas a encontrar fundamentos sólidos de Data Engineering, arquitectura práctica en AWS y las herramientas mentales para gestionar tu carrera con consciencia e intención." },
-      { "type": "text", "text": "La tecnología es útil si te libera tiempo para lo más importante: __tu vida fuera de la pantalla__." },
-      { "type": "statement", "text": "==No soy mi trabajo ni mi profesión.==" },
-      { "type": "text", "text": "Si esto resuena con vos, entonces estás en el lugar correcto." }
+      {
+        "type": "text",
+        "text": "La industria tech suele decirnos que para ser exitoso tenés que estar conectado 24/7 y aprender tres frameworks de IA antes de desayunar."
+      },
+      {
+        "type": "text",
+        "text": "Yo pienso que no tiene porqué ser así. Eso no es excelencia."
+      },
+      {
+        "type": "quote",
+        "text": "Es el camino directo al burnout."
+      },
+      {
+        "type": "text",
+        "text": "Acá vas a encontrar fundamentos sólidos de Data Engineering, arquitectura práctica en AWS y las herramientas mentales para gestionar tu carrera con consciencia e intención."
+      },
+      {
+        "type": "text",
+        "text": "La tecnología es útil si te libera tiempo para lo más importante: __tu vida fuera de la pantalla__."
+      },
+      {
+        "type": "statement",
+        "text": "==No soy mi trabajo ni mi profesión.=="
+      },
+      {
+        "type": "text",
+        "text": "Si esto resuena con vos, entonces estás en el lugar correcto."
+      }
     ]
   },
-
   "audience": {
     "title": "¿Para quién ~es?~",
     "items": [
@@ -51,9 +96,11 @@
       "Para profesionales intermedios que buscan progresar hacia conceptos más avanzados y tener criterios claros de arquitectura.",
       "Para cualquiera en IT que quiera crecer profesionalmente (escalar en su puesto, negociar un mejor sueldo) pero se niegue a dejar la vida en una oficina o rol."
     ],
-    "cta": { "label": "Suscribite ahora", "href": "#subscribe" }
+    "cta": {
+      "label": "Suscribite ahora",
+      "href": "#subscribe"
+    }
   },
-
   "structure": {
     "title": "¿Cómo está ~organizada?~",
     "paragraphs": [
@@ -97,7 +144,6 @@
       }
     ]
   },
-
   "expectations": {
     "title": "¿Qué vas a ~recibir?~",
     "items": [
@@ -107,9 +153,11 @@
       "Una mirada consciente sobre la carrera en tecnología."
     ],
     "closing": "Si buscás crecer como profesional sin desconectarte de vos mismo/a, estás en el lugar correcto.",
-    "cta": { "label": "Suscribite gratis", "href": "#subscribe" }
+    "cta": {
+      "label": "Suscribite gratis",
+      "href": "#subscribe"
+    }
   },
-
   "author": {
     "title": "¿Quién está detrás de ~“El Ingeniero Consciente”?~",
     "photo": "/images/profile_pics/elias_linkedin.jpg",
@@ -124,6 +172,9 @@
       "Te comparto lo que me funciona a mí para construir una carrera sólida y mantener la cabeza cuerda en este ecosistema tan acelerado."
     ],
     "closing": "==Si buscás crecer como profesional sin desconectarte de vos mismo/a, ¡sumate!==",
-    "cta": { "label": "Conocé más sobre mí", "href": "/about/" }
+    "cta": {
+      "label": "Conocé más sobre mí",
+      "href": "/about/"
+    }
   }
 }

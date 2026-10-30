@@ -5,11 +5,20 @@ import AboutHero from '../components/AboutHero.astro';
 import ExperienceGrid from '../components/ExperienceGrid.astro';
 import about from '../data/about.json';
 import { rich } from '../utils/richText.js';
+import { abs, breadcrumbNode, ogImageUrl, pageNode, personRef } from '../utils/seo.js';
 
 const pad = (n: number) => String(n + 1).padStart(2, '0');
+
+// SEO: página de perfil de Elias (misma persona que evelazquez.dev)
+const url = abs('/about');
+const ogImage = ogImageUrl('page', 'about');
+const jsonLd = [
+    pageNode('ProfilePage', { url, title: about.seo.title, description: about.seo.description, image: ogImage, breadcrumb: true, extra: { mainEntity: personRef, about: personRef } }),
+    breadcrumbNode(url, [{ name: about.pageTitle, path: '/about' }]),
+];
 ---
 
-<SiteLayout pageTitle={about.pageTitle}>
+<SiteLayout pageTitle={about.seo.title} description={about.seo.description} canonicalURL={url} ogImage={ogImage} ogType="profile" jsonLd={jsonLd}>
     <main>
         <AboutHero
             kicker={about.kicker}

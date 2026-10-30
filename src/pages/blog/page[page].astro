@@ -6,6 +6,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import PageHero from '../../components/PageHero.astro';
 import blog from '../../data/blog.json';
 import { fmt } from '../../utils/richText.js';
+import { abs, breadcrumbNode, itemListNode, ogImageUrl, pageNode } from '../../utils/seo.js';
 
 import { sanityClient } from "sanity:client";
 
@@ -43,7 +44,9 @@ const POSTS_QUERY = `{
   "total": count(*[_type == "post"])
 }`;
 
-const { posts, total } = await sanityClient.fetch(POSTS_QUERY);
+const { posts: rawPosts, total } = await sanityClient.fetch(POSTS_QUERY);
+// Tolerancia a datos incompletos: se omiten documentos sin slug y referencias a tags borrados
+const posts = (rawPosts ?? []).filter((p) => p?.slug?.current);
 
 const totalPages = Math.ceil(total / postsPerPage);
 const hasNext = currentPage < totalPages;
@@ -54,9 +57,19 @@ const prevPage = hasPrev ? currentPage - 1 : null;
 // Los textos de esta página están en src/data/blog.json → "postsPage"
 const t = blog.postsPage;
 const pageTitle = fmt(t.pageTitle, { page: currentPage });
+
+// SEO: cada página del archivo es indexable con su propia URL canónica
+const url = abs(`/blog/page${currentPage}`);
+const seoTitle = fmt(t.seo.title, { page: currentPage });
+const seoDescription = fmt(t.seo.description, { page: currentPage, total: totalPages });
+const jsonLd = [
+    pageNode('CollectionPage', { url, title: seoTitle, description: seoDescription, breadcrumb: true, extra: { mainEntity: { '@id': `${url}#list` } } }),
+    breadcrumbNode(url, [{ name: 'Blog', path: '/blog' }, { name: fmt(t.breadcrumbPage, { page: currentPage }), path: `/blog/page${currentPage}` }]),
+    itemListNode(url, posts.map((p) => ({ name: p.title, path: `/blog/${p.slug.current}` }))),
+];
 ---
 
-<SiteLayout pageTitle={pageTitle}>
+<SiteLayout pageTitle={seoTitle} description={seoDescription} canonicalURL={url} ogImage={ogImageUrl('page', 'blog')} jsonLd={jsonLd}>
     <PageHero title={t.title} titleLight={t.titleLight} ghost={t.ghost} size="md">
         <Breadcrumbs
             slot="breadcrumbs"

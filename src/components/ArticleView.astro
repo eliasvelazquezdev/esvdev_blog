@@ -11,6 +11,7 @@ import { components } from "./PortableTextComponents.jsx";
 import site from "../data/site.json";
 import blog from "../data/blog.json";
 import { fmt } from "../utils/richText.js";
+import { articleStats } from "../utils/article.js";
 
 interface Props {
   doc: {
@@ -29,12 +30,7 @@ const { doc, canonicalURL, kind = "post" } = Astro.props;
 const portableText = doc.body ?? [];
 
 // Tiempo de lectura estimado (~200 palabras por minuto)
-const words = portableText
-  .map((b: any) => (b._type === "block" ? (b.children ?? []).map((c: any) => c.text ?? "").join(" ") : b._type === "code" ? b.code ?? "" : ""))
-  .join(" ")
-  .split(/\s+/)
-  .filter(Boolean).length;
-const readingTime = Math.max(1, Math.round(words / 200));
+const { minutes: readingTime } = articleStats(portableText);
 
 const hasToc = portableText.some((b: any) => b._type === "block" && ["h1", "h2", "h3", "h4"].includes(b.style));
 const section = kind === "zip" ? { label: "Zips", link: "/blog/zips" } : { label: "Blog", link: "/blog" };
@@ -123,7 +119,7 @@ const { author } = site;
           />
           <div class="flex-1">
             <p class="kicker mb-1">{t.writtenBy}</p>
-            <p class="text-xl font-bold tracking-tight text-gray-primary">{author.name}</p>
+            <a href={author.website} rel="author" class="text-xl font-bold tracking-tight text-gray-primary transition-colors hover:text-orange-secondary">{author.name}</a>
             <p class="mt-2 text-base leading-relaxed text-gray-primary/70">{author.bio}</p>
           </div>
           <a href={t.aboutButton.href} class="btn-outline shrink-0 !text-base">{t.aboutButton.label}</a>

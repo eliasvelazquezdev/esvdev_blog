@@ -1,6 +1,5 @@
 {
   "$descripcion": "Textos de las páginas del blog: listado, paginación, zips, tags, artículos y páginas de error. El contenido de los posts sigue viniendo de Sanity.",
-
   "blogIndex": {
     "pageTitle": "Blog",
     "hero": {
@@ -26,18 +25,24 @@
     "featuredCountLabel": "artículos",
     "latestTitle": "Últimos ~posts~",
     "seeAll": "Ver todos",
-    "allPostsButton": "Todos los posts"
+    "allPostsButton": "Todos los posts",
+    "seo": {
+      "title": "Blog de Data Engineering y AWS",
+      "description": "Artículos técnicos de Elias Velazquez sobre Data Engineering, pipelines ETL, Python, SQL y arquitectura en AWS. Contenido práctico y aplicable."
+    }
   },
-
   "postsPage": {
     "pageTitle": "Posts - Página {page}",
     "title": "Todos los",
     "titleLight": " posts",
     "ghost": "Posts",
     "breadcrumbPage": "Página {page}",
-    "description": "Todos los artículos que he publicado. Página {page} de {total}."
+    "description": "Todos los artículos que he publicado. Página {page} de {total}.",
+    "seo": {
+      "title": "Todos los artículos · Página {page}",
+      "description": "Archivo completo de artículos de Data Engineering y AWS de El Ingeniero Consciente. Página {page} de {total}."
+    }
   },
-
   "zips": {
     "pageTitle": "Zips",
     "kicker": "Ideas técnicas comprimidas",
@@ -46,9 +51,12 @@
     "description": "¡Bienvenido/a a **Zips**! Aquí encontrarás lecturas rápidas de índole técnica. La idea es que te lleves un aprendizaje, encuentres recursos, o simplemente te diviertas en lecturas breves de pocos minutos.",
     "countLabel": "zips",
     "durationLabel": "Menos de 5 minutos",
-    "cardCta": "Lectura rápida"
+    "cardCta": "Lectura rápida",
+    "seo": {
+      "title": "Zips: ideas técnicas en minutos",
+      "description": "Zips: lecturas técnicas breves sobre Data Engineering, AWS, Python y SQL. Un aprendizaje concreto en menos de 5 minutos, por Elias Velazquez."
+    }
   },
-
   "tags": {
     "pageTitle": "Tags",
     "kicker": "Explorá posts por tema",
@@ -59,18 +67,24 @@
     "featuredBadge": "Destacado",
     "allTitle": "Todos los ~temas~",
     "post": "post",
-    "posts": "posts"
+    "posts": "posts",
+    "seo": {
+      "title": "Temas: AWS, Python, SQL y más",
+      "description": "Explorá los artículos de El Ingeniero Consciente por tema: AWS, Python, SQL, Snowflake, Data Engineering y carrera en tecnología."
+    }
   },
-
   "tagPage": {
     "pageTitle": "Posts etiquetados con {tag}",
     "pageTitlePaged": "Posts etiquetados con {tag} - Página {page}",
     "kicker": "Posts con la etiqueta",
     "pageLabel": "Página {page} de {total}",
     "empty": "Nada por aquí. Muy pronto voy a hablar de este tema, así que date una vuelta pronto. 😉",
-    "backToTags": "Todos los tags"
+    "backToTags": "Todos los tags",
+    "seo": {
+      "title": "#{tag}: artículos y guías",
+      "description": "Artículos sobre {tag} en El Ingeniero Consciente: guías prácticas de Data Engineering y AWS por Elias Velazquez."
+    }
   },
-
   "article": {
     "breadcrumbPost": "Artículo",
     "breadcrumbZip": "Zip",
@@ -79,7 +93,10 @@
     "tagsLabel": "Tags",
     "shareLabel": "Compartir",
     "writtenBy": "Escrito por",
-    "aboutButton": { "label": "Sobre mí", "href": "/about/" },
+    "aboutButton": {
+      "label": "Sobre mí",
+      "href": "/about/"
+    },
     "backTo": "Volver a {section}",
     "tocTitle": "En este artículo",
     "tocTitleMobile": "Tabla de contenidos",
@@ -87,20 +104,31 @@
       "kicker": "Newsletter",
       "text": "¿Te sirvió? Recibí el próximo artículo en tu correo.",
       "cta": "Suscribite gratis"
-    }
+    },
+    "ogKickerPost": "Artículo",
+    "ogKickerZip": "Zip · lectura rápida"
   },
-
   "cards": {
     "featuredBadge": "Destacado",
     "readMore": "Leer artículo"
   },
-
   "notFound": {
     "kicker": "Error 404",
-    "post": { "title": "Post no", "titleLight": " encontrado", "text": "El post que buscas no existe o ya no está disponible.", "button": "Volver al blog", "href": "/blog" },
-    "zip": { "title": "Zip no", "titleLight": " encontrado", "text": "El contenido que buscas no existe o ya no está disponible.", "button": "Volver a Zips", "href": "/blog/zips" }
+    "post": {
+      "title": "Post no",
+      "titleLight": " encontrado",
+      "text": "El post que buscas no existe o ya no está disponible.",
+      "button": "Volver al blog",
+      "href": "/blog"
+    },
+    "zip": {
+      "title": "Zip no",
+      "titleLight": " encontrado",
+      "text": "El contenido que buscas no existe o ya no está disponible.",
+      "button": "Volver a Zips",
+      "href": "/blog/zips"
+    }
   },
-
   "ui": {
     "home": "Inicio",
     "prevPage": "Página anterior",

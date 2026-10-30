@@ -4,6 +4,7 @@ import SiteLayout from '../../../layouts/SiteLayout.astro';
 import PageHero from '../../../components/PageHero.astro';
 import blog from '../../../data/blog.json';
 import { rich } from '../../../utils/richText.js';
+import { abs, breadcrumbNode, itemListNode, ogImageUrl, pageNode } from '../../../utils/seo.js';
 
 // Los textos de esta página están en src/data/blog.json → "zips"
 const t = blog.zips;
@@ -18,10 +19,20 @@ const ZIPS_QUERY = `*[contentType == "zip"] | order(publishedAt desc) {
   excerpt
 }`;
 
-const zipsEntries = await sanityClient.fetch<SanityDocument[]>(ZIPS_QUERY);
+// Tolerancia a datos incompletos: se omiten zips sin slug
+const zipsEntries = (await sanityClient.fetch<SanityDocument[]>(ZIPS_QUERY)).filter((z) => z?.slug?.current);
+
+// SEO
+const url = abs('/blog/zips');
+const ogImage = ogImageUrl('page', 'zips');
+const jsonLd = [
+    pageNode('CollectionPage', { url, title: t.seo.title, description: t.seo.description, image: ogImage, breadcrumb: true, extra: { mainEntity: { '@id': `${url}#list` } } }),
+    breadcrumbNode(url, [{ name: 'Blog', path: '/blog' }, { name: t.title, path: '/blog/zips' }]),
+    itemListNode(url, zipsEntries.map((z) => ({ name: z.title, path: `/blog/zips/${z.slug?.current}` }))),
+];
 ---
 
-<SiteLayout pageTitle={t.pageTitle}>
+<SiteLayout pageTitle={t.seo.title} description={t.seo.description} canonicalURL={url} ogImage={ogImage} jsonLd={jsonLd}>
     <PageHero title={t.title} kicker={t.kicker} ghost={t.ghost}>
         <p set:html={rich(t.description)} />
         <div slot="after" class="flex flex-wrap gap-2.5">

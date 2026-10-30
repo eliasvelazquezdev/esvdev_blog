@@ -4,6 +4,7 @@ import PageHero from "../../components/PageHero.astro";
 import PostDescription from "../../components/PostDescription.astro";
 import blog from "../../data/blog.json";
 import { rich } from "../../utils/richText.js";
+import { abs, blogNode, breadcrumbNode, itemListNode, ogImageUrl, pageNode } from "../../utils/seo.js";
 
 import { sanityClient } from "sanity:client";
 import type { SanityDocument } from "@sanity/client";
@@ -13,20 +14,31 @@ const FEATURED_POSTS_QUERY = `*[
 ]|order(publishedAt desc){_id, title, slug, excerpt, publishedAt}
 `;
 
-const featured_posts = await sanityClient.fetch<SanityDocument[]>(FEATURED_POSTS_QUERY);
+// Tolerancia a datos incompletos: se omiten documentos sin slug y referencias a tags borrados
+const featured_posts = (await sanityClient.fetch<SanityDocument[]>(FEATURED_POSTS_QUERY)).filter((p) => p?.slug?.current);
 
 const LATEST_POSTS_QUERY = `*[
   contentType == "post"
 ]|order(publishedAt desc)[0...5]{_id, title, slug, excerpt, publishedAt}
 `;
-const latest_posts = await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY);
+const latest_posts = (await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY)).filter((p) => p?.slug?.current);
 
 // Los textos de esta página están en src/data/blog.json → "blogIndex"
 const t = blog.blogIndex;
 const pageTitle = t.pageTitle;
+
+// SEO
+const url = abs("/blog");
+const ogImage = ogImageUrl("page", "blog");
+const jsonLd = [
+	blogNode(),
+	pageNode("CollectionPage", { url, title: t.seo.title, description: t.seo.description, image: ogImage, breadcrumb: true, extra: { mainEntity: { "@id": `${url}#list` } } }),
+	breadcrumbNode(url, [{ name: pageTitle, path: "/blog" }]),
+	itemListNode(url, [...featured_posts, ...latest_posts.filter((p) => !featured_posts.some((f) => f._id === p._id))].map((p) => ({ name: p.title, path: `/blog/${p.slug.current}` }))),
+];
 ---
 
-<SiteLayout pageTitle={pageTitle}>
+<SiteLayout pageTitle={t.seo.title} description={t.seo.description} canonicalURL={url} ogImage={ogImage} jsonLd={jsonLd}>
   <PageHero title={t.hero.title} titleLight={t.hero.titleLight} kicker={t.hero.kicker} ghost={t.hero.ghost}>
     <p set:html={rich(t.hero.description)} />
   </PageHero>

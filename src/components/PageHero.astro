@@ -14,23 +14,37 @@ interface Props {
 const { title, titleLight, kicker, ghost, size = "lg" } = Astro.props;
 ---
 
-<header class="relative overflow-hidden pb-14 pt-32 lg:pb-20 lg:pt-44">
+<header
+  class:list={[
+    "relative overflow-hidden",
+    // Portadas principales (Blog, Zips, Tags): más aire y altura mínima para que no se vean aplastadas
+    size === "lg"
+      ? "flex min-h-[30rem] flex-col justify-center pb-20 pt-36 sm:min-h-[34rem] lg:min-h-[40rem] lg:pb-28 lg:pt-48 xl:min-h-[44rem]"
+      : "pb-14 pt-32 lg:pb-20 lg:pt-44",
+  ]}
+>
   <PlexusBackground density="soft" />
 
   {
     ghost && (
-      <span class="ghost-word -right-4 top-24 z-[1] text-[22vw] lg:top-20 lg:text-[16vw]" aria-hidden="true">
+      <span
+        class:list={[
+          "ghost-word -right-4 z-[1] text-[22vw] lg:text-[16vw]",
+          size === "lg" ? "top-1/2 -translate-y-[38%]" : "top-24 lg:top-20",
+        ]}
+        aria-hidden="true"
+      >
         {ghost}
       </span>
     )
   }
 
-  <div class="shell relative z-10">
+  <div class="shell relative z-10 w-full">
     {Astro.slots.has("breadcrumbs") && <div class="hero-appear mb-8"><slot name="breadcrumbs" /></div>}
 
     {
       kicker && (
-        <p class="hero-appear kicker mb-5 !text-orange-secondary" style="--d: 60ms">
+        <p class:list={["hero-appear kicker !text-orange-secondary", size === "lg" ? "mb-6 lg:mb-8" : "mb-5"]} style="--d: 60ms">
           {kicker}
         </p>
       )
@@ -40,7 +54,7 @@ const { title, titleLight, kicker, ghost, size = "lg" } = Astro.props;
       data-bg-quiet
       class:list={[
         "hero-appear max-w-5xl font-extrabold tracking-tight text-gray-primary",
-        size === "lg" ? "text-5xl leading-[1.02] sm:text-6xl lg:text-7xl xl:text-8xl" : "text-4xl leading-[1.08] sm:text-5xl lg:text-6xl",
+        size === "lg" ? "text-5xl leading-[1.06] sm:text-6xl lg:text-7xl xl:text-8xl" : "text-4xl leading-[1.08] sm:text-5xl lg:text-6xl",
       ]}
       style="--d: 120ms; text-shadow: 0 2px 18px rgba(8, 18, 40, 0.7);"
     >
@@ -52,7 +66,7 @@ const { title, titleLight, kicker, ghost, size = "lg" } = Astro.props;
       Astro.slots.has("default") && (
         <div
           data-bg-quiet
-          class="hero-appear mt-7 max-w-3xl text-lg leading-relaxed text-gray-primary/80 lg:text-xl"
+          class:list={["hero-appear max-w-3xl text-lg leading-relaxed text-gray-primary/80 lg:text-xl", size === "lg" ? "mt-8 lg:mt-10" : "mt-7"]}
           style="--d: 260ms"
         >
           <slot />
@@ -60,6 +74,6 @@ const { title, titleLight, kicker, ghost, size = "lg" } = Astro.props;
       )
     }
 
-    {Astro.slots.has("after") && <div class="hero-appear mt-8" style="--d: 380ms"><slot name="after" /></div>}
+    {Astro.slots.has("after") && <div class:list={["hero-appear", size === "lg" ? "mt-9 lg:mt-11" : "mt-8"]} style="--d: 380ms"><slot name="after" /></div>}
   </div>
 </header>

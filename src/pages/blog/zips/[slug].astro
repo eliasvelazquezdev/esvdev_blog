@@ -2,6 +2,8 @@
 import PostLayout from "../../../layouts/PostLayout.astro";
 import ArticleView from "../../../components/ArticleView.astro";
 import blog from "../../../data/blog.json";
+import { abs, blogNode, breadcrumbNode, ogImageUrl, pageNode, personRef, SITE_URL } from "../../../utils/seo.js";
+import { articleStats } from "../../../utils/article.js";
 import PageHero from "../../../components/PageHero.astro";
 
 import { sanityClient } from "sanity:client";
@@ -9,8 +11,11 @@ import type { SanityDocument } from "@sanity/client";
 
 const { slug } = Astro.params;
 
+// El slug viaja como parámetro ($slug), nunca concatenado en la consulta.
+// seoTitle / seoDescription / coverImage son opcionales: si existen en Sanity se usan;
+// si no, se usan el título, el extracto y la miniatura generada automáticamente.
 const ZIP_BY_SLUG_QUERY = `*[
-    contentType == "zip" && slug.current == "${slug}"
+    contentType == "zip" && slug.current == $slug
 ][0]{
     _id,
     title,
@@ -18,6 +23,9 @@ const ZIP_BY_SLUG_QUERY = `*[
     publishedAt,
     _updatedAt,
     body,
+    "seoTitle": coalesce(seoTitle, seo.title, metaTitle),
+    "seoDescription": coalesce(seoDescription, seo.description, metaDescription),
+    "coverImage": coalesce(mainImage.asset->url, coverImage.asset->url, image.asset->url),
     "tags": tags[]->{
     name,
     "slug": slug.current,
@@ -26,19 +34,67 @@ const ZIP_BY_SLUG_QUERY = `*[
     }
 }`;
 
-const zip = await sanityClient.fetch<SanityDocument | null>(ZIP_BY_SLUG_QUERY);
+const zip = await sanityClient.fetch<SanityDocument | null>(ZIP_BY_SLUG_QUERY, { slug });
+// Tolerancia a datos incompletos: se omiten referencias a tags borrados
+if (zip?.tags) zip.tags = zip.tags.filter(Boolean);
 
 if (!zip) {
     Astro.response.status = 404;
 }
 
-const canonicalURL = new URL(`/blog/zips/${slug}`, Astro.site).href;
-
+// ===== SEO =====
+const canonical = abs(`/blog/zips/${slug}`);
+const { words, minutes } = articleStats(zip?.body ?? []);
+const seoTitle = zip?.seoTitle || zip?.title;
+const seoDescription = zip?.seoDescription || zip?.excerpt || undefined;
+const tagNames = (zip?.tags ?? []).map((t) => t.name);
+const ogImage = zip?.coverImage
+    ? `${zip.coverImage}?w=1200&h=630&fit=crop&fm=jpg&q=85`
+    : ogImageUrl("zip", String(slug), zip?._updatedAt);
+const jsonLd = zip
+    ? [
+          blogNode(),
+          {
+              "@type": "BlogPosting",
+              "@id": `${canonical}#article`,
+              mainEntityOfPage: { "@id": `${canonical}#webpage` },
+              headline: zip.title,
+              description: seoDescription,
+              image: { "@type": "ImageObject", url: ogImage, width: 1200, height: 630 },
+              datePublished: zip.publishedAt,
+              dateModified: zip._updatedAt ?? zip.publishedAt,
+              author: personRef,
+              publisher: personRef,
+              isPartOf: { "@id": `${SITE_URL}/#blog` },
+              articleSection: "Zips",
+              keywords: tagNames,
+              about: tagNames.map((name) => ({ "@type": "Thing", name })),
+              wordCount: words,
+              timeRequired: `PT${minutes}M`,
+              inLanguage: "es",
+          },
+          pageNode("WebPage", { url: canonical, title: seoTitle, description: seoDescription, image: ogImage, breadcrumb: true }),
+          breadcrumbNode(canonical, [
+              { name: "Blog", path: "/blog" },
+              { name: "Zips", path: "/blog/zips" },
+              { name: zip.title, path: `/blog/zips/${slug}` },
+          ]),
+      ]
+    : [];
 ---
 
-<PostLayout pageTitle={zip?.title ?? `${blog.notFound.zip.title}${blog.notFound.zip.titleLight}`} canonicalURL={canonicalURL} description={zip?.excerpt}>
+<PostLayout
+    pageTitle={zip ? seoTitle : `${blog.notFound.zip.title}${blog.notFound.zip.titleLight}`}
+    description={seoDescription}
+    canonicalURL={canonical}
+    ogImage={zip ? ogImage : undefined}
+    ogType={zip ? "article" : "website"}
+    article={zip ? { publishedTime: zip.publishedAt, modifiedTime: zip._updatedAt, section: "Zips", tags: tagNames } : undefined}
+    jsonLd={jsonLd}
+    noindex={!zip}
+>
     {zip ? (
-        <ArticleView doc={zip} canonicalURL={canonicalURL} kind="zip" />
+        <ArticleView doc={zip} canonicalURL={canonical} kind="zip" />
     ) : (
         <PageHero title={blog.notFound.zip.title} titleLight={blog.notFound.zip.titleLight} kicker={blog.notFound.kicker} size="md">
             <p>{blog.notFound.zip.text}</p>

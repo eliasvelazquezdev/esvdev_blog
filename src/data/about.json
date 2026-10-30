@@ -1,19 +1,20 @@
 {
   "$descripcion": "Textos de la página About (/about/).",
-
   "pageTitle": "Acerca de",
+  "seo": {
+    "title": "Elias Velazquez, Data Engineer en Buenos Aires",
+    "description": "Conocé a Elias Velazquez: Data Engineer en Buenos Aires, autor de El Ingeniero Consciente y fundador de ShareIT. Datos, AWS y tecnología con propósito."
+  },
   "kicker": "Acerca de",
   "ghost": "Acerca",
   "title": "¡Hola! Soy Elias",
   "highlight": "Te cuento un poco sobre mí",
-
   "photo": {
     "src": "/images/profile_pics/elias_casual_1.jpeg",
     "alt": "Elias Velazquez",
     "tag": "Buenos Aires",
     "caption": "Data Engineer · Creador de El Ingeniero Consciente y fundador de ShareIT."
   },
-
   "$ayuda_sections": "Cada sección es una fila numerada (01, 02...). label es la etiqueta chica de la izquierda.",
   "sections": [
     {
@@ -37,12 +38,18 @@
       "text": "Fuera de las pantallas, me vas a encontrar tocando el piano, leyendo sobre filosofía y finanzas, o conectando con personas de trasfondos distintos. Si querés hablar sobre datos o explorar cómo podemos colaborar, ¡escribime! Siempre es un buen momento para una charla."
     }
   ],
-
   "buttons": {
-    "primary": { "label": "Escribime", "href": "https://www.linkedin.com/in/eliassvelazquez", "icon": "fa-brands fa-linkedin-in" },
-    "secondary": { "label": "evelazquez.dev", "href": "https://www.evelazquez.dev/", "icon": "fa-solid fa-arrow-up-right-from-square" }
+    "primary": {
+      "label": "Escribime",
+      "href": "https://www.linkedin.com/in/eliassvelazquez",
+      "icon": "fa-brands fa-linkedin-in"
+    },
+    "secondary": {
+      "label": "evelazquez.dev",
+      "href": "https://www.evelazquez.dev/",
+      "icon": "fa-solid fa-arrow-up-right-from-square"
+    }
   },
-
   "experience": {
     "title": "Experiencia ~& Proyectos~",
     "items": [

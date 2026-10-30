@@ -1,16 +1,13 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 
-interface Props {
-  pageTitle: string;
-  canonicalURL?: string;
-  description?: string;
-}
+import type { ComponentProps } from "astro/types";
 
-const { pageTitle, canonicalURL, description } = Astro.props;
+// Recibe las mismas props de SEO que SiteLayout (título, descripción, miniatura, datos de artículo...)
+type Props = ComponentProps<typeof SiteLayout>;
 ---
 
-<SiteLayout pageTitle={pageTitle} canonicalURL={canonicalURL} description={description}>
+<SiteLayout {...Astro.props}>
   <slot />
 
   <style is:global>

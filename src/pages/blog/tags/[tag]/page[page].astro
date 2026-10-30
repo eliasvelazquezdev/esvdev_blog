@@ -7,6 +7,7 @@ import { getTagColorClasses } from "../../../../utils/tagColors.js";
 import PageHero from "../../../../components/PageHero.astro";
 import blog from "../../../../data/blog.json";
 import { fmt } from "../../../../utils/richText.js";
+import { abs, breadcrumbNode, itemListNode, ogImageUrl, pageNode } from "../../../../utils/seo.js";
 
 import { sanityClient } from "sanity:client";
 
@@ -76,7 +77,9 @@ const POSTS_BY_TAG_QUERY = `{
   "total": count(*[_type == "post" && references(*[_type == "tag" && slug.current == "${tag}"]._id)])
 }`;
 
-const { posts, total } = await sanityClient.fetch(POSTS_BY_TAG_QUERY);
+const { posts: rawPosts, total } = await sanityClient.fetch(POSTS_BY_TAG_QUERY);
+// Tolerancia a datos incompletos: se omiten documentos sin slug y referencias a tags borrados
+const posts = (rawPosts ?? []).filter((p) => p?.slug?.current).map((p) => ({ ...p, tags: (p.tags ?? []).filter(Boolean) }));
 
 const totalPages = Math.ceil(total / postsPerPage);
 const hasNext = currentPage < totalPages;
@@ -90,15 +93,28 @@ const tagName = currentTagData?.name || tag;
 // Los textos de esta página están en src/data/blog.json → "tagPage"
 const t = blog.tagPage;
 const pageTitle = fmt(currentPage === 1 ? t.pageTitle : t.pageTitlePaged, { tag: tagName, page: currentPage });
+
+// SEO
+const url = abs(`/blog/tags/${tag}/page${currentPage}`);
+const seoTitle = fmt(t.seo.title, { tag: tagName }) + (currentPage > 1 ? ` · ${fmt(blog.postsPage.breadcrumbPage, { page: currentPage })}` : "");
+// Si la descripción del tag en Sanity es corta, se completa con el texto genérico
+const tagDesc = currentTagData?.description?.trim();
+const genericDesc = fmt(t.seo.description, { tag: tagName });
+const seoDescription = !tagDesc ? genericDesc : tagDesc.length < 80 ? `${tagDesc.replace(/\.$/, "")}. ${genericDesc}` : tagDesc;
+const jsonLd = [
+    pageNode("CollectionPage", { url, title: seoTitle, description: seoDescription, breadcrumb: true, extra: { about: { "@type": "Thing", name: tagName }, mainEntity: { "@id": `${url}#list` } } }),
+    breadcrumbNode(url, [{ name: "Blog", path: "/blog" }, { name: blog.tags.title, path: "/blog/tags" }, { name: `#${tagName}`, path: `/blog/tags/${tag}/page${currentPage}` }]),
+    itemListNode(url, posts.map((p) => ({ name: p.title, path: `/blog/${p.slug.current}` }))),
+];
 ---
 
-<SiteLayout pageTitle={pageTitle}>
+<SiteLayout pageTitle={seoTitle} description={seoDescription} canonicalURL={url} ogImage={ogImageUrl("tag", tag)} jsonLd={jsonLd}>
     <PageHero title={`#${tagName}`} kicker={t.kicker} ghost={`#${tagName}`} size="md">
         <Breadcrumbs
             slot="breadcrumbs"
             linkList={[
                 { label: blog.tags.title, link: "/blog/tags" },
-                { label: tagName, link: currentPage === 1 ? undefined : `/blog/tags/${tag}` },
+                { label: tagName, link: currentPage === 1 ? undefined : `/blog/tags/${tag}/page1` },
                 ...(currentPage > 1 ? [{ label: fmt(blog.postsPage.breadcrumbPage, { page: currentPage }) }] : []),
             ]}
         />
