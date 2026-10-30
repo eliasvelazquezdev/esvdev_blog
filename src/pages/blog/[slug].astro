@@ -1,19 +1,21 @@
 ---
 import PostLayout from "../../layouts/PostLayout.astro";
-import TableOfContents from "../../components/TableOfContents.astro";
-import AuthorLayout from "../../components/AuthorLayout.astro";
-import ShareButtons from "../../components/ShareButtons.astro";
-import { getTagColorClasses } from "../../utils/tagColors.js";
+import ArticleView from "../../components/ArticleView.astro";
+import blog from "../../data/blog.json";
+import { abs, blogNode, breadcrumbNode, ogImageUrl, pageNode, personRef, SITE_URL } from "../../utils/seo.js";
+import { articleStats } from "../../utils/article.js";
+import PageHero from "../../components/PageHero.astro";
 
 import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
-import { PortableText } from "astro-portabletext";
-import { components } from '../../components/PortableTextComponents.jsx';
 
 const { slug } = Astro.params;
 
+// El slug viaja como parámetro ($slug), nunca concatenado en la consulta.
+// seoTitle / seoDescription / coverImage son opcionales: si existen en Sanity se usan;
+// si no, se usan el título, el extracto y la miniatura generada automáticamente.
 const POST_BY_SLUG_QUERY = `*[
-    contentType == "post" && slug.current == "${slug}"
+    contentType == "post" && slug.current == $slug
 ][0]{
     _id,
     title,
@@ -21,6 +23,9 @@ const POST_BY_SLUG_QUERY = `*[
     publishedAt,
     _updatedAt,
     body,
+    "seoTitle": coalesce(seoTitle, seo.title, metaTitle),
+    "seoDescription": coalesce(seoDescription, seo.description, metaDescription),
+    "coverImage": coalesce(mainImage.asset->url, coverImage.asset->url, image.asset->url),
     "tags": tags[]->{
     name,
     "slug": slug.current,
@@ -29,82 +34,70 @@ const POST_BY_SLUG_QUERY = `*[
     }
 }`;
 
-const post = await sanityClient.fetch<SanityDocument | null>(POST_BY_SLUG_QUERY);
-const portableText = post?.body ?? [];
+const post = await sanityClient.fetch<SanityDocument | null>(POST_BY_SLUG_QUERY, { slug });
+// Tolerancia a datos incompletos: se omiten referencias a tags borrados
+if (post?.tags) post.tags = post.tags.filter(Boolean);
 
 if (!post) {
     Astro.response.status = 404;
 }
 
-// Generate canonical URL for this post
-const canonicalURL = new URL(`/blog/${slug}`, Astro.site).href;
-
-
-
+// ===== SEO =====
+const canonical = abs(`/blog/${slug}`);
+const { words, minutes } = articleStats(post?.body ?? []);
+const seoTitle = post?.seoTitle || post?.title;
+const seoDescription = post?.seoDescription || post?.excerpt || undefined;
+const tagNames = (post?.tags ?? []).map((t) => t.name);
+const ogImage = post?.coverImage
+    ? `${post.coverImage}?w=1200&h=630&fit=crop&fm=jpg&q=85`
+    : ogImageUrl("post", String(slug), post?._updatedAt);
+const jsonLd = post
+    ? [
+          blogNode(),
+          {
+              "@type": "BlogPosting",
+              "@id": `${canonical}#article`,
+              mainEntityOfPage: { "@id": `${canonical}#webpage` },
+              headline: post.title,
+              description: seoDescription,
+              image: { "@type": "ImageObject", url: ogImage, width: 1200, height: 630 },
+              datePublished: post.publishedAt,
+              dateModified: post._updatedAt ?? post.publishedAt,
+              author: personRef,
+              publisher: personRef,
+              isPartOf: { "@id": `${SITE_URL}/#blog` },
+              articleSection: "Blog",
+              keywords: tagNames,
+              about: tagNames.map((name) => ({ "@type": "Thing", name })),
+              wordCount: words,
+              timeRequired: `PT${minutes}M`,
+              inLanguage: "es",
+          },
+          pageNode("WebPage", { url: canonical, title: seoTitle, description: seoDescription, image: ogImage, breadcrumb: true }),
+          breadcrumbNode(canonical, [
+              { name: "Blog", path: "/blog" },
+              { name: post.title, path: `/blog/${slug}` },
+          ]),
+      ]
+    : [];
 ---
-<PostLayout pageTitle={post?.title ?? "Post no encontrado"} canonicalURL={canonicalURL}>
+
+<PostLayout
+    pageTitle={post ? seoTitle : `${blog.notFound.post.title}${blog.notFound.post.titleLight}`}
+    description={seoDescription}
+    canonicalURL={canonical}
+    ogImage={post ? ogImage : undefined}
+    ogType={post ? "article" : "website"}
+    article={post ? { publishedTime: post.publishedAt, modifiedTime: post._updatedAt, section: "Blog", tags: tagNames } : undefined}
+    jsonLd={jsonLd}
+    noindex={!post}
+>
     {post ? (
-        <>
-            <header
-                class="max-w-4xl mx-auto px-6 pt-16 pb-12"
-                data-purpose="article-header"
-            >
-                <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
-                    {post.title}
-                </h1>
-                <AuthorLayout publishedAt={post.publishedAt} updatedAt={post._updatedAt} />
-            </header>
-
-            <main class="max-w-4xl mx-auto px-6 pb-24" data-purpose="main-article-content">
-                <article class="content text-brand-offwhite">
-                    {post.excerpt && (
-                        <p class="text-brand-gray">{post.excerpt}</p>
-                    )}
-                    <TableOfContents items={portableText} />
-                    <PortableText value={portableText} components={components} />
-                </article>
-
-                {post.tags && post.tags.length > 0 && (
-                    <div class="mt-12">
-                        <h3 class="text-xs font-bold uppercase tracking-widest text-brand-gray mb-4">
-                            Tags
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            {post.tags.map((tag) => {
-                                const colors = getTagColorClasses(tag.color);
-                                return (
-                                    <a
-                                        href={`/blog/tags/${tag.slug}`}
-                                        class={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} ${colors.hover} transition-colors duration-200`}
-                                        title={tag.description || `Ver todos los posts sobre ${tag.name}`}
-                                    >
-                                        #{tag.name}
-                                    </a>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
-
-                <section
-                    class="mt-16 pt-8 border-t border-gray-700 flex flex-wrap gap-4 items-center"
-                    data-purpose="social-sharing"
-                >
-                    <span class="text-xs font-bold uppercase tracking-widest text-brand-gray">
-                        Compartir
-                    </span>
-                    <ShareButtons title={post.title} canonicalURL={canonicalURL} />
-                </section>
-            </main>
-        </>
+        <ArticleView doc={post} canonicalURL={canonical} kind="post" />
     ) : (
-        <main class="max-w-4xl mx-auto px-6 pt-16 pb-24">
-            <h1 class="text-4xl md:text-6xl mb-8 leading-tight text-brand-orange">
-                Post no encontrado
-            </h1>
-            <p class="text-brand-gray">
-                El post que buscas no existe o ya no está disponible.
-            </p>
-        </main>
+        <PageHero title={blog.notFound.post.title} titleLight={blog.notFound.post.titleLight} kicker={blog.notFound.kicker} size="md">
+            <p>{blog.notFound.post.text}</p>
+            <a slot="after" href={blog.notFound.post.href} class="btn-outline">{blog.notFound.post.button}</a>
+        </PageHero>
     )}
 </PostLayout>

@@ -1,0 +1,424 @@
+---
+// Fondo animado 3D: red de nodos (plexus) en perspectiva, partículas de profundidad,
+// trama halftone y pulsos de luz. Mismo efecto que el header de evelazquez.dev,
+// reescrito en JS puro (sin GSAP) para no sumar dependencias.
+interface Props {
+  /** Densidad de la red: "full" para el hero de la home, "soft" para encabezados internos */
+  density?: "full" | "soft";
+  /** Color de fondo base (degradado) */
+  fade?: boolean;
+}
+
+const { density = "full", fade = true } = Astro.props;
+---
+
+<div class="plexus" data-plexus={density} aria-hidden="true">
+  <div class="plexus__glow"></div>
+  <canvas class="plexus__canvas"></canvas>
+  <div class="plexus__halftone halftone"></div>
+  <div class="plexus__vignette"></div>
+  {fade && <div class="plexus__fade"></div>}
+</div>
+
+<style>
+  .plexus {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 80% 70% at 72% 38%, #1c3058 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 15% 80%, #112449 0%, transparent 70%),
+      linear-gradient(180deg, #14213d 0%, #0f1d38 60%, #0a1830 100%);
+  }
+  .plexus__glow {
+    position: absolute;
+    width: 70vmax;
+    height: 70vmax;
+    right: -15vmax;
+    top: -20vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(70, 120, 200, 0.18) 0%, transparent 65%);
+    animation: plexusBreath 12s ease-in-out infinite alternate;
+  }
+  .plexus__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .plexus__halftone {
+    position: absolute;
+    inset: -40px;
+    -webkit-mask-image: radial-gradient(ellipse 38% 45% at 22% 78%, #000 0%, transparent 100%);
+    mask-image: radial-gradient(ellipse 38% 45% at 22% 78%, #000 0%, transparent 100%);
+    opacity: 0.55;
+    animation: plexusDrift 5s linear infinite;
+  }
+  .plexus__vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 120% 90% at 50% 45%, transparent 55%, rgba(1, 22, 30, 0.55) 100%);
+  }
+  .plexus__fade {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 220px;
+    background: linear-gradient(to bottom, transparent, #01161e);
+  }
+  @keyframes plexusBreath {
+    to {
+      transform: scale(1.12);
+    }
+  }
+  @keyframes plexusDrift {
+    to {
+      background-position: 14px 14px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plexus__glow,
+    .plexus__halftone {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const TAU = Math.PI * 2;
+  const rand = (a: number, b: number) => a + Math.random() * (b - a);
+  const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  type Node3 = { x: number; y: number; z: number; r: number; glow: boolean; orange: boolean; phase: number; fx: number; fa: number; boost: number; boostT: number };
+  type Proj = { sx: number; sy: number; s: number; d: number; m: number };
+  type Zone = { x: number; y: number; rx: number; ry: number };
+  type Pulse = { e: number; t: number; dur: number };
+
+  function makeSprite(color: string, size = 64) {
+    const c = document.createElement("canvas");
+    c.width = c.height = size;
+    const g = c.getContext("2d")!;
+    const grad = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgba(255,255,255,1)");
+    grad.addColorStop(0.15, color);
+    grad.addColorStop(0.45, color.replace(/[\d.]+\)$/, "0.25)"));
+    grad.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = grad;
+    g.fillRect(0, 0, size, size);
+    return c;
+  }
+
+  function initPlexus(root: HTMLElement): () => void {
+    const canvas = root.querySelector<HTMLCanvasElement>("canvas")!;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return () => {};
+    const soft = root.dataset.plexus === "soft";
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const blueSprite = makeSprite("rgba(150,190,255,0.9)");
+    const orangeSprite = makeSprite("rgba(244,165,24,0.95)");
+
+    const state = { rotY: 0, tiltX: -0.18, tiltY: 0, swing: 0, reveal: 0, zoom: 0.8 };
+    const target = { tiltX: -0.18, tiltY: 0 };
+    let w = 0, h = 0, dpr = 1, cx = 0, cy = 0, scale = 0, scaleX = 0, scaleY = 0;
+    let nodes: Node3[] = [];
+    let dust: { x: number; y: number; z: number }[] = [];
+    let edges: [number, number][] = [];
+    let proj: Proj[] = [];
+    let pulses: Pulse[] = [];
+    let zones: Zone[] = [];
+    let visible = true;
+    let raf = 0;
+    let start = performance.now();
+    let last = start;
+    let nextPulse = 1200;
+    let nextFlash = 2000;
+    const quietStrength = 0.8;
+
+    // Zonas "silenciosas": la red se atenúa detrás del contenido marcado con data-bg-quiet
+    function measureZones() {
+      const host = root.parentElement;
+      if (!host) return;
+      const base = root.getBoundingClientRect();
+      zones = Array.from(host.querySelectorAll<HTMLElement>("[data-bg-quiet]")).map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          x: r.left - base.left + r.width / 2,
+          y: r.top - base.top + r.height / 2,
+          rx: (r.width / 2) * 1.02 + 24,
+          ry: (r.height / 2) * 1.08 + 24,
+        };
+      });
+    }
+
+    function quiet(x: number, y: number) {
+      let m = 1;
+      for (const z of zones) {
+        const dx = (x - z.x) / z.rx, dy = (y - z.y) / z.ry;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d >= 1.45) continue;
+        const t = d <= 1 ? 1 : 1 - (d - 1) / 0.45;
+        const f = t * t * (3 - 2 * t);
+        m *= 1 - quietStrength * f;
+      }
+      return m;
+    }
+
+    function build() {
+      const mobile = w < 768;
+      const count = soft ? (mobile ? 55 : 120) : mobile ? 75 : 175;
+      nodes = [];
+      for (let i = 0; i < count; i++) {
+        let x, y, z;
+        do {
+          x = rand(-1, 1); y = rand(-1, 1); z = rand(-1, 1);
+        } while (x * x + y * y + z * z > 1);
+        nodes.push({
+          x: x * 1.9, y: y * 1.2, z: z * 1.2,
+          r: rand(0.8, 2),
+          glow: Math.random() < 0.18,
+          orange: Math.random() < 0.05,
+          phase: Math.random() * TAU,
+          fx: rand(0.4, 0.9),
+          fa: rand(0.025, 0.07),
+          boost: 0,
+          boostT: -1,
+        });
+      }
+      edges = [];
+      const deg = new Array(count).fill(0);
+      const maxD = mobile ? 0.6 : 0.46;
+      for (let i = 0; i < count; i++) {
+        for (let j = i + 1; j < count; j++) {
+          if (deg[i] >= 4 || deg[j] >= 4) continue;
+          const a = nodes[i], b = nodes[j];
+          if (Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z) < maxD) {
+            edges.push([i, j]); deg[i]++; deg[j]++;
+          }
+        }
+      }
+      dust = [];
+      const dustCount = soft ? (mobile ? 80 : 200) : mobile ? 120 : 320;
+      for (let i = 0; i < dustCount; i++) dust.push({ x: rand(-3.5, 3.5), y: rand(-2, 2), z: rand(-2.5, 2.5) });
+      proj = nodes.map(() => ({ sx: 0, sy: 0, s: 0, d: 0, m: 1 }));
+      pulses = [];
+    }
+
+    function resize() {
+      const rect = root.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      w = rect.width; h = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      const mobile = w < 1024;
+      cx = w * 0.5;
+      cy = h * 0.48;
+      scale = Math.min(w * (mobile ? 0.55 : 0.36), h * 0.6);
+      scaleX = w * (mobile ? 0.34 : 0.3);
+      scaleY = h * (mobile ? 0.4 : 0.44);
+      build();
+      measureZones();
+      if (reduceMotion) render(0);
+    }
+
+    function render(time: number) {
+      const c = ctx!;
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.clearRect(0, 0, w, h);
+      const reveal = state.reveal * (soft ? 0.8 : 1);
+      const cam = 3.2;
+      const f = 3.2 * state.zoom;
+
+      // Partículas de fondo
+      {
+        const ay = state.rotY * 0.35 + state.tiltY * 0.4;
+        const cY = Math.cos(ay), sY = Math.sin(ay);
+        const cX = Math.cos(state.tiltX * 0.5), sX = Math.sin(state.tiltX * 0.5);
+        for (const p of dust) {
+          const x = p.x * cY - p.z * sY;
+          let z = p.x * sY + p.z * cY;
+          const y = p.y * cX - z * sX;
+          z = p.y * sX + z * cX;
+          const zz = z + 5;
+          if (zz <= 0.5) continue;
+          const s = 5 / zz;
+          const sx = w / 2 + x * s * scale * 0.9;
+          const sy = h / 2 + y * s * scale * 0.9;
+          if (sx < 0 || sx > w || sy < 0 || sy > h) continue;
+          const a = Math.min(1, s * 0.5) * 0.5 * reveal * (0.4 + 0.6 * quiet(sx, sy));
+          c.fillStyle = `rgba(170,195,240,${a})`;
+          const size = s * 1.1;
+          c.fillRect(sx, sy, size, size);
+        }
+      }
+
+      // Proyección
+      const ay = state.rotY + state.tiltY;
+      const cY = Math.cos(ay), sY = Math.sin(ay);
+      const axn = state.tiltX + state.swing;
+      const cX = Math.cos(axn), sX = Math.sin(axn);
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const nx = n.x + Math.sin(time * n.fx + n.phase) * n.fa;
+        const ny = n.y + Math.cos(time * n.fx * 0.8 + n.phase) * n.fa;
+        const nz = n.z + Math.sin(time * n.fx * 0.6 + n.phase * 2) * n.fa;
+        const x = nx * cY - nz * sY;
+        let z = nx * sY + nz * cY;
+        const y = ny * cX - z * sX;
+        z = ny * sX + z * cX;
+        const s = f / (cam + z);
+        const o = proj[i];
+        o.sx = cx + x * s * scaleX;
+        o.sy = cy + y * s * scaleY;
+        o.s = s;
+        o.d = Math.min(1, Math.max(0, (z + 1.4) / 2.8));
+        o.m = quiet(o.sx, o.sy);
+      }
+
+      // Aristas
+      c.lineCap = "round";
+      for (const [i, j] of edges) {
+        const a = proj[i], b = proj[j];
+        const depth = (a.d + b.d) / 2;
+        const mask = Math.min(a.m, b.m, quiet((a.sx + b.sx) / 2, (a.sy + b.sy) / 2));
+        const alpha = (1 - depth * 0.8) * 0.4 * reveal * mask;
+        if (alpha < 0.01) continue;
+        c.strokeStyle = `rgba(130,165,225,${alpha})`;
+        c.lineWidth = 0.4 + (a.s + b.s) * 0.32;
+        c.beginPath();
+        c.moveTo(a.sx, a.sy);
+        c.lineTo(b.sx, b.sy);
+        c.stroke();
+      }
+
+      // Nodos
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i], p = proj[i];
+        const twinkle = 0.7 + 0.3 * Math.sin(time * 1.6 + n.phase);
+        const alpha = Math.min(1, (1 - p.d * 0.75) * twinkle + n.boost * 0.6) * reveal * p.m;
+        if (alpha < 0.01) continue;
+        const r = n.r * p.s * 1.1 * (1 + n.boost * 0.8);
+        if (n.glow || n.orange || n.boost > 0.05) {
+          const size = r * (n.orange ? 16 : 14);
+          c.globalAlpha = alpha * (n.orange ? 0.9 : 0.75);
+          c.drawImage(n.orange ? orangeSprite : blueSprite, p.sx - size / 2, p.sy - size / 2, size, size);
+          c.globalAlpha = 1;
+        }
+        c.fillStyle = n.orange ? `rgba(249,180,60,${alpha})` : `rgba(200,220,255,${alpha * 0.9})`;
+        c.beginPath();
+        c.arc(p.sx, p.sy, r, 0, TAU);
+        c.fill();
+      }
+
+      // Pulsos de luz
+      for (const pl of pulses) {
+        const edge = edges[pl.e];
+        if (!edge) continue;
+        const a = proj[edge[0]], b = proj[edge[1]];
+        const t = pl.t < 0.5 ? 2 * pl.t * pl.t : 1 - Math.pow(-2 * pl.t + 2, 2) / 2;
+        const x = a.sx + (b.sx - a.sx) * t;
+        const y = a.sy + (b.sy - a.sy) * t;
+        const s = a.s + (b.s - a.s) * t;
+        const size = 20 * s;
+        c.globalAlpha = Math.sin(t * Math.PI) * reveal * quiet(x, y);
+        c.drawImage(orangeSprite, x - size / 2, y - size / 2, size, size);
+      }
+      c.globalAlpha = 1;
+    }
+
+    function tick(now: number) {
+      raf = requestAnimationFrame(tick);
+      if (!visible || document.hidden) {
+        last = now;
+        return;
+      }
+      const dt = Math.min(now - last, 50);
+      last = now;
+      const elapsed = now - start;
+      const t = elapsed / 1000;
+
+      // Entrada: la red aparece acercándose a la cámara
+      const intro = easeOut(Math.min(1, elapsed / 2600));
+      state.reveal = intro;
+      state.zoom = 0.8 + 0.2 * intro;
+
+      // Balanceo, rotación y parallax suavizado
+      state.swing = Math.sin(t * (Math.PI / 8)) * 0.12;
+      state.rotY += dt * 0.00012;
+      const k = 1 - Math.pow(0.04, dt / 1000);
+      state.tiltX += (target.tiltX - state.tiltX) * k;
+      state.tiltY += (target.tiltY - state.tiltY) * k;
+
+      // Pulsos
+      nextPulse -= dt;
+      if (nextPulse <= 0) {
+        if (edges.length && pulses.length < 26) pulses.push({ e: Math.floor(Math.random() * edges.length), t: 0, dur: rand(1200, 2400) });
+        nextPulse = rand(60, 250);
+      }
+      pulses = pulses.filter((p) => (p.t += dt / p.dur) < 1);
+
+      // Destellos
+      nextFlash -= dt;
+      if (nextFlash <= 0 && nodes.length) {
+        nodes[Math.floor(Math.random() * nodes.length)].boostT = 0;
+        nextFlash = rand(400, 1100);
+      }
+      for (const n of nodes) {
+        if (n.boostT < 0) continue;
+        n.boostT += dt / 1600;
+        n.boost = n.boostT >= 1 ? 0 : Math.sin(n.boostT * Math.PI);
+        if (n.boostT >= 1) n.boostT = -1;
+      }
+
+      render(t);
+    }
+
+    const onPointer = (e: PointerEvent) => {
+      if (!visible || e.pointerType === "touch") return;
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      target.tiltY = nx * 0.6;
+      target.tiltX = -0.18 + ny * 0.35;
+    };
+
+    resize();
+    document.fonts?.ready.then(measureZones);
+    const zoneTimer = window.setTimeout(measureZones, 1600);
+    const ro = new ResizeObserver(() => resize());
+    ro.observe(root);
+    const io = new IntersectionObserver((entries) => {
+      visible = entries[0]?.isIntersecting ?? true;
+    });
+    io.observe(root);
+
+    if (reduceMotion) {
+      state.reveal = 1;
+      state.zoom = 1;
+      render(0);
+    } else {
+      window.addEventListener("pointermove", onPointer, { passive: true });
+      raf = requestAnimationFrame(tick);
+    }
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(zoneTimer);
+      ro.disconnect();
+      io.disconnect();
+      window.removeEventListener("pointermove", onPointer);
+    };
+  }
+
+  let cleanups: (() => void)[] = [];
+  const mount = () => {
+    cleanups.forEach((fn) => fn());
+    cleanups = Array.from(document.querySelectorAll<HTMLElement>("[data-plexus]")).map(initPlexus);
+  };
+  document.addEventListener("astro:page-load", mount);
+  document.addEventListener("astro:before-swap", () => {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+  });
+</script>

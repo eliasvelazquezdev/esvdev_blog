@@ -3,50 +3,186 @@ import NavigationLayout from "../components/NavigationLayout.astro";
 import FooterLayout from "../components/FooterLayout.astro";
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
+import site from "../data/site.json";
+import { abs, canonicalPath, fullTitle as makeTitle, ogImageUrl, personNode, websiteNode } from "../utils/seo.js";
 
 interface Props {
   pageTitle: string;
   canonicalURL?: string;
+  description?: string;
+  /** Miniatura para redes (URL absoluta). Por defecto, la tarjeta de la marca. */
+  ogImage?: string;
+  ogImageAlt?: string;
+  ogType?: "website" | "article" | "profile";
+  /** Datos de artículo para Open Graph */
+  article?: { publishedTime?: string; modifiedTime?: string; section?: string; tags?: string[] };
+  /** Nodos extra de schema.org para esta página (se suman al grafo base) */
+  jsonLd?: object[];
+  /** true para páginas que no deben aparecer en Google (por ejemplo, 404) */
+  noindex?: boolean;
 }
 
-const { pageTitle, canonicalURL } = Astro.props;
-const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
+const {
+  pageTitle,
+  canonicalURL,
+  description = site.seo.defaultDescription,
+  ogImage = ogImageUrl("page", "home"),
+  ogImageAlt = site.seo.ogImageAlt,
+  ogType = "website",
+  article,
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
+
+const canonical = canonicalURL || abs(canonicalPath(Astro.url.pathname));
+const fullTitle = makeTitle(pageTitle);
+const { author } = site;
+const ogImageType = /fm=jpg|\.jpe?g(\?|$)/.test(ogImage) ? "image/jpeg" : "image/png";
+const graph = { "@context": "https://schema.org", "@graph": [websiteNode(), personNode(), ...jsonLd] };
 ---
-<html lang="en">
+<html lang={site.seo.lang}>
   <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={author.name} />
+    <meta name="keywords" content={(article?.tags?.length ? [...article.tags, ...site.seo.keywords.slice(0, 4)] : site.seo.keywords).join(", ")} />
+    <meta
+      name="robots"
+      content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
+    />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+
+    <!-- Autor e identidad (mismo dueño que evelazquez.dev) -->
+    <link rel="author" href={author.website} />
+    {author.sameAs.map((url) => <link rel="me" href={url} />)}
+
+    <!-- Open Graph (LinkedIn, Facebook, WhatsApp, Slack, Discord...) -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.brand.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={site.seo.locale} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:type" content={ogImageType} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    {
+      ogType === "article" && article && (
+        <>
+          {article.publishedTime && <meta property="article:published_time" content={article.publishedTime} />}
+          {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
+          <meta property="article:author" content={author.website} />
+          {article.section && <meta property="article:section" content={article.section} />}
+          {article.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
+    {
+      ogType === "profile" && (
+        <>
+          <meta property="profile:first_name" content="Elias" />
+          <meta property="profile:last_name" content="Velazquez" />
+          <meta property="profile:username" content={author.xHandle} />
+        </>
+      )
+    }
+
+    <!-- X / Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={site.seo.twitterHandle} />
+    <meta name="twitter:creator" content={site.seo.twitterHandle} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    {
+      ogType === "article" && (
+        <>
+          <meta name="twitter:label1" content="Escrito por" />
+          <meta name="twitter:data1" content={author.name} />
+        </>
+      )
+    }
+
+    <!-- Íconos y app -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href={canonical} />
-    <meta property="og:title" content={pageTitle} />
-    <meta
-      property="og:description"
-      content="Data Engineering - AWS - Python"
+    <meta name="theme-color" content={site.seo.themeColor} />
+    <meta name="application-name" content={site.brand.name} />
+    <meta name="apple-mobile-web-app-title" content={site.brand.name} />
+
+    <!-- Feeds y recursos para buscadores e IA -->
+    <link rel="alternate" type="application/rss+xml" title={`${site.brand.name} — RSS`} href={abs("/rss.xml")} />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    {site.seo.verification.google && <meta name="google-site-verification" content={site.seo.verification.google} />}
+    {site.seo.verification.bing && <meta name="msvalidate.01" content={site.seo.verification.bing} />}
+
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+
+    <!-- Tipografía: Manrope (igual que evelazquez.dev) + JetBrains Mono para código -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=JetBrains+Mono:wght@400;500;600&display=swap"
     />
-    <meta property="og:image" content="/thumbnail/ingeniero_consciente_thumb.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="627" />
 
     <!-- Font Awesome -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer" />
 
-	<!-- Dev Icons -->
-	<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <!-- Dev Icons -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
-	<title>
-	    {pageTitle === 'El Ingeniero Consciente' ? pageTitle : `${pageTitle} | El Ingeniero Consciente`}
-	</title>
+    <!-- Activa las animaciones de revelado solo cuando hay JS -->
+    <script is:inline>
+      document.documentElement.classList.add("js");
+      document.addEventListener("astro:after-swap", () => document.documentElement.classList.add("js"));
+    </script>
 
-	<ClientRouter />
+    <ClientRouter />
   </head>
-  <body class="bg-brand-navy text-brand-offwhite selection-highlight antialiased">
+  <body class="min-h-screen overflow-x-clip">
     <NavigationLayout />
     <slot />
     <FooterLayout />
+
+    <script>
+      // Revelado progresivo de elementos con [data-reveal] al entrar en pantalla
+      let observer: IntersectionObserver | null = null;
+
+      const setupReveal = () => {
+        observer?.disconnect();
+        const items = document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-visible)");
+        if (!("IntersectionObserver" in window)) {
+          items.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+        observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer?.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+        );
+        items.forEach((el) => observer!.observe(el));
+      };
+
+      document.addEventListener("astro:page-load", setupReveal);
+    </script>
   </body>
 </html>

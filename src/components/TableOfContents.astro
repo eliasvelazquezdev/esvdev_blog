@@ -1,6 +1,6 @@
 ---
 import { createSlug } from '../utils/slugify.js';
-
+import blog from '../data/blog.json';
 
 interface PortableTextBlock {
     _type: string;
@@ -13,18 +13,20 @@ interface PortableTextBlock {
 
 interface Props {
     items: PortableTextBlock[];
+    /** "inline": desplegable (mobile/tablet) · "aside": lista fija en la barra lateral */
+    variant?: 'inline' | 'aside';
 }
 
-const { items } = Astro.props;
+const { items, variant = 'aside' } = Astro.props;
 
 function extractTextFromBlock(block: PortableTextBlock): string {
     if (!block.children) return '';
     return block.children
-        .filter(child => child._type === 'span')
+        // astro-portabletext normaliza los spans a "@text" al renderizar, por eso aceptamos ambos
+        .filter(child => child._type === 'span' || child._type === '@text')
         .map(child => child.text)
         .join('');
 }
-
 
 const tocItems = items
     .filter(item =>
@@ -35,52 +37,120 @@ const tocItems = items
     .map(item => {
         const text = extractTextFromBlock(item);
         return {
-            level: parseInt(item.style!.substring(1)), // Extract number from h1, h2, etc.
+            level: parseInt(item.style!.substring(1)),
             text: text,
             slug: createSlug(text),
             style: item.style
         };
     })
-    .filter(item => item.text.trim() !== ''); // Remove empty headings
+    .filter(item => item.text.trim() !== '');
 
-// Group headings hierarchically
+// Agrupa los headings jerárquicamente
 const groupedItems = tocItems.reduce((acc: any[], item) => {
     if (item.level === 1 || item.level === 2) {
-        // Main headings
-        acc.push({
-            ...item,
-            children: []
-        });
+        acc.push({ ...item, children: [] });
     } else if ((item.level === 3 || item.level === 4) && acc.length > 0) {
-        // Sub-headings under the last main heading
         acc[acc.length - 1].children.push(item);
     }
     return acc;
 }, []);
+
+const pad = (n: number) => String(n + 1).padStart(2, '0');
 ---
 
 {tocItems.length > 0 && (
-    <nav class="toc bg-brand-navy-dark p-6 rounded-lg mb-8 border border-gray-800">
-        <h3 class="text-xl font-bold mb-4 text-brand-offwhite">Tabla de Contenidos</h3>
-        <ul class="space-y-3 list-disc list-outside ml-4 text-brand-offwhite">
-            {groupedItems.map(heading => (
-                <li>
-                    <a href={`#${heading.slug}`} class="text-brand-orange hover:text-brand-offwhite block">
-                        {heading.text}
-                    </a>
-                    {heading.children.length > 0 && (
-                        <ul class="ml-4 mt-2 space-y-2 list-outside">
-                            {heading.children.map(subheading => (
-                                <li>
-                                    <a href={`#${subheading.slug}`} class="text-brand-gray hover:text-brand-offwhite text-sm block">
-                                        {subheading.text}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </li>
-            ))}
-        </ul>
-    </nav>
+    variant === 'inline' ? (
+        <details class="toc group/toc mb-10 overflow-hidden rounded-2xl border border-orange-secondary/40 bg-blue-secondary/30 open:border-orange-secondary">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden">
+                <span class="kicker !text-orange-secondary">{blog.article.tocTitleMobile}</span>
+                <i class="fa-solid fa-chevron-down text-sm text-orange-secondary transition-transform duration-300 group-open/toc:rotate-180" aria-hidden="true" />
+            </summary>
+            <ol class="space-y-1 border-t border-white/10 px-6 pb-6 pt-4">
+                {groupedItems.map((heading, i) => (
+                    <li>
+                        <a href={`#${heading.slug}`} class="flex gap-3 py-1.5 text-base font-semibold text-gray-primary/85 transition-colors hover:text-orange-secondary">
+                            <span class="index-num pt-1">{pad(i)}</span>
+                            <span>{heading.text}</span>
+                        </a>
+                        {heading.children.length > 0 && (
+                            <ul class="mb-2 ml-9 space-y-1 border-l border-white/10 pl-4">
+                                {heading.children.map((sub) => (
+                                    <li>
+                                        <a href={`#${sub.slug}`} class="block py-1 text-sm text-gray-primary/60 transition-colors hover:text-orange-secondary">
+                                            {sub.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </li>
+                ))}
+            </ol>
+        </details>
+    ) : (
+        <nav class="toc" aria-label="Tabla de contenidos" data-toc>
+            <p class="kicker mb-5 !text-orange-secondary">{blog.article.tocTitle}</p>
+            <ol class="relative space-y-0.5">
+                {groupedItems.map((heading, i) => (
+                    <li>
+                        <a
+                            href={`#${heading.slug}`}
+                            data-toc-link={heading.slug}
+                            class="flex gap-3 py-2 text-sm font-semibold leading-snug text-gray-primary/60 transition-colors duration-300 hover:text-gray-primary data-[active=true]:text-orange-secondary"
+                        >
+                            <span class="pt-px text-[11px] tabular-nums tracking-[0.15em] opacity-60">{pad(i)}</span>
+                            <span>{heading.text}</span>
+                        </a>
+                        {heading.children.length > 0 && (
+                            <ul class="space-y-0.5">
+                                {heading.children.map((sub) => (
+                                    <li>
+                                        <a
+                                            href={`#${sub.slug}`}
+                                            data-toc-link={sub.slug}
+                                            class="block py-1.5 pl-[2.1rem] text-[13px] leading-snug text-gray-primary/45 transition-colors duration-300 hover:text-gray-primary data-[active=true]:text-orange-secondary"
+                                        >
+                                            {sub.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </li>
+                ))}
+            </ol>
+        </nav>
+    )
 )}
+
+<script>
+    // Resalta en la tabla de contenidos la sección que se está leyendo
+    let observer: IntersectionObserver | null = null;
+
+    document.addEventListener('astro:page-load', () => {
+        observer?.disconnect();
+        const toc = document.querySelector('[data-toc]');
+        if (!toc) return;
+        const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+        const headings = links
+            .map((l) => document.getElementById(l.dataset.tocLink!))
+            .filter((h): h is HTMLElement => !!h);
+        if (!headings.length) return;
+
+        const setActive = (id: string) => {
+            links.forEach((l) => (l.dataset.active = String(l.dataset.tocLink === id)));
+        };
+
+        observer = new IntersectionObserver(
+            (entries) => {
+                const visible = entries.filter((e) => e.isIntersecting);
+                if (visible.length) {
+                    visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                    setActive((visible[0].target as HTMLElement).id);
+                }
+            },
+            { rootMargin: '-15% 0px -70% 0px', threshold: 0 },
+        );
+        headings.forEach((h) => observer!.observe(h));
+    });
+</script>

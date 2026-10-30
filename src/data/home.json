@@ -1,0 +1,180 @@
+{
+  "$descripcion": "Textos de la portada (/). Cada bloque corresponde a una sección, en el orden en que aparecen.",
+  "pageTitle": "El Ingeniero Consciente",
+  "seo": {
+    "$descripcion": "Título (hasta ~60) y descripción (hasta ~155) para Google y redes.",
+    "title": "El Ingeniero Consciente · Newsletter de Data Engineering y AWS",
+    "description": "Newsletter semanal de Elias Velazquez sobre Data Engineering, AWS y carrera en tecnología para crecer profesionalmente sin quemarte en el camino.",
+    "ogKicker": "Newsletter semanal"
+  },
+  "hero": {
+    "kicker": "Newsletter · Data Engineering · AWS",
+    "title": "Se puede ser un gran Ingeniero de Datos",
+    "titleAccent": "sin dejar la vida frente a la pantalla",
+    "description": "Sumate a la comunidad de **^^+250 lectores^^** que buscan crecer en Data Engineering, arquitectura en AWS y mentalidad profesional sin perderse a ellos mismos en el camino.",
+    "primaryCta": {
+      "label": "Suscribite gratis",
+      "href": "#subscribe"
+    },
+    "secondaryCta": {
+      "label": "Leer el blog",
+      "href": "/blog/"
+    },
+    "topics": [
+      "Data Engineering",
+      "AWS",
+      "Python",
+      "SQL",
+      "Arquitectura Cloud",
+      "DataOps",
+      "Carrera",
+      "Mentalidad"
+    ]
+  },
+  "intro": {
+    "kicker": "¿Qué es \"El Ingeniero Consciente\"?",
+    "ghost": "Consciente",
+    "statement": "Una ^^newsletter semanal^^ para ingenieros de datos que buscan la excelencia técnica, sin comprar el humo del hype ~~ni quemar su salud mental en el camino.~~",
+    "text": "Comparto lo que aprendo, valido y utilizo en el día a día."
+  },
+  "topics": {
+    "title": "¿De qué va la ~newsletter?~",
+    "items": [
+      {
+        "title": "De Ingeniería de Datos",
+        "text": "Pipelines, SQL, Python y los fundamentos que no pasan de moda."
+      },
+      {
+        "title": "AWS desde el camino real",
+        "text": "Arquitectura cloud aprendida en producción, no en un slide."
+      },
+      {
+        "title": "Y de la humanidad detrás del teclado",
+        "text": "Carrera, foco y criterio para crecer sin perderte en el camino."
+      }
+    ]
+  },
+  "manifesto": {
+    "kicker": "Manifiesto",
+    "title": "Eso no es ^^excelencia.^^",
+    "$ayuda_blocks": "Cada bloque es un párrafo. type: \"text\" (normal), \"quote\" (frase naranja con barra lateral) o \"statement\" (frase grande resaltada).",
+    "blocks": [
+      {
+        "type": "text",
+        "text": "La industria tech suele decirnos que para ser exitoso tenés que estar conectado 24/7 y aprender tres frameworks de IA antes de desayunar."
+      },
+      {
+        "type": "text",
+        "text": "Yo pienso que no tiene porqué ser así. Eso no es excelencia."
+      },
+      {
+        "type": "quote",
+        "text": "Es el camino directo al burnout."
+      },
+      {
+        "type": "text",
+        "text": "Acá vas a encontrar fundamentos sólidos de Data Engineering, arquitectura práctica en AWS y las herramientas mentales para gestionar tu carrera con consciencia e intención."
+      },
+      {
+        "type": "text",
+        "text": "La tecnología es útil si te libera tiempo para lo más importante: __tu vida fuera de la pantalla__."
+      },
+      {
+        "type": "statement",
+        "text": "==No soy mi trabajo ni mi profesión.=="
+      },
+      {
+        "type": "text",
+        "text": "Si esto resuena con vos, entonces estás en el lugar correcto."
+      }
+    ]
+  },
+  "audience": {
+    "title": "¿Para quién ~es?~",
+    "items": [
+      "Para quienes quieren dar sus primeros pasos en Data Engineering y AWS.",
+      "Para profesionales intermedios que buscan progresar hacia conceptos más avanzados y tener criterios claros de arquitectura.",
+      "Para cualquiera en IT que quiera crecer profesionalmente (escalar en su puesto, negociar un mejor sueldo) pero se niegue a dejar la vida en una oficina o rol."
+    ],
+    "cta": {
+      "label": "Suscribite ahora",
+      "href": "#subscribe"
+    }
+  },
+  "structure": {
+    "title": "¿Cómo está ~organizada?~",
+    "paragraphs": [
+      "Recibirás un correo __cada semana, según disponibilidad__. Priorizo el respeto a tu tiempo y la calidad del contenido antes que la cantidad.",
+      "Si no hay nada que realmente te aporte valor o te invite a la acción, no te escribo.",
+      "Cada edición se enfoca en uno de estos tres pilares:"
+    ],
+    "$ayuda_icon": "Íconos disponibles: brain, cloud, wrench, briefcase, tags, lightning, notebook, fire, sprout.",
+    "pillars": [
+      {
+        "icon": "wrench",
+        "title": "Taller de Datos",
+        "image": "https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/taller_datos_prof_iab4fn.webp",
+        "text": "Data Engineering, Python, SQL, Git y herramientas técnicas. Conceptos fundamentales explicados de forma práctica y aplicable."
+      },
+      {
+        "icon": "cloud",
+        "title": "La Senda del Nubearquitecto",
+        "image": "https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/senda_nubearquitecto_prof_hdohen.webp",
+        "text": "AWS, cloud computing y arquitectura. Aprendizajes, buenas prácticas y herramientas desde el recorrido real (no desde la teoría pura)."
+      },
+      {
+        "icon": "brain",
+        "title": "Carrera y Debug Mental",
+        "image": "https://res.cloudinary.com/dwczjy8e4/image/upload/v1783786611/banners/pilares_banners/carrera_y_debug_mental_prof_xsmgaw.webp",
+        "text": "El costado humano del desarrollo profesional. Estrategia laboral, toma de decisiones, foco, hábitos y cómo nuestra mente determina la clase de profesionales que somos."
+      }
+    ],
+    "extrasTitle": "Lo que ^^condimenta^^ cada edición",
+    "extrasText": "Para que las lecturas sean dinámicas y te lleves valor aplicable de inmediato, los pilares principales suelen venir acompañados por dos secciones especiales:",
+    "extras": [
+      {
+        "icon": "fire",
+        "title": "Datazo",
+        "text": "Un recurso concreto que encontré y que pienso que te puede servir. Puede ser un tutorial, un hilo de Twitter, un blog post técnico, un curso o una herramienta que te va a ahorrar horas de trabajo y frustración."
+      },
+      {
+        "icon": "sprout",
+        "title": "Lo que aprendí hace poco",
+        "text": "Mi cable a tierra con vos. Acá te comparto de forma rápida un aprendizaje real y reciente que tuve en la trinchera. No me las sé todas, sigo estudiando todas las semanas y te lo muestro sin filtros. Al final, vas a poder votar si querés que desarrolle ese tema en profundidad en una futura edición."
+      }
+    ]
+  },
+  "expectations": {
+    "title": "¿Qué vas a ~recibir?~",
+    "items": [
+      "Contenido técnico enfocado y digerible.",
+      "Reflexiones honestas, sin humo.",
+      "Aprendizajes reales, no solo éxitos.",
+      "Una mirada consciente sobre la carrera en tecnología."
+    ],
+    "closing": "Si buscás crecer como profesional sin desconectarte de vos mismo/a, estás en el lugar correcto.",
+    "cta": {
+      "label": "Suscribite gratis",
+      "href": "#subscribe"
+    }
+  },
+  "author": {
+    "title": "¿Quién está detrás de ~“El Ingeniero Consciente”?~",
+    "photo": "/images/profile_pics/elias-velazquez.jpg",
+    "photoAlt": "Elias Velazquez",
+    "photoTag": "Buenos Aires",
+    "photoName": "Elias Velazquez",
+    "photoRole": "Data Engineer · AWS",
+    "lead": "Hola, soy ^^Elias Velazquez.^^ No soy un gurú infalible que se las sabe todas.",
+    "paragraphs": [
+      "Soy un ingeniero de datos con ~2 años y medio de experiencia profesional, enfocado en cloud architecture dentro de __AWS__ que se equivoca, investiga y aprende todos los días en la trinchera real: producción.",
+      "Escribo esto como un compañero de ruta. En mis ediciones no vas a encontrar verdades absolutas, sino mis aciertos y, sobre todo, mis errores (de los que se aprende el triple).",
+      "Te comparto lo que me funciona a mí para construir una carrera sólida y mantener la cabeza cuerda en este ecosistema tan acelerado."
+    ],
+    "closing": "==Si buscás crecer como profesional sin desconectarte de vos mismo/a, ¡sumate!==",
+    "cta": {
+      "label": "Conocé más sobre mí",
+      "href": "/about/"
+    }
+  }
+}

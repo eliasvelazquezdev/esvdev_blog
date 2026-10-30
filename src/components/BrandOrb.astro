@@ -1,0 +1,125 @@
+---
+// Logo de la marca dentro de un anillo naranja con órbitas giratorias y tilt 3D,
+// inspirado en la foto de perfil del hero de evelazquez.dev.
+import site from "../data/site.json";
+
+interface Props {
+  src?: string;
+  alt?: string;
+  /** "logo" deja aire alrededor del ícono; "photo" llena el círculo */
+  fit?: "logo" | "photo";
+}
+
+const { src = site.brand.logo, alt = site.brand.name, fit = "logo" } = Astro.props;
+---
+
+<div data-bg-quiet class="flex justify-center lg:justify-start">
+  <div class="orb-stage relative z-10" data-orb>
+    <svg class="orb-orbit orb-orbit--outer" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="98" fill="none" stroke="rgba(150,185,240,0.22)" stroke-width="0.5" stroke-dasharray="1.2 5"></circle>
+      <circle cx="100" cy="2" r="1.3" fill="rgba(210,225,255,0.65)"></circle>
+      <circle cx="30.7" cy="169.3" r="1.6" fill="rgba(244,165,24,0.8)"></circle>
+    </svg>
+    <svg class="orb-orbit orb-orbit--inner" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="98" fill="none" stroke="rgba(150,185,240,0.12)" stroke-width="0.4"></circle>
+      <circle cx="100" cy="100" r="98" fill="none" stroke="rgba(244,165,24,0.4)" stroke-width="0.7" stroke-dasharray="55 561" stroke-linecap="round"></circle>
+    </svg>
+
+    <div
+      class="orb-frame relative h-64 w-64 overflow-hidden rounded-full border-8 border-orange-secondary bg-blue-secondary sm:h-72 sm:w-72 lg:h-80 lg:w-80 xl:h-[25rem] xl:w-[25rem] xl:border-[10px] 2xl:h-[30rem] 2xl:w-[30rem]"
+      data-orb-tilt
+    >
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,#24406f_0%,#14213d_55%,#0b1730_100%)]" aria-hidden="true"></div>
+      <div class="halftone absolute inset-0 opacity-30 [mask-image:radial-gradient(circle_at_50%_100%,#000,transparent_70%)]" aria-hidden="true"></div>
+      <img
+        src={src}
+        alt={alt}
+        class:list={[
+          "relative h-full w-full",
+          fit === "logo" ? "object-contain p-[16%] drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]" : "object-cover",
+        ]}
+      />
+      <div class="orb-vignette" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .orb-stage {
+    isolation: isolate;
+    animation: orbIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .orb-orbit {
+    position: absolute;
+    inset: -9%;
+    width: 118%;
+    height: 118%;
+    z-index: -1;
+    overflow: visible;
+    transition: translate 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .orb-orbit--outer {
+    animation: orbSpin 70s linear infinite;
+  }
+  .orb-orbit--inner {
+    inset: -4.5%;
+    width: 109%;
+    height: 109%;
+    animation: orbSpin 28s linear infinite reverse;
+  }
+  .orb-frame {
+    box-shadow: 0 30px 60px -20px rgba(1, 10, 25, 0.75);
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .orb-vignette {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: inset 0 0 30px 6px rgba(10, 22, 50, 0.45);
+  }
+  @keyframes orbSpin {
+    to {
+      rotate: 360deg;
+    }
+  }
+  @keyframes orbIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .orb-stage,
+    .orb-orbit--outer,
+    .orb-orbit--inner {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  let handler: ((e: PointerEvent) => void) | null = null;
+
+  document.addEventListener("astro:page-load", () => {
+    if (handler) window.removeEventListener("pointermove", handler);
+    handler = null;
+    const stage = document.querySelector<HTMLElement>("[data-orb]");
+    if (!stage || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const frame = stage.querySelector<HTMLElement>("[data-orb-tilt]")!;
+    const orbits = stage.querySelectorAll<SVGElement>(".orb-orbit");
+
+    handler = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      const r = stage.getBoundingClientRect();
+      if (r.bottom < 0) return;
+      const nx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2)));
+      const ny = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2)));
+      frame.style.setProperty("--ry", `${nx * 7}deg`);
+      frame.style.setProperty("--rx", `${-ny * 7}deg`);
+      orbits.forEach((o) => (o.style.translate = `${nx * -6}px ${ny * -6}px`));
+    };
+    window.addEventListener("pointermove", handler, { passive: true });
+  });
+</script>

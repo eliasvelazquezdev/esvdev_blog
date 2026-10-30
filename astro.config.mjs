@@ -19,7 +19,8 @@ export default defineConfig({
     react(),
   ],
   output: "server",
-  adapter: netlify(),
+  // El proyecto no usa edge functions; el emulador local falla con Deno >= 2.9
+  adapter: netlify({ devFeatures: { edgeFunctions: false } }),
   vite: {
     resolve: {
       alias: [

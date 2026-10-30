@@ -1,7 +1,13 @@
 ---
 import ZipsCard from '../../../components/ZipsCard.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
-import Icon from '../../../components/Icon.astro';
+import PageHero from '../../../components/PageHero.astro';
+import blog from '../../../data/blog.json';
+import { rich } from '../../../utils/richText.js';
+import { abs, breadcrumbNode, itemListNode, ogImageUrl, pageNode } from '../../../utils/seo.js';
+
+// Los textos de esta página están en src/data/blog.json → "zips"
+const t = blog.zips;
 
 import { sanityClient } from "sanity:client";
 import type { SanityDocument } from "@sanity/client";
@@ -13,26 +19,31 @@ const ZIPS_QUERY = `*[contentType == "zip"] | order(publishedAt desc) {
   excerpt
 }`;
 
-const zipsEntries = await sanityClient.fetch<SanityDocument[]>(ZIPS_QUERY);
+// Tolerancia a datos incompletos: se omiten zips sin slug
+const zipsEntries = (await sanityClient.fetch<SanityDocument[]>(ZIPS_QUERY)).filter((z) => z?.slug?.current);
 
+// SEO
+const url = abs('/blog/zips');
+const ogImage = ogImageUrl('page', 'zips');
+const jsonLd = [
+    pageNode('CollectionPage', { url, title: t.seo.title, description: t.seo.description, image: ogImage, breadcrumb: true, extra: { mainEntity: { '@id': `${url}#list` } } }),
+    breadcrumbNode(url, [{ name: 'Blog', path: '/blog' }, { name: t.title, path: '/blog/zips' }]),
+    itemListNode(url, zipsEntries.map((z) => ({ name: z.title, path: `/blog/zips/${z.slug?.current}` }))),
+];
 ---
 
-<SiteLayout pageTitle="Zips">
-    <main class="max-w-4xl mx-auto px-6 pb-24">
-        <h1 class="text-4xl md:text-5xl font-bold mb-5 text-brand-orange">
-            Zips <Icon name="lightning" size={36} className="inline-block align-middle ml-2" />
-        </h1>
+<SiteLayout pageTitle={t.seo.title} description={t.seo.description} canonicalURL={url} ogImage={ogImage} jsonLd={jsonLd}>
+    <PageHero title={t.title} kicker={t.kicker} ghost={t.ghost}>
+        <p set:html={rich(t.description)} />
+        <div slot="after" class="flex flex-wrap gap-2.5">
+            <span class="chip"><i class="fa-solid fa-bolt text-xs text-orange-secondary" aria-hidden="true"></i>{zipsEntries.length} {t.countLabel}</span>
+            <span class="chip"><i class="fa-regular fa-clock text-xs text-orange-secondary" aria-hidden="true"></i>{t.durationLabel}</span>
+        </div>
+    </PageHero>
 
-        <p class="text-lg mb-14 leading-loose">¡Bienvenido/a a <span class="font-bold">Zips</span>! Aquí encontrarás lecturas rápidas de índole técnica. La idea es que te lleves un aprendizaje, encuentres recursos, o simplemente te diviertas en lecturas breves de pocos minutos.</p>
-
-        <div class="grid lg:grid-cols-2 gap-6">
-            {
-            zipsEntries.map((zip) => (
-                <div>
-                    <ZipsCard zip={zip} />
-                </div>
-            ))
-        }
+    <main class="shell pb-20 lg:pb-28">
+        <div class="grid gap-6 md:grid-cols-2 lg:gap-8 xl:grid-cols-3">
+            {zipsEntries.map((zip, i) => <ZipsCard zip={zip} index={i} />)}
         </div>
     </main>
 </SiteLayout>

@@ -1,0 +1,79 @@
+---
+import PlexusBackground from "./PlexusBackground.astro";
+
+interface Props {
+  title: string;
+  /** Parte del título en peso normal (como "About Me" en la web) */
+  titleLight?: string;
+  kicker?: string;
+  /** Palabra gigante con contorno de fondo */
+  ghost?: string;
+  size?: "lg" | "md";
+}
+
+const { title, titleLight, kicker, ghost, size = "lg" } = Astro.props;
+---
+
+<header
+  class:list={[
+    "relative overflow-hidden",
+    // Portadas principales (Blog, Zips, Tags): más aire y altura mínima para que no se vean aplastadas
+    size === "lg"
+      ? "flex min-h-[30rem] flex-col justify-center pb-20 pt-36 sm:min-h-[34rem] lg:min-h-[40rem] lg:pb-28 lg:pt-48 xl:min-h-[44rem]"
+      : "pb-14 pt-32 lg:pb-20 lg:pt-44",
+  ]}
+>
+  <PlexusBackground density="soft" />
+
+  {
+    ghost && (
+      <span
+        class:list={[
+          "ghost-word -right-4 z-[1] text-[22vw] lg:text-[16vw]",
+          size === "lg" ? "top-1/2 -translate-y-[38%]" : "top-24 lg:top-20",
+        ]}
+        aria-hidden="true"
+      >
+        {ghost}
+      </span>
+    )
+  }
+
+  <div class="shell relative z-10 w-full">
+    {Astro.slots.has("breadcrumbs") && <div class="hero-appear mb-8"><slot name="breadcrumbs" /></div>}
+
+    {
+      kicker && (
+        <p class:list={["hero-appear kicker !text-orange-secondary", size === "lg" ? "mb-6 lg:mb-8" : "mb-5"]} style="--d: 60ms">
+          {kicker}
+        </p>
+      )
+    }
+
+    <h1
+      data-bg-quiet
+      class:list={[
+        "hero-appear max-w-5xl font-extrabold tracking-tight text-gray-primary",
+        size === "lg" ? "text-5xl leading-[1.06] sm:text-6xl lg:text-7xl xl:text-8xl" : "text-4xl leading-[1.08] sm:text-5xl lg:text-6xl",
+      ]}
+      style="--d: 120ms; text-shadow: 0 2px 18px rgba(8, 18, 40, 0.7);"
+    >
+      {title}
+      {titleLight && <span class="font-normal">{titleLight}</span>}
+    </h1>
+
+    {
+      Astro.slots.has("default") && (
+        <div
+          data-bg-quiet
+          class:list={["hero-appear max-w-3xl text-lg leading-relaxed text-gray-primary/80 lg:text-xl", size === "lg" ? "mt-8 lg:mt-10" : "mt-7"]}
+          style="--d: 260ms"
+        >
+          <slot />
+        </div>
+      )
+    }
+
+    {Astro.slots.has("after") && <div class:list={["hero-appear", size === "lg" ? "mt-9 lg:mt-11" : "mt-8"]} style="--d: 380ms"><slot name="after" /></div>}
+  </div>
+</header>

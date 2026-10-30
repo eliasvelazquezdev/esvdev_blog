@@ -1,4 +1,7 @@
 ---
+import site from "../data/site.json";
+import blog from "../data/blog.json";
+
 interface Props {
   title: string;
   canonicalURL: string;
@@ -10,29 +13,43 @@ const { title, canonicalURL, className = "" } = Astro.props as Props;
 const encodedTitle = encodeURIComponent(title);
 const encodedURL = encodeURIComponent(canonicalURL);
 
-const xShareUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedURL}&via=ingeconsciente`;
+const xShareUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedURL}&via=${site.author.xHandle}`;
 const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedURL}`;
 
-const wrapperClass = `flex gap-4 ${className}`.trim();
+const btn =
+  "relative flex h-11 w-11 items-center justify-center rounded-lg border border-orange-secondary/30 bg-blue-secondary/30 text-orange-secondary transition-[border-color,background-color,transform] duration-300 hover:-translate-y-0.5 hover:border-orange-secondary hover:bg-orange-secondary/10";
 ---
 
-<div class={wrapperClass}>
-  <a
-    class="w-10 h-10 inline-flex items-center justify-center rounded-full p-0 hover:bg-brand-orange/20 transition-colors text-brand-offwhite hover:text-brand-orange"
-    href={xShareUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    title="Compartir en X"
-  >
-    <i class="fa-brands fa-square-x-twitter text-xl"></i>
+<div class={`flex flex-wrap items-center gap-3 ${className}`.trim()}>
+  <a class={btn} href={xShareUrl} target="_blank" rel="noopener noreferrer" title={blog.ui.shareX} aria-label={blog.ui.shareX}>
+    <i class="fa-brands fa-x-twitter text-lg" aria-hidden="true"></i>
   </a>
-  <a
-    class="w-10 h-10 inline-flex items-center justify-center rounded-full p-0 hover:bg-brand-orange/20 transition-colors text-brand-offwhite hover:text-brand-orange"
-    href={linkedInShareUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    title="Compartir en LinkedIn"
-  >
-    <i class="fa-brands fa-linkedin text-xl"></i>
+  <a class={btn} href={linkedInShareUrl} target="_blank" rel="noopener noreferrer" title={blog.ui.shareLinkedIn} aria-label={blog.ui.shareLinkedIn}>
+    <i class="fa-brands fa-linkedin-in text-lg" aria-hidden="true"></i>
   </a>
+  <button type="button" class={btn} data-copy-link={canonicalURL} data-copied-label={blog.ui.copied} title={blog.ui.copyLink} aria-label={blog.ui.copyLink}>
+    <i class="fa-solid fa-link text-base" data-copy-icon aria-hidden="true"></i>
+  </button>
 </div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLButtonElement>("[data-copy-link]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const icon = btn.querySelector("[data-copy-icon]");
+        const original = btn.getAttribute("aria-label") || "";
+        try {
+          await navigator.clipboard.writeText(btn.dataset.copyLink || location.href);
+          icon?.classList.replace("fa-link", "fa-check");
+          btn.setAttribute("aria-label", btn.dataset.copiedLabel || original);
+          setTimeout(() => {
+            icon?.classList.replace("fa-check", "fa-link");
+            btn.setAttribute("aria-label", original);
+          }, 1800);
+        } catch {
+          /* sin permisos de portapapeles: no hacemos nada */
+        }
+      });
+    });
+  });
+</script>

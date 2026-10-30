@@ -1,38 +1,204 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "Montserrat", sans-serif;
+/* ==========================================================================
+   Base — mismo lenguaje visual que evelazquez.dev
+   ========================================================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-blue-primary font-sans text-gray-primary antialiased;
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+
+  strong,
+  b {
+    @apply font-bold text-gray-secondary;
+  }
+
+  em {
+    @apply italic text-gray-primary;
+  }
+
+  :focus-visible {
+    outline: 2px solid #f4a518;
+    outline-offset: 3px;
+  }
 }
 
-.selection-highlight::selection {
-  background-color: #fca311;
-  color: #0a1120;
+/* Selección */
+::selection {
+  background-color: #f4a518;
+  color: #14213d;
+}
+::-moz-selection {
+  background-color: #f4a518;
+  color: #14213d;
 }
 
-strong,
-b {
-  font-weight: 700;
-  color: #829dd1;
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #f4a518;
+  border-radius: 20px;
+  border: 4px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #d18c0d;
+}
+@supports (scrollbar-color: auto) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #f4a518 transparent;
+  }
 }
 
-em {
-  font-style: italic;
-  color: #a8c0ad;
+/* ==========================================================================
+   Componentes reutilizables
+   ========================================================================== */
+
+@layer components {
+  /* Contenedor principal */
+  .shell {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+  }
+
+  /* Etiqueta pequeña en mayúsculas (kicker) */
+  .kicker {
+    @apply text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-primary/50 lg:text-xs;
+  }
+
+  /* Numeración 01 / 02 */
+  .index-num {
+    @apply text-xs font-semibold tabular-nums tracking-[0.2em] text-gray-primary/45 lg:text-sm;
+  }
+
+  /* Título de sección */
+  .section-title {
+    @apply text-4xl font-extrabold tracking-tight text-gray-primary lg:text-5xl xl:text-6xl;
+  }
+
+  /* Botón principal (relleno) */
+  .btn-primary {
+    @apply inline-flex items-center gap-2.5 rounded-lg bg-orange-secondary px-5 py-2.5 text-base font-bold tracking-tight text-blue-primary transition-[background-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-orange-primary hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.6)] lg:text-lg;
+  }
+
+  /* Botón contorno */
+  .btn-outline {
+    @apply inline-flex items-center gap-2.5 rounded-lg border-2 border-orange-secondary/70 px-5 py-2 text-base font-semibold tracking-tight text-orange-secondary transition-[background-color,border-color,color] duration-300 hover:border-orange-secondary hover:bg-orange-secondary hover:text-blue-primary lg:text-lg;
+  }
+
+  /* Tarjeta con borde naranja */
+  .card {
+    @apply relative overflow-hidden rounded-3xl border-2 border-orange-primary bg-blue-secondary/30 transition-[border-color,background-color,transform,box-shadow] duration-300 ease-out;
+  }
+  .card-hover {
+    @apply hover:-translate-y-1 hover:border-orange-secondary hover:bg-blue-secondary/55 hover:shadow-[0_24px_60px_-30px_rgba(244,165,24,0.45)];
+  }
+
+  /* Viñeta tipo guion naranja (como en Work Experience) */
+  .dash {
+    @apply mt-[0.75em] h-[2px] w-3 shrink-0 rounded-full bg-orange-primary lg:w-4;
+  }
+
+  /* Línea de acento inferior que crece en hover */
+  .accent-line {
+    @apply pointer-events-none absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-gradient-to-r from-orange-secondary via-orange-primary to-transparent transition-transform duration-500 ease-out group-hover:scale-x-100;
+  }
+
+  /* Chip */
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-orange-secondary/50 bg-orange-secondary/[0.07] px-3.5 py-1.5 text-sm font-semibold text-gray-secondary transition-[border-color,background-color,color] duration-300 hover:border-orange-secondary hover:bg-orange-secondary/15;
+  }
+
+  /* Resaltado tipo marcador */
+  .mark {
+    @apply rounded-sm bg-orange-secondary/15 px-1.5 py-0.5 text-gray-secondary [box-decoration-break:clone];
+  }
+
+  /* Subrayado de palabras clave (como en About de la web) */
+  .hl {
+    @apply font-bold text-gray-secondary underline decoration-orange-secondary decoration-2 underline-offset-[6px];
+  }
+
+  /* Palabra gigante de fondo con contorno */
+  .ghost-word {
+    @apply pointer-events-none absolute select-none whitespace-nowrap font-extrabold leading-none tracking-tighter text-transparent;
+    -webkit-text-stroke: 1px rgba(244, 165, 24, 0.09);
+  }
 }
 
-.narrative-text p {
-  margin-bottom: 1.5rem;
-  line-height: 1.75;
+/* ==========================================================================
+   Animaciones
+   ========================================================================== */
+
+@keyframes heroAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
-.narrative-text p:last-child {
-  margin-bottom: 0;
+.hero-appear {
+  animation: heroAppear 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0ms);
 }
 
-html {
-  scroll-behavior: smooth;
+/* Revelado al hacer scroll (solo si JS está activo) */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0ms);
+}
+html.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Fondo halftone (trama de puntos) */
+.halftone {
+  background-image: radial-gradient(rgba(120, 155, 215, 0.4) 1.1px, transparent 1.7px);
+  background-size: 14px 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .hero-appear {
+    animation: none;
+  }
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
 }
