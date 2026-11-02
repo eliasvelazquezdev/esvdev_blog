@@ -5,11 +5,20 @@ interface Props {
   next?: string | null;
   prev?: string | null;
   tagName: string;
+  /** Slug del tag, para armar los enlaces a cada página */
+  tagSlug: string;
   currentPage?: number;
   totalPages?: number;
 }
 
-const { next, prev, tagName, currentPage = 1, totalPages = 1 } = Astro.props;
+const { next, prev, tagName, tagSlug, currentPage = 1, totalPages = 1 } = Astro.props;
 ---
 
-<PaginationArrowsForPosts next={next} prev={prev} currentPage={currentPage} totalPages={totalPages} context={`#${tagName}`} />
+<PaginationArrowsForPosts
+  next={next}
+  prev={prev}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  baseHref={`/blog/tags/${tagSlug}/page`}
+  context={`#${tagName}`}
+/>

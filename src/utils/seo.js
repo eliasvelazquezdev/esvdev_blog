@@ -26,7 +26,8 @@ export const fullTitle = (title) => {
 // Hoy todas las páginas usan la imagen fija de site.json → seo.ogImage (cuadrada, carga instantánea en WhatsApp).
 // Las tarjetas generadas por artículo siguen disponibles en /og/<tipo>/<slug>.png por si se quieren volver a usar.
 export const OG_IMAGE = abs(site.seo.ogImage);
-export const ogImageUrl = () => OG_IMAGE;
+/** @param {...any} _args tipo, slug y versión (se ignoran mientras se use la imagen fija) */
+export const ogImageUrl = (..._args) => OG_IMAGE;
 export const generatedOgImageUrl = (kind, slug, version = "") =>
   abs(`/og/${kind}/${encodeURIComponent(slug)}.png${version ? `?v=${encodeURIComponent(version)}` : ""}`);
 

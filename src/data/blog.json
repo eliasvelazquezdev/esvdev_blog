@@ -98,6 +98,10 @@
       "href": "/about/"
     },
     "backTo": "Volver a {section}",
+    "$ayuda_backTo": "El botón de volver lleva a la última lista que se visitó. {page} = número de página, {tag} = nombre del tag.",
+    "backToPage": "Volver a la página {page}",
+    "backToTag": "Volver a #{tag}",
+    "backToHome": "Volver al inicio",
     "tocTitle": "En este artículo",
     "tocTitleMobile": "Tabla de contenidos",
     "newsletterCard": {
@@ -133,6 +137,8 @@
     "home": "Inicio",
     "prevPage": "Página anterior",
     "nextPage": "Página siguiente",
+    "goToPage": "Ir a la página {page}",
+    "pageLabel": "Página",
     "copy": "Copiar",
     "copied": "¡Copiado!",
     "copyLink": "Copiar enlace",
