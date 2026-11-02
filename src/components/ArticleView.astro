@@ -125,9 +125,20 @@ const { author } = site;
           <a href={t.aboutButton.href} class="btn-outline shrink-0 !text-base">{t.aboutButton.label}</a>
         </div>
 
-        <a href={section.link} class="group inline-flex items-center gap-2 font-bold text-orange-secondary">
+        <!-- "Volver" lleva a la última lista visitada (ej. la página 4 del blog o un tag); ver src/utils/backNav.ts -->
+        <a
+          href={section.link}
+          data-back-link
+          data-kind={kind}
+          data-section={section.label}
+          data-text-section={t.backTo}
+          data-text-page={t.backToPage}
+          data-text-tag={t.backToTag}
+          data-text-home={t.backToHome}
+          class="group inline-flex items-center gap-2 font-bold text-orange-secondary"
+        >
           <i class="fa-solid fa-arrow-left text-sm transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true"></i>
-          {fmt(t.backTo, { section: section.label })}
+          <span data-back-label>{fmt(t.backTo, { section: section.label })}</span>
         </a>
       </footer>
     </div>
@@ -158,3 +169,33 @@ const { author } = site;
     </aside>
   </div>
 </main>
+
+<script>
+  import { lastList, requestRestore } from "../utils/backNav";
+
+  const fill = (text: string, values: Record<string, string>) => text.replace(/\{(\w+)\}/g, (m, k) => values[k] ?? m);
+
+  /** Texto del botón según a qué lista vuelve */
+  const labelFor = (path: string, d: DOMStringMap) => {
+    if (path === "/") return d.textHome!;
+    const tag = path.match(/^\/blog\/tags\/([^/]+)/);
+    if (tag) return fill(d.textTag!, { tag: decodeURIComponent(tag[1]) });
+    const page = path.match(/^\/blog\/page(\d+)$/);
+    if (page && page[1] !== "1") return fill(d.textPage!, { page: page[1] });
+    return fill(d.textSection!, { section: d.section! });
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLAnchorElement>("[data-back-link]").forEach((link) => {
+      const target = lastList(link.dataset.kind || "post");
+      if (!target) return; // sin historial: queda el enlace por defecto (Blog o Zips)
+
+      link.href = target;
+      const label = link.querySelector("[data-back-label]");
+      if (label) label.textContent = labelFor(target, link.dataset);
+
+      // Al volver, la lista se abre en el mismo punto del scroll en que se dejó
+      link.addEventListener("click", () => requestRestore(target));
+    });
+  });
+</script>

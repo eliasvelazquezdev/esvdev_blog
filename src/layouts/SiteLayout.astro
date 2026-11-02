@@ -185,6 +185,21 @@ const graph = { "@context": "https://schema.org", "@graph": [websiteNode(), pers
       };
 
       document.addEventListener("astro:page-load", setupReveal);
+
+      // Memoria de navegación para el botón "Volver" de los artículos (ver src/utils/backNav.ts)
+      import { rememberPage, setupScrollMemory } from "../utils/backNav";
+      document.addEventListener("astro:page-load", rememberPage);
+      setupScrollMemory();
+
+      // El scroll suave (scroll-behavior: smooth) impide que el navegador vuelva a la posición
+      // anterior al ir "atrás". Se apaga durante el cambio de página y se reactiva después.
+      document.addEventListener("astro:before-swap", (e) => {
+        e.newDocument.documentElement.style.scrollBehavior = "auto";
+        document.documentElement.style.scrollBehavior = "auto";
+      });
+      document.addEventListener("astro:page-load", () => {
+        setTimeout(() => document.documentElement.style.removeProperty("scroll-behavior"), 100);
+      });
     </script>
   </body>
 </html>

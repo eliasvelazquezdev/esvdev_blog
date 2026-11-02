@@ -153,6 +153,7 @@ const jsonLd = [
             next={nextPage ? `/blog/tags/${tag}/page${nextPage}` : null}
             prev={prevPage ? `/blog/tags/${tag}/page${prevPage}` : null}
             tagName={tagName}
+            tagSlug={tag}
             currentPage={currentPage}
             totalPages={totalPages}
         />
