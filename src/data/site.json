@@ -131,11 +131,11 @@
     "chips": [
       {
         "icon": "fa-solid fa-users",
-        "label": "+250 lectores"
+        "label": "+300 lectores"
       },
       {
         "icon": "fa-solid fa-calendar-week",
-        "label": "Cada semana"
+        "label": "Cada 15 días"
       },
       {
         "icon": "fa-solid fa-heart",
